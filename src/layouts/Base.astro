@@ -1,11 +1,21 @@
 ---
 import '../styles/global.css';
-import { type Locale, locales, homePath, getDict } from '../i18n';
-import '../styles/themes.css';
-interface Props { locale: Locale; theme?: string; title?: string; description?: string }
-const { locale, theme, title, description } = Astro.props;
+import { type Locale, getDict } from '../i18n';
+interface Props {
+  locale: Locale;
+  /** Design tokens set; the site currently uses only "next" (styles/next.css). */
+  theme?: string;
+  title?: string;
+  description?: string;
+  /** Keep a page out of search engines (drafts, test pages). */
+  noindex?: boolean;
+}
+const { locale, theme = 'next', title, description, noindex = false } = Astro.props;
 const t = getDict(locale);
 const site = Astro.site ?? new URL('https://www.nuuvie.com');
+// One canonical address per page, without a trailing slash (same as the old Webflow site)
+const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+const canonical = new URL(path, site);
 ---
 <!doctype html>
 <html lang={locale} class="no-js" data-theme={theme}>
@@ -14,27 +24,18 @@ const site = Astro.site ?? new URL('https://www.nuuvie.com');
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>{title ?? t.meta.title}</title>
     <meta name="description" content={description ?? t.meta.description} />
-    <meta name="theme-color" content="#f5f3ee" />
-    {theme && <meta name="robots" content="noindex" />}
-    <link rel="canonical" href={new URL(homePath(locale), site)} />
-    {locales.map((l) => <link rel="alternate" hreflang={l} href={new URL(homePath(l), site)} />)}
-    <link rel="alternate" hreflang="x-default" href={new URL(homePath('pl'), site)} />
+    <meta name="theme-color" content="#ffffff" />
+    {noindex && <meta name="robots" content="noindex" />}
+    <link rel="canonical" href={canonical} />
     <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
     <meta property="og:title" content={title ?? t.meta.title} />
     <meta property="og:description" content={description ?? t.meta.description} />
     <meta property="og:locale" content={locale === 'pl' ? 'pl_PL' : 'en_GB'} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <slot name="head" />
     <link rel="preload" href="/fonts/BDOGrotesk-VF.ttf" as="font" type="font/ttf" crossorigin />
-    <script is:inline>
-      (function () {
-        var root = document.documentElement;
-        root.classList.replace('no-js', 'js');
-        try {
-          if (sessionStorage.getItem('nuuvie:seen') || location.hash) root.classList.add('is-seen');
-        } catch (e) {}
-      })();
-    </script>
+    <script is:inline>document.documentElement.classList.replace('no-js', 'js');</script>
   </head>
   <body>
     <slot />

@@ -54,13 +54,13 @@ const nav = [
   { href: '#album', label: 'Album' },
 ];
 ---
-<Base locale="pl" theme="next" title="Zestaw 250 fontów dobranych w pary – Nuuvie" description="250 fontów dobranych w pary, z parametrami pod web, przewodnikiem PDF z promptami i albumem do wysłania klientowi.">
+<Base locale="pl" title="Zestaw 250 fontów dobranych w pary – Nuuvie" description="250 fontów dobranych w pary, z parametrami pod web, przewodnikiem PDF z promptami i albumem do wysłania klientowi.">
   <link slot="head" rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link slot="head" rel="stylesheet" href={fontsUrl} />
 
   <header class="x-nav">
     <div class="x-wrap x-nav__in">
-      <a class="x-brand" href="/design/next/" aria-label="Nuuvie Studio"><Mark id="mark-f-nav" /><span>Nuuvie</span></a>
+      <a class="x-brand" href="/" aria-label="Nuuvie Studio"><Mark id="mark-f-nav" /><span>Nuuvie</span></a>
       <nav aria-label="Menu">{nav.map((l) => <a href={l.href}>{l.label}</a>)}</nav>
       <div class="x-nav__right">
         <a class="x-btn x-btn--sm" href="#kup">Kup zestaw</a>
@@ -225,7 +225,7 @@ const nav = [
   <footer class="x-foot">
     <div class="x-wrap x-foot__grid">
       <div>
-        <a class="x-brand" href="/design/next/" aria-label="Nuuvie Studio"><Mark id="mark-f-foot" /><span>Nuuvie</span></a>
+        <a class="x-brand" href="/" aria-label="Nuuvie Studio"><Mark id="mark-f-foot" /><span>Nuuvie</span></a>
         <p>Studio projektowe Daniela Trocia.</p>
       </div>
       <div><p>Zestaw fontów</p><ul>{nav.map((l) => <li><a href={l.href}>{l.label}</a></li>)}</ul></div>

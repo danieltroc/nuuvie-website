@@ -1,4 +1,320 @@
 ---
-import HomePage from '../components/home/HomePage.astro';
+// Home page (the "Next" design: Vercel / Linear manner, light, closed boxes):
+// centred hero, product-style UI graphics instead of photos of me, no eyebrows, short copy.
+// All graphics are HTML/SVG (crisp at any size, animated with GSAP in scripts/next.ts).
+import '../styles/next.css';
+import Base from '../layouts/Base.astro';
+import Mark from '../components/Mark.astro';
+import Arrow from '../components/Arrow.astro';
+import { getDict, formatDate, socials, clientLogos } from '../i18n';
+
+const t = getDict('pl');
+const LIVE = 'https://www.nuuvie.com';
+const year = new Date().getFullYear();
+const markPath = 'M60.419 90.627C60.419 107.311 46.894 120.836 30.21 120.836C13.526 120.836 0.0002 107.311 0 90.627V30.21C0 13.526 13.526 0 30.21 0H60.419V90.627ZM90.633 0C107.317 0 120.842 13.526 120.842 30.21C120.842 46.868 107.359 60.376 90.711 60.418H120.842V90.627C120.842 107.311 107.317 120.836 90.633 120.836C73.949 120.836 60.424 107.311 60.424 90.627V60.418H90.555C73.907 60.376 60.424 46.868 60.424 30.21C60.424 13.526 73.949 0 90.633 0Z';
+
+const nav = [
+  { href: '#work', label: 'Prace' },
+  { href: '#services', label: 'Usługi' },
+  { href: '/strefa-designera/', label: 'Strefa Designera' },
+  { href: '#blog', label: 'Blog' },
+  { href: '/fonty/', label: 'Fonty' },
+];
+const services = [
+  { key: 'brand', title: 'Logo i branding', body: 'Identyfikacja, która buduje rozpoznawalność. Od logo po kompletny brandbook.' },
+  { key: 'ux', title: 'Strony, aplikacje i UX/UI', body: 'Intuicyjne interfejsy dla produktów cyfrowych, aplikacji i SaaS.' },
+  { key: 'graphic', title: 'Grafika', body: 'Kampanie i materiały do social mediów, które zapadają w pamięć.' },
+  { key: 'audit', title: 'Strategia i audyty', body: 'Analiza i strategia wizualna, która realizuje cele biznesowe.' },
+  { key: 'team', title: 'Wsparcie Twojego zespołu', body: 'Senior designer w Twoim teamie, bez długiej rekrutacji.' },
+];
+const audit = [['Czytelność', 92], ['Hierarchia', 74], ['Spójność', 81], ['Dostępność', 68]];
+// Isometric line figures for the statement section (pure geometry, drawn as SVG paths)
+const box = (cx, cy, w, h, t) =>
+  `M${cx - w} ${cy}L${cx} ${cy - h}L${cx + w} ${cy}V${cy + t}L${cx} ${cy + h + t}L${cx - w} ${cy + t}Z M${cx - w} ${cy}L${cx} ${cy + h}L${cx + w} ${cy} M${cx} ${cy + h}V${cy + h + t}`;
+const fin = (x, y, hgt) => `M${x} ${y}L${x + 90} ${y + 45}V${y + 45 - hgt}L${x} ${y - hgt}Z`;
+const figs = [
+  { title: '15 lat doświadczenia', text: 'Doświadczenia, które oszczędzi Ci błędów.',
+    paths: [...[0, 1, 2, 3, 4].map((i) => box(160, 190 - i * 18, 110, 55, 10)), box(160, 86, 110, 55, 10)] },
+  { title: '11 krajów', text: 'Współpraca międzynarodowa.',
+    paths: [box(160, 70, 52, 26, 70), box(102, 105, 52, 26, 80), box(218, 105, 52, 26, 50), box(160, 150, 52, 26, 60)] },
+  { title: '2540+ projektów', text: 'Pewność, że Twój jest w dobrych rękach.',
+    paths: [0, 1, 2, 3, 4, 5, 6, 7, 8].map((i) => fin(160 - i * 11, 160 + i * 5.5, 140 - i * 14)) },
+];
+const issues = [
+  ['NUV-24', 'Onboarding: nowy flow', 'progress'],
+  ['NUV-23', 'Design system: przyciski', 'todo'],
+  ['NUV-21', 'Ekran płatności', 'todo'],
+  ['NUV-19', 'Ikony v2', 'done'],
+];
 ---
-<HomePage locale="pl" />
+<Base locale="pl">
+
+  <header class="x-nav">
+    <div class="x-wrap x-nav__in">
+      <a class="x-brand" href="/" aria-label="Nuuvie Studio"><Mark id="mark-x-nav" /><span>Nuuvie</span></a>
+      <nav aria-label="Menu">{nav.map((l) => <a href={l.href}>{l.label}</a>)}</nav>
+      <div class="x-nav__right">
+        <a class="x-nav__link" href="#contact">Kontakt</a>
+        <a class="x-btn x-btn--sm" href={t.contact.bookHref}>Porozmawiajmy</a>
+      </div>
+    </div>
+  </header>
+
+  <main id="top" class="x">
+    <!-- ───── Hero ───── -->
+    <section class="x-hero">
+      <div class="x-wrap x-hero__text">
+        <h1 data-x-in>Projektuję marki i&nbsp;produkty, którym się ufa.</h1>
+        <p data-x-in>15 lat w UX/UI i brandingu. Pomagam firmom wyglądać tak dobrze, jak działają.</p>
+        <div class="x-actions" data-x-in>
+          <a class="x-btn" href={t.contact.bookHref}>Porozmawiajmy o projekcie</a>
+          <a class="x-btn x-btn--ghost" href="#work">Zobacz prace</a>
+        </div>
+      </div>
+
+      <div class="x-wrap x-stage" data-x-stage>
+        <div class="x-win" data-x-win aria-hidden="true">
+          <div class="x-win__bar">
+            <span class="x-dots"><i></i><i></i><i></i></span>
+            <span class="x-win__title">Identyfikacja wizualna</span>
+            <span class="x-win__share"><b class="x-ava">D</b><em>Udostępnij</em></span>
+          </div>
+          <div class="x-win__body">
+            <aside class="x-layers">
+              <p>Warstwy</p>
+              {['Logo', 'Typografia', 'Kolory', 'Strona główna'].map((l, i) => <span class:list={[i === 0 && 'is-on']} data-x-layer={i}><i></i>{l}</span>)}
+            </aside>
+            <div class="x-canvas" data-x-canvas>
+              <div class="x-art x-art--logo" data-x-art="0"><small>Logo</small><svg viewBox="0 0 121 121"><path d={markPath} fill="url(#x-grad)" /><defs><linearGradient id="x-grad" x1="0" y1="60" x2="121" y2="60" gradientUnits="userSpaceOnUse"><stop stop-color="#864AF9"/><stop offset=".69" stop-color="#F0386B"/><stop offset="1" stop-color="#882E47"/></linearGradient></defs></svg></div>
+              <div class="x-art x-art--type" data-x-art="1"><small>Typografia</small><b>Aa</b><span>BDO Grotesk</span></div>
+              <div class="x-art x-art--color" data-x-art="2"><small>Kolory</small><i></i><i></i><i></i><i></i></div>
+              <div class="x-art x-art--site" data-x-art="3"><small>Strona główna</small><span class="x-sk x-sk--nav"></span><span class="x-sk x-sk--h"></span><span class="x-sk x-sk--h2"></span><span class="x-sk x-sk--btn"></span><span class="x-sk x-sk--img"></span></div>
+              <div class="x-sel" data-x-sel><i></i><i></i><i></i><i></i><em data-x-size>320 × 320</em></div>
+              <div class="x-cursor" data-x-cursor><svg viewBox="0 0 16 16"><path d="M2 1.5 13.5 8 8.2 9.2 5.6 14.2Z" /></svg><em>Daniel</em></div>
+            </div>
+            <aside class="x-props">
+              <p>Wypełnienie</p>
+              <span class="x-prop"><i class="x-sw"></i>#864AF9</span>
+              <p>Promień</p>
+              <span class="x-prop">24</span>
+              <p>Krój</p>
+              <span class="x-prop">BDO Grotesk</span>
+              <p>Wyrównanie</p>
+              <span class="x-align"><i></i><i></i><i></i></span>
+            </aside>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ───── Logos ───── -->
+    <section class="x-wrap x-logos-sec" aria-label={t.clients.label}>
+      <div class="x-logos" data-fade>
+        {clientLogos.map((l) => <img src={`/img/logos/${l}.svg`} alt={l} width="150" height="100" loading="lazy" />)}
+      </div>
+    </section>
+
+    <!-- ───── Statement + three figures ───── -->
+    <section class="x-wrap x-sec" id="about">
+      <p class="x-statement" data-fade>Design to narzędzie, które eliminuje domysły Twoich klientów. <span>Moim zadaniem jest sprawić, by Twoja marka mówiła to, co najważniejsze, zanim użytkownik przeczyta pierwsze słowo.</span></p>
+      <div class="x-figs">
+        {figs.map((f, i) => (
+          <div class="x-fig" data-fade>
+            <small>FIG 0.{i + 1}</small>
+            <svg viewBox="0 0 320 260" aria-hidden="true" data-x-fig>{f.paths.map((d, n) => <path d={d} class:list={[n === f.paths.length - 1 && 'is-accent']} />)}</svg>
+            <h3>{f.title}</h3>
+            <p>{f.text}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- ───── Work ───── -->
+    <section class="x-wrap x-sec" id="work">
+      <header class="x-head x-head--split">
+        <h2 data-split="lines">Wybrane projekty</h2>
+        <div data-fade><p>Marki i produkty, które zaprojektowałem od podstaw: od identyfikacji po aplikacje.</p></div>
+      </header>
+      <div class="x-cols">
+        {t.work.items.map((w, i) => (
+          <a class="x-col" href={w.href} data-fade>
+            <div class="x-project__img"><img src={w.img} alt="" width="2400" height="1350" loading={i === 0 ? 'eager' : 'lazy'} /></div>
+            <h3>{w.name}. <span>{w.desc}</span></h3>
+            <span class="x-more">Zobacz projekt →</span>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <!-- ───── Services: feature bento with UI graphics ───── -->
+    <section class="x-wrap x-sec" id="services">
+      <header class="x-head x-head--split">
+        <h2 data-split="lines">Co zrobię dla Twojego biznesu</h2>
+        <div data-fade><p>Pełen proces projektowy, od pierwszego szkicu po wdrożenie.</p><a class="x-more" href="#contact">Porozmawiajmy →</a></div>
+      </header>
+      <div class="x-bento">
+        {services.map((s) => (
+          <article class:list={['x-card', 'x-feat', `x-feat--${s.key}`]} data-fade data-x-feat={s.key}>
+            <div class="x-feat__gfx" aria-hidden="true">
+              {s.key === 'brand' && (
+                <svg class="x-g-brand" viewBox="0 0 400 240">
+                  <g class="x-g-guides">
+                    <line x1="0" y1="120" x2="400" y2="120" /><line x1="200" y1="0" x2="200" y2="240" />
+                    <rect x="139.5" y="59.5" width="121" height="121" />
+                  </g>
+                  <g transform="translate(139.5 59.5)">
+                    <g class="x-g-circles">
+                      <circle cx="30.2" cy="90.6" r="30.2" /><circle cx="90.6" cy="30.2" r="30.2" /><circle cx="90.6" cy="90.6" r="30.2" /><circle cx="30.2" cy="30.2" r="30.2" />
+                    </g>
+                    <path class="x-g-fill" d={markPath} />
+                    <path class="x-g-stroke" d={markPath} data-x-draw />
+                  </g>
+                  <text x="268" y="56">r = 30</text><text x="268" y="196">121 × 121</text>
+                </svg>
+              )}
+              {s.key === 'ux' && (
+                <div class="x-g-ux">
+                  <div class="x-g-ux__win">
+                    <span class="x-sk x-sk--nav"></span>
+                    <span class="x-sk x-sk--h"></span><span class="x-sk x-sk--h2"></span>
+                    <span class="x-sk x-sk--btn" data-x-tap></span>
+                    <div class="x-g-ux__cards"><span></span><span></span><span></span></div>
+                  </div>
+                  <div class="x-cursor x-cursor--ux" data-x-ux-cursor><svg viewBox="0 0 16 16"><path d="M2 1.5 13.5 8 8.2 9.2 5.6 14.2Z" /></svg></div>
+                </div>
+              )}
+              {s.key === 'graphic' && (
+                <div class="x-g-posts">
+                  {[t.blog.posts[1].img, t.blog.posts[2].img, t.blog.posts[0].img].map((src) => (
+                    <div class="x-g-post" data-x-post><img src={src} alt="" loading="lazy" /><span></span><span></span></div>
+                  ))}
+                </div>
+              )}
+              {s.key === 'audit' && (
+                <div class="x-g-audit">
+                  <p><b>Audyt UX</b><span>79 / 100</span></p>
+                  {audit.map(([label, v]) => (
+                    <div class="x-g-row"><span>{label}</span><i><b style={`--v:${v}`} data-x-bar></b></i><em>{v}</em></div>
+                  ))}
+                </div>
+              )}
+              {s.key === 'team' && (
+                <div class="x-g-issues">
+                  {issues.map(([id, title, state], i) => (
+                    <div class="x-g-issue" data-x-issue={i}>
+                      <i class:list={['x-st', `x-st--${state}`]} data-x-status></i>
+                      <em>{id}</em><span>{title}</span><b class="x-ava">{i % 2 ? 'Ty' : 'D'}</b>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+            <div class="x-feat__text">
+              <h3>{s.title}</h3>
+              <p>{s.body}</p>
+            </div>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <!-- ───── Quotes ───── -->
+    <section class="x-wrap x-sec">
+      <header class="x-head">
+        <h2 data-split="lines">Zaufali mi CEO i founderzy</h2>
+      </header>
+      <div class="x-quotes">
+        {t.testimonials.items.map((q) => (
+          <figure class="x-card" data-fade>
+            <blockquote>„{q.quote}”</blockquote>
+            <figcaption><img src={q.img} alt="" width="80" height="80" loading="lazy" /><span><b>{q.name}</b>{q.company}</span></figcaption>
+          </figure>
+        ))}
+      </div>
+    </section>
+
+    <!-- ───── Two paths ───── -->
+    <section class="x-wrap x-sec" id="paths">
+      <header class="x-head x-head--split">
+        <h2 data-split="lines">Jak mogę Ci pomóc?</h2>
+        <div data-fade><p>Projektuję dla firm i pomagam rosnąć designerom. Wybierz ścieżkę, która jest Twoja.</p></div>
+      </header>
+      <div class="x-paths">
+        <article class="x-card x-path" data-fade>
+          <div class="x-path__gfx" aria-hidden="true">
+            <div class="x-g-steps">
+              {['Rozmowa', 'Projekt', 'Wdrożenie'].map((s, i) => <span data-x-step={i}><i>{i + 1}</i>{s}</span>)}
+            </div>
+          </div>
+          <h3>Dla biznesu</h3>
+          <p>Logo, identyfikacja, strony i aplikacje. Zaczynamy od bezpłatnej, 15-minutowej rozmowy.</p>
+          <a class="x-btn" href={t.contact.bookHref}>Porozmawiajmy o projekcie</a>
+        </article>
+        <article class="x-card x-path" data-fade>
+          <div class="x-path__gfx" aria-hidden="true">
+            <div class="x-g-review">
+              <div class="x-g-thumbs">{[...t.work.items.map((w) => w.img), ...t.blog.posts.slice(3, 6).map((p) => p.img)].map((src, i) => <span class:list={[i === 2 && 'is-pick']}><img src={src} alt="" loading="lazy" /></span>)}</div>
+              <div class="x-g-note" data-x-note><b class="x-ava">D</b><p>Ten case daj na początek portfolio.</p></div>
+            </div>
+          </div>
+          <h3>Dla designerów</h3>
+          <p>Przegląd portfolio, plan rozwoju i feedback do projektów. Konsultacja 1:1, 90 minut.</p>
+          <a class="x-btn x-btn--ghost" href="/strefa-designera/">Strefa Designera</a>
+        </article>
+      </div>
+    </section>
+
+    <!-- ───── Blog: the Apple / Swiss row list ───── -->
+    <section class="x-wrap x-sec" id="blog">
+      <header class="x-head x-head--row">
+        <h2 data-split="lines">Piszę o designie</h2>
+        <a class="x-link" href={t.blog.href} data-fade>Wszystkie wpisy →</a>
+      </header>
+      <ul class="blog__list" data-fade-group data-blog-list>
+        {t.blog.posts.map((p, i) => (
+          <li class="post" data-fade>
+            <a href={p.href} data-post={i}>
+              <div class="post__thumb"><img src={p.img} alt="" width="144" height="144" loading="lazy" /></div>
+              <time datetime={p.date}>{formatDate(p.date, 'pl')}</time>
+              <h3>{p.title}</h3>
+              <span class="post__arrow" aria-hidden="true"><Arrow /></span>
+            </a>
+          </li>
+        ))}
+      </ul>
+      <div class="blog__preview" data-blog-preview aria-hidden="true">
+        {t.blog.posts.map((p) => <img src={p.img} alt="" loading="lazy" />)}
+      </div>
+    </section>
+
+    <!-- ───── Final call to action ───── -->
+    <section class="x-wrap x-final" id="contact">
+      <div class="x-final__in">
+        <h2 data-split="lines">Czas na Twój ruch.</h2>
+        <p data-fade>Napisz albo umów bezpłatną, 15-minutową rozmowę.</p>
+        <div class="x-actions" data-fade>
+          <a class="x-btn" href={t.contact.bookHref}>Umów rozmowę</a>
+          <button class="x-btn x-btn--ghost" type="button" data-x-copy={t.contact.email}><span data-x-copy-label>{t.contact.email}</span></button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="x-foot">
+    <div class="x-wrap x-foot__grid x-foot__grid--5">
+      <div>
+        <a class="x-brand" href="/" aria-label="Nuuvie Studio"><Mark id="mark-x-foot" /><span>Nuuvie</span></a>
+        <p>Studio projektowe Daniela Trocia.</p>
+      </div>
+      <div><p>Usługi</p><ul>{services.map((s) => <li><a href="#services">{s.title}</a></li>)}</ul></div>
+      <div><p>Studio</p><ul>{nav.map((l) => <li><a href={l.href}>{l.label}</a></li>)}<li><a href="#about">O studiu</a></li></ul></div>
+      <div><p>Kontakt</p><ul><li><a href={`mailto:${t.contact.email}`}>{t.contact.email}</a></li><li><a href={t.contact.bookHref}>Umów rozmowę</a></li>{socials.map((s) => <li><a href={s.href} target="_blank" rel="noopener">{s.label}</a></li>)}</ul></div>
+      <div><p>Informacje</p><ul>{t.footer.legal.map((l) => <li><a href={l.href}>{l.label}</a></li>)}</ul></div>
+    </div>
+    <p class="x-wrap x-foot__copy">© {year} Nuuvie Studio</p>
+  </footer>
+
+  <script>
+    import '../scripts/next';
+  </script>
+</Base>
