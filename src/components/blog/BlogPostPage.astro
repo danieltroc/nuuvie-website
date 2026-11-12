@@ -1,0 +1,69 @@
+---
+import '../../styles/next.css';
+import '../../styles/blog.css';
+import { PortableText } from 'astro-portabletext';
+import Base from '../../layouts/Base.astro';
+import SiteNav from '../site/SiteNav.astro';
+import SiteFooter from '../site/SiteFooter.astro';
+import PostImage from './PostImage.astro';
+import { formatDate, getDict, type Locale } from '../../i18n';
+import { getPosts, postPath, blogPath, type Post } from '../../lib/sanity';
+interface Props { post: Post }
+const { post } = Astro.props;
+const language = post.language;
+const pl = language === 'pl';
+const t = getDict(language);
+const translation = post.translations[0];
+const more = (await getPosts(language)).filter((p) => p.slug !== post.slug).slice(0, 3);
+---
+<Base locale={language} title={`${post.seoTitle ?? post.title} – Nuuvie`} description={post.seoDescription ?? post.excerpt}>
+  <SiteNav language={language} alternate={translation ? postPath(translation.language, translation.slug) : undefined} />
+  <main id="top" class="x b">
+    <article>
+      <header class="x-wrap b-head">
+        <a class="x-more" href={blogPath(language)}>← Blog</a>
+        <time datetime={post.publishedAt} data-fade>{formatDate(post.publishedAt, language)}</time>
+        <h1 data-split="lines">{post.title}</h1>
+        {post.excerpt && <p data-fade>{post.excerpt}</p>}
+      </header>
+      {post.image && (
+        <div class="x-wrap"><div class="b-cover" data-fade><img src={post.image} alt={post.imageAlt ?? ''} width="1600" height="1067" /></div></div>
+      )}
+      <div class="x-wrap b-body">
+        {post.body?.length
+          ? <PortableText value={post.body as never} components={{ type: { image: PostImage } }} />
+          : <p class="b-empty">{pl ? 'Treść tego wpisu pojawi się po podłączeniu bloga do Sanity.' : 'The full text will appear once the blog is connected to Sanity.'}</p>}
+      </div>
+    </article>
+
+    <section class="x-wrap x-final b-cta">
+      <div class="x-final__in">
+        <h2 data-split="lines">{pl ? 'Masz projekt?' : 'Have a project?'}</h2>
+        <p data-fade>{pl ? 'Umów bezpłatną, 15-minutową rozmowę.' : 'Book a free 15-minute call.'}</p>
+        <div class="x-actions" data-fade>
+          <a class="x-btn" href={t.contact.bookHref}>{pl ? 'Umów rozmowę' : 'Book a call'}</a>
+          <a class="x-btn x-btn--ghost" href={`mailto:${t.contact.email}`}>{t.contact.email}</a>
+        </div>
+      </div>
+    </section>
+
+    {more.length > 0 && (
+      <section class="x-wrap x-sec b-more">
+        <header class="x-head x-head--row">
+          <h2 data-split="lines">{pl ? 'Czytaj dalej' : 'Keep reading'}</h2>
+          <a class="x-link" href={blogPath(language)}>{pl ? 'Wszystkie wpisy →' : 'All posts →'}</a>
+        </header>
+        <div class="x-cols">
+          {more.map((p) => (
+            <a class="x-col" href={postPath(language, p.slug)} data-fade>
+              <div class="x-project__img">{p.image && <img src={p.image} alt="" loading="lazy" />}</div>
+              <h3>{p.title}</h3>
+              <span class="x-more">{formatDate(p.publishedAt, language)}</span>
+            </a>
+          ))}
+        </div>
+      </section>
+    )}
+  </main>
+  <SiteFooter language={language} />
+</Base>

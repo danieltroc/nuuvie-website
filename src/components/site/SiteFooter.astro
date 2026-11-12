@@ -1,0 +1,29 @@
+---
+import Mark from '../Mark.astro';
+import { getDict, socials, type Locale } from '../../i18n';
+import { blogPath } from '../../lib/sanity';
+interface Props { language: Locale }
+const { language } = Astro.props;
+const t = getDict(language);
+const pl = language === 'pl';
+const year = new Date().getFullYear();
+---
+<footer class="x-foot">
+  <div class="x-wrap x-foot__grid">
+    <div>
+      <a class="x-brand" href="/" aria-label="Nuuvie Studio"><Mark id="mark-site-foot" /><span>Nuuvie</span></a>
+      <p>{pl ? 'Studio projektowe Daniela Trocia.' : "Daniel Troć's design studio."}</p>
+    </div>
+    <div><p>Studio</p><ul>
+      <li><a href="/#work">{pl ? 'Prace' : 'Work'}</a></li>
+      <li><a href="/strefa-designera">{pl ? 'Strefa Designera' : 'Designer Zone'}</a></li>
+      <li><a href={blogPath(language)}>Blog</a></li>
+    </ul></div>
+    <div><p>{pl ? 'Kontakt' : 'Contact'}</p><ul>
+      <li><a href={`mailto:${t.contact.email}`}>{t.contact.email}</a></li>
+      {socials.map((s) => <li><a href={s.href} target="_blank" rel="noopener">{s.label}</a></li>)}
+    </ul></div>
+    <div><p>{pl ? 'Informacje' : 'Info'}</p><ul>{t.footer.legal.map((l) => <li><a href={l.href}>{l.label}</a></li>)}</ul></div>
+  </div>
+  <p class="x-wrap x-foot__copy">© {year} Nuuvie Studio</p>
+</footer>

@@ -5,10 +5,12 @@
 import '../styles/next.css';
 import Base from '../layouts/Base.astro';
 import Mark from '../components/Mark.astro';
-import Arrow from '../components/Arrow.astro';
-import { getDict, formatDate, socials, clientLogos } from '../i18n';
+import BlogList from '../components/blog/BlogList.astro';
+import { getPosts } from '../lib/sanity';
+import { getDict, socials, clientLogos } from '../i18n';
 
 const t = getDict('pl');
+const posts = await getPosts('pl');
 const LIVE = 'https://www.nuuvie.com';
 const year = new Date().getFullYear();
 const markPath = 'M60.419 90.627C60.419 107.311 46.894 120.836 30.21 120.836C13.526 120.836 0.0002 107.311 0 90.627V30.21C0 13.526 13.526 0 30.21 0H60.419V90.627ZM90.633 0C107.317 0 120.842 13.526 120.842 30.21C120.842 46.868 107.359 60.376 90.711 60.418H120.842V90.627C120.842 107.311 107.317 120.836 90.633 120.836C73.949 120.836 60.424 107.311 60.424 90.627V60.418H90.555C73.907 60.376 60.424 46.868 60.424 30.21C60.424 13.526 73.949 0 90.633 0Z';
@@ -17,7 +19,7 @@ const nav = [
   { href: '#work', label: 'Prace' },
   { href: '#services', label: 'Usługi' },
   { href: '/strefa-designera/', label: 'Strefa Designera' },
-  { href: '#blog', label: 'Blog' },
+  { href: '/blog', label: 'Blog' },
   { href: '/fonty/', label: 'Fonty' },
 ];
 const services = [
@@ -268,23 +270,9 @@ const issues = [
     <section class="x-wrap x-sec" id="blog">
       <header class="x-head x-head--row">
         <h2 data-split="lines">Piszę o designie</h2>
-        <a class="x-link" href={t.blog.href} data-fade>Wszystkie wpisy →</a>
+        <a class="x-link" href="/blog" data-fade>Wszystkie wpisy →</a>
       </header>
-      <ul class="blog__list" data-fade-group data-blog-list>
-        {t.blog.posts.map((p, i) => (
-          <li class="post" data-fade>
-            <a href={p.href} data-post={i}>
-              <div class="post__thumb"><img src={p.img} alt="" width="144" height="144" loading="lazy" /></div>
-              <time datetime={p.date}>{formatDate(p.date, 'pl')}</time>
-              <h3>{p.title}</h3>
-              <span class="post__arrow" aria-hidden="true"><Arrow /></span>
-            </a>
-          </li>
-        ))}
-      </ul>
-      <div class="blog__preview" data-blog-preview aria-hidden="true">
-        {t.blog.posts.map((p) => <img src={p.img} alt="" loading="lazy" />)}
-      </div>
+      <BlogList posts={posts.slice(0, 6)} language="pl" />
     </section>
 
     <!-- ───── Final call to action ───── -->

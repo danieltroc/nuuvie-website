@@ -1,0 +1,32 @@
+/* Blog index and post pages. Builds on next.css (tokens, nav, buttons, footer). */
+
+.b-index { padding-top: clamp(7.5rem, 13vw, 11rem); }
+.b-index h1 { font-size: clamp(2.5rem, 1.2rem + 4.4vw, 5rem); line-height: 1.02; letter-spacing: -0.045em; font-weight: 500; max-width: 10ch; }
+
+/* Post header */
+.b-head { display: grid; justify-items: center; gap: 1.25rem; padding-top: clamp(7.5rem, 13vw, 11rem); text-align: center; }
+.b-head .x-more { margin: 0 0 1rem; }
+.b-head time { font-size: 0.9375rem; color: var(--muted); }
+.b-head h1 { font-size: clamp(2.25rem, 1.2rem + 3.6vw, 4.5rem); line-height: 1.05; letter-spacing: -0.04em; font-weight: 500; max-width: 18ch; text-wrap: balance; }
+.b-head p { font-size: clamp(1.0625rem, 1rem + 0.4vw, 1.3125rem); line-height: 1.5; color: var(--muted); max-width: 40ch; text-wrap: balance; }
+.b-cover { margin-top: clamp(2.5rem, 6vw, 4.5rem); aspect-ratio: 3 / 2; max-height: 44rem; width: 100%; overflow: hidden; border-radius: var(--radius); background: var(--paper-2); }
+.b-cover img { width: 100%; height: 100%; object-fit: cover; }
+
+/* Post body: a comfortable reading column */
+.b-body { max-width: 44rem; margin-inline: auto; padding-top: clamp(3rem, 7vw, 5rem); font-size: clamp(1.0625rem, 1rem + 0.25vw, 1.1875rem); line-height: 1.7; }
+.b-body > * + * { margin-top: 1.25em; }
+.b-body h2 { font-size: clamp(1.5rem, 1.1rem + 1.4vw, 2.125rem); line-height: 1.15; letter-spacing: -0.03em; font-weight: 500; margin-top: 2.25em; }
+.b-body h3 { font-size: clamp(1.25rem, 1.05rem + 0.7vw, 1.5rem); line-height: 1.25; letter-spacing: -0.02em; font-weight: 500; margin-top: 1.75em; }
+.b-body h2 + *, .b-body h3 + * { margin-top: 0.75em; }
+.b-body a { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 0.2em; }
+.b-body strong { font-weight: 600; }
+.b-body ul, .b-body ol { padding-left: 1.25em; }
+.b-body ul { list-style: disc; }
+.b-body ol { list-style: decimal; }
+.b-body li + li { margin-top: 0.4em; }
+.b-body blockquote { padding: 1.25rem 1.5rem; border-radius: var(--radius); background: var(--paper-2); font-size: 1.125em; line-height: 1.5; letter-spacing: -0.01em; }
+.b-figure { margin-block: 2.5em; }
+.b-figure img { width: 100%; height: auto; border-radius: var(--radius); }
+.b-figure figcaption { margin-top: 0.6rem; font-size: 0.875rem; color: var(--muted); text-align: center; }
+.b-empty { padding: 1.5rem; border-radius: var(--radius); background: var(--paper-2); color: var(--muted); text-align: center; }
+.b-cta { margin-top: clamp(4rem, 8vw, 7rem); }

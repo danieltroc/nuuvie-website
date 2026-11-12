@@ -1,0 +1,23 @@
+---
+// Row list of posts with the pointer-following preview (motion.ts). Used on the home page and /blog.
+import Arrow from '../Arrow.astro';
+import { formatDate, type Locale } from '../../i18n';
+import { postPath, type Post } from '../../lib/sanity';
+interface Props { posts: Post[]; language: Locale }
+const { posts, language } = Astro.props;
+---
+<ul class="blog__list" data-fade-group data-blog-list>
+  {posts.map((p, i) => (
+    <li class="post" data-fade>
+      <a href={postPath(language, p.slug)} data-post={i}>
+        <div class="post__thumb">{p.image && <img src={p.image} alt="" width="144" height="144" loading="lazy" />}</div>
+        <time datetime={p.publishedAt}>{formatDate(p.publishedAt, language)}</time>
+        <h3>{p.title}</h3>
+        <span class="post__arrow" aria-hidden="true"><Arrow /></span>
+      </a>
+    </li>
+  ))}
+</ul>
+<div class="blog__preview" data-blog-preview aria-hidden="true">
+  {posts.map((p) => <img src={p.image} alt="" loading="lazy" />)}
+</div>

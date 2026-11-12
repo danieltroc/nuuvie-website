@@ -1,5 +1,7 @@
 import { pl, type Dict } from './pl';
 
+const LIVE = 'https://www.nuuvie.com';
+
 export const en: Dict = {
   locale: 'en',
   meta: {
@@ -128,9 +130,9 @@ export const en: Dict = {
     cta: 'Go to the blog',
     read: 'Read',
     posts: [
-      { ...pl.blog.posts[0], title: 'Rebranding a visual identity: the Old Craft Barbershop Lublin case study' },
-      { ...pl.blog.posts[1], title: 'Human touch in design: why brands are running from perfection in 2026' },
-      { ...pl.blog.posts[2], title: 'Why a weak brand costs you more than you think' },
+      { ...pl.blog.posts[0], href: `${LIVE}/en/blog-posts/visual-identity-rebrand-old-craft-barbershop-lublin-case-study`, title: 'Rebranding a visual identity: the Old Craft Barbershop Lublin case study' },
+      { ...pl.blog.posts[1], href: `${LIVE}/en/blog-posts/human-touch-in-design-why-brands-in-2026-are-moving-away-from-perfection`, title: 'Human touch in design: why brands are running from perfection in 2026' },
+      { ...pl.blog.posts[2], href: `${LIVE}/en/blog-posts/why-a-weak-brand-costs-you-more-than-you-think`, title: 'Why a weak brand costs you more than you think' },
       { ...pl.blog.posts[3], title: 'A website UX audit – do it yourself or hire professionals' },
       { ...pl.blog.posts[4], title: 'How to choose a UX/UI designer' },
       { ...pl.blog.posts[5], title: 'How much does a website cost in 2026?' },

@@ -1,0 +1,12 @@
+---
+// Image block inside a post body (Portable Text).
+import { imageUrl } from '../../lib/sanity';
+const { node } = Astro.props as { node: { alt?: string; caption?: string } };
+const src = imageUrl(node, 1600);
+---
+{src && (
+  <figure class="b-figure">
+    <img src={src} alt={node.alt ?? ''} loading="lazy" />
+    {node.caption && <figcaption>{node.caption}</figcaption>}
+  </figure>
+)}

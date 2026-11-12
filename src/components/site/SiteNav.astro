@@ -1,0 +1,27 @@
+---
+// Top bar used by the blog pages. `alternate` is the same page in the other language, when it exists.
+import Mark from '../Mark.astro';
+import { getDict, type Locale } from '../../i18n';
+import { blogPath } from '../../lib/sanity';
+interface Props { language: Locale; alternate?: string }
+const { language, alternate } = Astro.props;
+const t = getDict(language);
+const pl = language === 'pl';
+const links = [
+  { href: '/#work', label: pl ? 'Prace' : 'Work' },
+  { href: '/#services', label: pl ? 'Usługi' : 'Services' },
+  { href: '/strefa-designera', label: pl ? 'Strefa Designera' : 'Designer Zone' },
+  { href: blogPath(language), label: 'Blog' },
+];
+const other: Locale = pl ? 'en' : 'pl';
+---
+<header class="x-nav">
+  <div class="x-wrap x-nav__in">
+    <a class="x-brand" href="/" aria-label="Nuuvie Studio"><Mark id="mark-site-nav" /><span>Nuuvie</span></a>
+    <nav aria-label="Menu">{links.map((l) => <a href={l.href}>{l.label}</a>)}</nav>
+    <div class="x-nav__right">
+      <a class="x-nav__link" href={alternate ?? blogPath(other)} hreflang={other} lang={other}>{other.toUpperCase()}</a>
+      <a class="x-btn x-btn--sm" href={t.contact.bookHref}>{pl ? 'Porozmawiajmy' : "Let's talk"}</a>
+    </div>
+  </div>
+</header>

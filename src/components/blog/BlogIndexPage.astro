@@ -1,0 +1,31 @@
+---
+import '../../styles/next.css';
+import '../../styles/blog.css';
+import Base from '../../layouts/Base.astro';
+import SiteNav from '../site/SiteNav.astro';
+import SiteFooter from '../site/SiteFooter.astro';
+import BlogList from './BlogList.astro';
+import { type Locale } from '../../i18n';
+import { getPosts, blogPath } from '../../lib/sanity';
+interface Props { language: Locale }
+const { language } = Astro.props;
+const pl = language === 'pl';
+const posts = await getPosts(language);
+const title = pl ? 'Blog – Nuuvie Studio' : 'Blog – Nuuvie Studio';
+const description = pl
+  ? 'Piszę o designie: branding, UX/UI, strony internetowe i praca z marką.'
+  : 'Writing about design: branding, UX/UI, websites and building brands.';
+---
+<Base locale={language} title={title} description={description}>
+  <SiteNav language={language} alternate={blogPath(pl ? 'en' : 'pl')} />
+  <main id="top" class="x b">
+    <section class="x-wrap b-index">
+      <header class="x-head x-head--split">
+        <h1 data-split="lines">{pl ? 'Piszę o designie' : 'Writing about design'}</h1>
+        <div data-fade><p>{description}</p></div>
+      </header>
+      <BlogList posts={posts} language={language} />
+    </section>
+  </main>
+  <SiteFooter language={language} />
+</Base>
