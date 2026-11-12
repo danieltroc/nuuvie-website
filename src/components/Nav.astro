@@ -1,0 +1,44 @@
+---
+import Mark from './Mark.astro';
+import Button from './Button.astro';
+import { type Locale, locales, homePath, getDict, socials } from '../i18n';
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+const t = getDict(locale);
+const links = [
+  { href: '#work', label: t.nav.work },
+  { href: '#services', label: t.nav.services },
+  { href: '#about', label: t.nav.about },
+  { href: '#blog', label: t.nav.blog },
+  { href: '#contact', label: t.nav.contact },
+];
+---
+<header class="nav" data-nav>
+  <div class="nav__bar">
+    <a class="brand" href={homePath(locale)} aria-label="Nuuvie Studio"><Mark id="mark-nav" />Nuuvie</a>
+    <nav aria-label={t.nav.menu}>
+      <ul class="nav__links">
+        {links.slice(0, 4).map((l) => <li><a href={l.href}>{l.label}</a></li>)}
+      </ul>
+    </nav>
+    <div class="nav__right">
+      <div class="lang mono" role="group" aria-label="Language">
+        {locales.map((l) => (
+          <a href={homePath(l)} hreflang={l} lang={l} aria-current={l === locale ? 'true' : undefined}>{l}</a>
+        ))}
+      </div>
+      <Button href="#contact" label={t.nav.cta} size="sm" class="nav__cta" />
+      <button class="nav__toggle" type="button" data-menu-toggle aria-expanded="false" aria-controls="menu" aria-label={t.nav.menu}><i></i><i></i></button>
+    </div>
+  </div>
+</header>
+
+<div class="menu" id="menu" data-menu>
+  <ul class="menu__links">
+    {links.map((l, i) => <li><a href={l.href} style={`--i:${i}`} data-menu-link>{l.label}</a></li>)}
+  </ul>
+  <div class="menu__foot mono">
+    <a href={`mailto:${t.contact.email}`}>{t.contact.email}</a>
+    <ul>{socials.slice(0, 2).map((s) => <li><a href={s.href} target="_blank" rel="noopener">{s.label}</a></li>)}</ul>
+  </div>
+</div>

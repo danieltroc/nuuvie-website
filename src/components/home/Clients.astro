@@ -1,0 +1,20 @@
+---
+import { type Dict, clientLogos } from '../../i18n';
+interface Props { t: Dict }
+const { t } = Astro.props;
+---
+<section class="clients" aria-label={t.clients.label}>
+  <div class="container clients__head" data-fade-group>
+    <span class="mono label" data-fade>{t.clients.label}</span>
+    <p class="muted" data-fade>{t.clients.text}</p>
+  </div>
+  <div class="marquee" data-marquee>
+    <div class="marquee__track">
+      {[0, 1].map((n) => (
+        <div class="marquee__group" aria-hidden={n === 1 ? 'true' : undefined}>
+          {clientLogos.map((l) => <img src={`/img/logos/${l}.svg`} alt={n === 0 ? l : ''} width="150" height="100" loading="lazy" />)}
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

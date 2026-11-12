@@ -1,0 +1,140 @@
+/* "Nova Swiss" — Nova's structure and interactions in a calm Swiss tone.
+   Versus Nova: white work section, no flood transition, lighter type, one red-orange accent.
+   Second pass: Nova's rounded buttons back, far fewer lines and labels, more air everywhere.
+   Rule of thumb here: separate sections with space, not with lines. */
+
+html[data-theme='nova-swiss']:root {
+  --paper: #ffffff;
+  --paper-2: #f5f5f7;
+  --ink: #111111;
+  --muted: #7a7a7a;
+  --line: rgb(17 17 17 / 0.1);
+  --accent: #ff3d00;
+  --radius: 1.25rem;
+  --section: clamp(7rem, 3rem + 11vw, 15rem);
+}
+html[data-theme='nova-swiss'] .nav__bar { background: rgb(255 255 255 / 0.86); box-shadow: 0 1px 0 var(--line); }
+html[data-theme='nova-swiss'] .cursor { background: var(--ink); color: #fff; }
+
+/* Quiet small text: sans, sentence case, instead of mono capitals */
+.nova--swiss .mono { font-family: var(--font-sans); text-transform: none; letter-spacing: -0.005em; font-size: 0.9375rem; }
+.nova--swiss .n-label { color: var(--muted); }
+.nova--swiss :is(.n-hero__title, .n-h2, .n-manifesto__text, .n-svc__item h3, .n-svc__q, .n-stat__v, .n-num, .n-mail span, .n-quotes blockquote, .n-card h3, .n-post h3, .post h3) { font-weight: 400; }
+.nova--swiss .n-h2 { font-size: clamp(2.25rem, 1.2rem + 3.6vw, 5rem); line-height: 1.04; letter-spacing: -0.035em; }
+.nova--swiss .n-head { margin-bottom: clamp(3rem, 6vw, 6rem); }
+
+/* ───── Hero ───── */
+.nova--swiss .n-hero { height: auto; min-height: 0; overflow: visible; padding-inline: var(--gutter); }
+.nova--swiss .n-hero__content { height: auto; padding-inline: 0; padding-top: clamp(6.5rem, 10vw, 9rem); padding-bottom: 0; gap: clamp(3.5rem, 9vw, 8rem); }
+.nova--swiss .n-hero__meta { border-bottom: 0; padding-bottom: 0; }
+.nova--swiss .n-hero__meta span span { color: var(--muted); }
+.nova--swiss .n-hero__title { font-size: clamp(2.75rem, 1rem + 6.8vw, 8.25rem); line-height: 1.02; letter-spacing: -0.045em; }
+.nova--swiss .n-hero__foot { padding: 0; }
+.nova--swiss .n-hero__lead { gap: 2rem; }
+.nova--swiss .n-hero__lead p { line-height: 1.5; }
+.nova--swiss .n-index { display: grid; grid-template-columns: repeat(2, 1fr); gap: 2rem var(--gutter); margin-top: clamp(4rem, 9vw, 8rem); padding-bottom: var(--section); }
+.nova--swiss .n-index li { display: grid; gap: 0.35rem; align-content: start; line-height: 1.4; }
+.nova--swiss .n-index .mono { color: var(--muted); }
+@media (min-width: 900px) { .nova--swiss .n-index { grid-template-columns: repeat(4, 1fr); } }
+
+/* ───── Work: white, captions under the pictures ───── */
+.nova--swiss .n-work { background: none; color: var(--ink); border-radius: 0; padding: 0 var(--gutter) var(--section); }
+.nova--swiss .n-work .n-head .mono { color: var(--muted); }
+.nova--swiss .n-bento { gap: clamp(4rem, 7vw, 6.5rem) var(--gutter); }
+.nova--swiss .n-card { background: none; color: var(--ink); aspect-ratio: auto; overflow: visible; border-radius: 0; }
+.nova--swiss .n-card img { position: relative; inset: auto; height: auto; aspect-ratio: 16 / 10; border-radius: var(--radius); transform: none; }
+.nova--swiss .n-card__idx { display: none; }
+.nova--swiss .n-card__info { position: static; background: none; padding: 1.25rem 0 0; display: grid; gap: 0.4rem; }
+.nova--swiss .n-card h3 { font-size: clamp(1.5rem, 1.1rem + 1.2vw, 2.25rem); }
+.nova--swiss .n-card p { color: var(--muted); margin: 0; }
+/* Tags read as a plain line, not as boxes */
+.nova--swiss .n-card ul { gap: 0; color: var(--muted); }
+.nova--swiss .n-card li { padding: 0; background: none; border-radius: 0; font-size: 0.9375rem; }
+.nova--swiss .n-card li + li::before { content: ', '; }
+@media (min-width: 900px) { .nova--swiss .n-card:first-child img { aspect-ratio: 16 / 7.5; } }
+
+/* ───── Manifesto ───── */
+.nova--swiss .n-manifesto { text-align: left; justify-items: start; padding: 0 var(--gutter) var(--section); }
+.nova--swiss .n-manifesto__text { font-size: clamp(1.875rem, 1rem + 2.8vw, 3.75rem); line-height: 1.16; letter-spacing: -0.03em; max-width: 26ch; text-wrap: pretty; }
+.nova--swiss .n-manifesto__sig { color: var(--muted); margin-top: 1rem; }
+@media (min-width: 900px) {
+  .nova--swiss .n-manifesto { grid-template-columns: 3fr 9fr; column-gap: var(--gutter); }
+  .nova--swiss .n-manifesto > :not(.n-label) { grid-column: 2; }
+  .nova--swiss .n-manifesto > .n-label { grid-row: 1 / span 2; padding-top: 0.6em; }
+}
+
+/* ───── Services: same rolling index, calmer and airier ───── */
+.nova--swiss .n-svc { padding-bottom: var(--section); }
+.nova--swiss .n-svc__aside { border-top: 0; }
+.nova--swiss .n-svc__n { color: var(--muted); }
+.nova--swiss .n-svc__item { border-top: 0; padding-block: 2.5rem; gap: 1.25rem; }
+.nova--swiss .n-svc__item h3 { font-size: clamp(1.75rem, 1rem + 2.2vw, 3rem); line-height: 1.08; }
+.nova--swiss .n-svc__item p { line-height: 1.55; }
+@media (min-width: 900px) {
+  .nova--swiss .n-svc__grid { grid-template-columns: 4fr 8fr; }
+  .nova--swiss .n-svc__aside { padding-block: 6rem 3rem; }
+  .nova--swiss .n-num { font-size: clamp(7rem, 12vw, 12rem); }
+  .nova--swiss .n-num__col { color: var(--accent); }
+  .nova--swiss .n-svc__item { min-height: 50svh; }
+  .nova--swiss .n-svc__item:last-child { border-bottom: 0; }
+}
+
+/* ───── Numbers + clients: no table, just space ───── */
+.nova--swiss .n-stats { border: 0; gap: 3rem var(--gutter); }
+.nova--swiss .n-stat { padding: 0; gap: 1rem; border: 0 !important; }
+.nova--swiss .n-stat__v { font-size: clamp(3.75rem, 2rem + 5.4vw, 7rem); line-height: 1; }
+.nova--swiss .n-stat .mono { color: var(--ink); margin-bottom: 0.25rem; }
+.nova--swiss .n-stat p:last-child { line-height: 1.5; }
+.nova--swiss .n-facts__label { margin: var(--section) 0 clamp(2rem, 4vw, 3.5rem); }
+.nova--swiss .n-clients { background: none; border: 0; gap: clamp(1.5rem, 3vw, 3rem) var(--gutter); }
+.nova--swiss .n-clients li { padding: 0; background: none; }
+.nova--swiss .n-clients img { opacity: 0.7; }
+
+/* ───── Opinions ───── */
+.nova--swiss .n-quotes { background: var(--paper-2); border-radius: calc(var(--radius) * 1.6); padding: clamp(2rem, 5vw, 5rem); gap: 3rem; }
+.nova--swiss .n-quotes blockquote { font-size: clamp(1.375rem, 1rem + 1.6vw, 2.5rem); line-height: 1.22; letter-spacing: -0.025em; }
+.nova--swiss .n-quotes blockquote.is-long { font-size: clamp(1.125rem, 1rem + 0.7vw, 1.625rem); line-height: 1.4; letter-spacing: -0.015em; }
+.nova--swiss .n-quotes__tabs button { padding: 1rem 0; }
+.nova--swiss .n-quotes__tabs i { background: var(--ink); }
+@media (min-width: 900px) { .nova--swiss .n-quotes { grid-template-columns: 4fr 8fr; min-height: 30rem; } }
+
+/* ───── Blog: the Apple / Swiss row list (base styles live in global.css) ───── */
+.nova--swiss .n-blog { padding: 0 var(--gutter) var(--section); }
+.nova--swiss .post a { padding-block: clamp(1.5rem, 2.6vw, 2.25rem); }
+.nova--swiss .post h3 { line-height: 1.22; }
+.nova--swiss .post time { color: var(--muted); }
+
+/* ───── Contact ───── */
+.nova--swiss .n-contact > .n-label { border-top: 0; padding-top: 0; }
+.nova--swiss .n-contact__title { color: var(--muted); margin-top: 1.5rem; line-height: 1.1; }
+.nova--swiss .n-mail { margin-top: 1rem; }
+.nova--swiss .n-mail span { font-size: clamp(2rem, 6.2vw, 7.5rem); line-height: 1.1; }
+.nova--swiss .n-mail em { margin-top: 1.25rem; }
+.nova--swiss .n-foot { margin-top: var(--section); border-top: 1px solid var(--line); padding-top: 1.75rem; }
+
+/* ───── Two paths ───── */
+.n-paths { padding: 0 var(--gutter) var(--section); }
+.n-paths .n-head { align-items: flex-end; }
+.n-paths .n-label { display: block; margin-bottom: 1.25rem; }
+.n-paths__intro { max-width: 30ch; color: var(--muted); font-size: var(--fs-lead); line-height: 1.45; }
+.n-paths__grid { display: grid; gap: 0.75rem; }
+.n-path { display: flex; flex-direction: column; gap: 1.5rem; padding: clamp(1.75rem, 4vw, 3.75rem); border-radius: calc(var(--radius) * 1.6); background: var(--paper-2); color: var(--ink); }
+.n-path--dark { background: var(--ink); color: #fff; }
+.n-path__tag { color: var(--muted); }
+.n-path__tag span { display: none; }
+.n-path--dark .n-path__tag { color: rgb(255 255 255 / 0.55); }
+.n-path h3 { font-size: clamp(1.875rem, 1rem + 2.2vw, 3.25rem); line-height: 1.08; letter-spacing: -0.035em; font-weight: 400; max-width: 15ch; text-wrap: balance; }
+.n-path__lead { font-size: var(--fs-lead); line-height: 1.5; color: var(--muted); max-width: 34ch; }
+.n-path--dark .n-path__lead { color: rgb(255 255 255 / 0.62); }
+.n-path__list { display: grid; gap: 0.6rem; margin-top: 0.5rem; line-height: 1.4; }
+.n-path__list li::before { content: '—'; margin-right: 0.6em; color: var(--muted); }
+.n-path--dark .n-path__list li::before { color: rgb(255 255 255 / 0.4); }
+.n-path__foot { display: grid; gap: 1.25rem; justify-items: start; margin-top: auto; padding-top: clamp(2rem, 5vw, 4rem); }
+.n-path__foot .mono { color: var(--muted); }
+.n-path--dark .n-path__foot .mono { color: rgb(255 255 255 / 0.55); }
+.n-path__alt { font-size: 0.9375rem; color: var(--muted); }
+.n-path--dark .n-path__alt { color: rgb(255 255 255 / 0.55); }
+@media (min-width: 900px) {
+  .n-paths__grid { grid-template-columns: 1fr 1fr; }
+  .n-path { min-height: 42rem; }
+}

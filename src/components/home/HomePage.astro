@@ -1,0 +1,38 @@
+---
+import Base from '../../layouts/Base.astro';
+import Preloader from '../Preloader.astro';
+import Nav from '../Nav.astro';
+import Footer from '../Footer.astro';
+import Hero from './Hero.astro';
+import Clients from './Clients.astro';
+import Manifesto from './Manifesto.astro';
+import Work from './Work.astro';
+import Services from './Services.astro';
+import Stats from './Stats.astro';
+import Testimonials from './Testimonials.astro';
+import Blog from './Blog.astro';
+import Contact from './Contact.astro';
+import { type Locale, getDict } from '../../i18n';
+import DesignSwitcher from '../DesignSwitcher.astro';
+interface Props { locale: Locale; theme?: string }
+const { locale, theme } = Astro.props;
+const t = getDict(locale);
+---
+<Base locale={locale} theme={theme}>
+  <DesignSwitcher theme={theme} />
+  <Preloader />
+  <Nav locale={locale} />
+  <main id="top">
+    <Hero t={t} />
+    <Clients t={t} />
+    <Manifesto t={t} />
+    <Work t={t} />
+    <Services t={t} />
+    <Stats t={t} />
+    <Testimonials t={t} />
+    <Blog t={t} locale={locale} />
+    <Contact t={t} />
+  </main>
+  <Footer locale={locale} />
+  <div class="cursor mono" data-cursor-el aria-hidden="true"><span></span></div>
+</Base>

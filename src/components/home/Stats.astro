@@ -1,0 +1,17 @@
+---
+import type { Dict } from '../../i18n';
+interface Props { t: Dict }
+const { t } = Astro.props;
+---
+<section class="section stats container">
+  <div class="stats__grid">
+    {t.stats.map((s) => (
+      <div class="stat">
+        <div class="rule" data-rule></div>
+        <p class="stat__value"><span data-count={s.value}>{s.value}</span>{s.suffix && <sup>{s.suffix}</sup>}</p>
+        <span class="mono" data-fade>{s.unit}</span>
+        <p data-fade>{s.text}</p>
+      </div>
+    ))}
+  </div>
+</section>

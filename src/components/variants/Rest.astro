@@ -1,0 +1,91 @@
+---
+// Lower half of the page shared by the Tiles / Form / Reel variants.
+// Neutral markup; each variant restyles it through tokens and a few overrides (see rest.css).
+import Mark from '../Mark.astro';
+import { getDict, formatDate, socials, clientLogos } from '../../i18n';
+interface Props { id: string }
+const { id } = Astro.props;
+const t = getDict('pl');
+const year = new Date().getFullYear();
+---
+<div class="r">
+  <section class="r-sec r-about" id="about">
+    <p class="r-label" data-fade>Dlaczego to robię</p>
+    <p class="r-lead" data-fade>Design to narzędzie, które eliminuje domysły Twoich klientów. Marka ma mówić to, co najważniejsze, zanim ktokolwiek przeczyta pierwsze słowo.</p>
+    <p class="r-sig" data-fade>{t.manifesto.author}, {t.manifesto.role.toLowerCase()}</p>
+  </section>
+
+  <section class="r-sec r-services" id="services">
+    <p class="r-label" data-fade>Usługi</p>
+    <h2 class="r-h" data-fade>{t.services.title}</h2>
+    <ol class="r-list">
+      {t.services.items.map((s, i) => (
+        <li class="r-panel" data-fade>
+          <span class="r-num">0{i + 1}</span>
+          <h3>{s.title}</h3>
+          <p>{s.body}</p>
+        </li>
+      ))}
+    </ol>
+  </section>
+
+  <section class="r-sec r-facts">
+    <div class="r-stats">
+      {t.stats.map((s) => (
+        <div class="r-stat" data-fade>
+          <b><span data-count={s.value}>{s.value}</span>{s.suffix}</b>
+          <span>{s.unit}</span>
+          <p>{s.text}</p>
+        </div>
+      ))}
+    </div>
+    <p class="r-label r-logos-label" data-fade>{t.clients.text}</p>
+    <ul class="r-logos">
+      {clientLogos.map((l) => <li data-fade><img src={`/img/logos/${l}.svg`} alt={l} width="150" height="100" loading="lazy" /></li>)}
+    </ul>
+  </section>
+
+  <section class="r-sec r-quotes">
+    <p class="r-label" data-fade>{t.testimonials.label}</p>
+    <div class="r-quotes__grid">
+      {t.testimonials.items.map((q) => (
+        <figure class="r-panel" data-fade>
+          <blockquote>„{q.quote}”</blockquote>
+          <figcaption><img src={q.img} alt="" width="80" height="80" loading="lazy" /><span>{q.name}<br /><em>{q.company}</em></span></figcaption>
+        </figure>
+      ))}
+    </div>
+  </section>
+
+  <section class="r-sec r-blog" id="blog">
+    <div class="r-row">
+      <h2 class="r-h" data-fade>{t.blog.title}</h2>
+      <a class="r-link" href={t.blog.href} data-fade>Wszystkie wpisy</a>
+    </div>
+    <div class="r-posts">
+      {t.blog.posts.slice(0, 3).map((p) => (
+        <a class="r-post" href={p.href} data-fade>
+          <div class="r-post__img"><img src={p.img} alt="" width="1344" height="896" loading="lazy" /></div>
+          <time datetime={p.date}>{formatDate(p.date, 'pl')}</time>
+          <h3>{p.title}</h3>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <section class="r-sec r-contact" id="contact">
+    <div class="r-contact__box" data-fade>
+      <h2 class="r-h">Czas na Twój ruch.</h2>
+      <a class="r-mail" href={`mailto:${t.contact.email}`}>{t.contact.email}</a>
+      <p>{t.contact.bookText}</p>
+      <a class="r-btn" href={t.contact.bookHref}>{t.contact.bookCta}</a>
+    </div>
+  </section>
+
+  <footer class="r-foot">
+    <a class="brand" href={`/design/${id}/`} aria-label="Nuuvie Studio"><Mark id={`mark-foot-${id}`} />Nuuvie</a>
+    <ul>{socials.map((s) => <li><a href={s.href} target="_blank" rel="noopener">{s.label}</a></li>)}</ul>
+    <ul>{t.footer.legal.map((l) => <li><a href={l.href}>{l.label}</a></li>)}</ul>
+    <span>© {year} Nuuvie</span>
+  </footer>
+</div>

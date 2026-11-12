@@ -1,0 +1,11 @@
+---
+// Design variants of the home page, for comparison only (Polish content).
+import HomePage from '../../components/home/HomePage.astro';
+import { themes } from '../../i18n';
+
+export function getStaticPaths() {
+  return themes.filter((t) => !('custom' in t)).map((t) => ({ params: { theme: t.id } }));
+}
+const { theme } = Astro.params;
+---
+<HomePage locale="pl" theme={theme} />

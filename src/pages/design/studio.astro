@@ -1,0 +1,158 @@
+---
+// "Studio" — the restrained variant. One typeface, two sizes, no cards, pills, gradients,
+// counters or icons. The work is the only colour on the page. Polish only.
+import '../../styles/studio.css';
+import Base from '../../layouts/Base.astro';
+import DesignSwitcher from '../../components/DesignSwitcher.astro';
+import { getDict, formatDate, socials } from '../../i18n';
+
+const t = getDict('pl');
+const year = new Date().getFullYear();
+const clients = ['Sii', 'Tedee', 'Netwise', 'Polpharma', 'Leroy Merlin', 'Algida', 'Maersk', 'Jabra', 'Predica', 'Heroswipe', 'AMS', 'Old Craft Barbershop'];
+const nav = [
+  { href: '#work', label: 'Prace' },
+  { href: '#services', label: 'Usługi' },
+  { href: '#about', label: 'Studio' },
+  { href: '#blog', label: 'Blog' },
+];
+---
+<Base locale="pl" theme="studio">
+  <DesignSwitcher theme="studio" />
+
+  <header class="s-nav">
+    <a href="/design/studio/">Nuuvie Studio</a>
+    <nav aria-label="Menu">
+      {nav.map((l, i) => <><a href={l.href}>{l.label}</a>{i < nav.length - 1 && <span aria-hidden="true">, </span>}</>)}
+    </nav>
+    <a href="#contact">Kontakt</a>
+  </header>
+
+  <main id="top" class="studio">
+    <!-- ───── Opening statement ───── -->
+    <section class="s-intro">
+      <h1 class="s-big" data-split="lines">
+        Nuuvie to studio projektowe Daniela Trocia. Projektuję marki i&nbsp;produkty cyfrowe, które budują zaufanie od pierwszego kontaktu.
+      </h1>
+      <div class="s-cols">
+        <div data-fade>
+          <p class="s-dim">(Zakres)</p>
+          <ul>{t.hero.services.map((s) => <li>{s}</li>)}</ul>
+        </div>
+        <div data-fade>
+          <p class="s-dim">(Doświadczenie)</p>
+          <ul>
+            <li>15 lat w UX/UI i brandingu</li>
+            <li>Klienci z 11 krajów</li>
+            <li>Ponad 2540 projektów</li>
+          </ul>
+        </div>
+        <div data-fade>
+          <p class="s-dim">(Kontakt)</p>
+          <ul>
+            <li><a class="s-u" href={`mailto:${t.contact.email}`}>{t.contact.email}</a></li>
+            <li><a class="s-u" href={t.contact.bookHref}>Umów 15-minutową rozmowę</a></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ───── Work ───── -->
+    <section class="s-work" id="work">
+      <p class="s-rule"><span>Wybrane projekty</span><span>({String(t.work.items.length).padStart(2, '0')})</span></p>
+      <div class="s-work__grid">
+        {t.work.items.map((w, i) => (
+          <a class="s-project" href={w.href} data-cursor="Zobacz projekt">
+            <div class="s-project__img" data-s-reveal><img src={w.img} alt="" width="2400" height="1350" loading={i === 0 ? 'eager' : 'lazy'} /></div>
+            <div class="s-project__cap">
+              <p><span class="s-dim">({String(i + 1).padStart(2, '0')})</span> {w.name}</p>
+              <p class="s-dim">{w.kicker}</p>
+              <p class="s-dim">{w.tags.join(', ')}</p>
+            </div>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <!-- ───── Studio ───── -->
+    <section class="s-about" id="about">
+      <p class="s-dim" data-fade>(Studio)</p>
+      <div>
+        <p class="s-big" data-split="lines"><span class="s-indent" aria-hidden="true"></span>
+          Design to narzędzie, które eliminuje domysły Twoich klientów. Moim zadaniem jest sprawić, by Twoja marka mówiła to, co najważniejsze, zanim użytkownik przeczyta pierwsze słowo.
+        </p>
+        <p class="s-sig" data-fade>{t.manifesto.author}<br /><span class="s-dim">{t.manifesto.role}</span></p>
+      </div>
+    </section>
+
+    <!-- ───── Services ───── -->
+    <section class="s-services" id="services">
+      <p class="s-rule"><span>Usługi</span><span>({String(t.services.items.length).padStart(2, '0')})</span></p>
+      <ol>
+        {t.services.items.map((s, i) => (
+          <li data-fade>
+            <span class="s-dim">({String(i + 1).padStart(2, '0')})</span>
+            <h3>{s.title}</h3>
+            <p>{s.body}</p>
+          </li>
+        ))}
+      </ol>
+    </section>
+
+    <!-- ───── Clients ───── -->
+    <section class="s-clients">
+      <p class="s-dim" data-fade>(Klienci)</p>
+      <p class="s-big s-names" data-fade>
+        {clients.map((c, i) => <><span>{c}</span>{i < clients.length - 1 ? ', ' : '.'}</>)}
+      </p>
+    </section>
+
+    <!-- ───── Opinions ───── -->
+    <section class="s-quotes">
+      <p class="s-rule"><span>Opinie</span><span>({String(t.testimonials.items.length).padStart(2, '0')})</span></p>
+      <div class="s-quotes__grid">
+        {t.testimonials.items.map((q) => (
+          <figure data-fade>
+            <blockquote>„{q.quote}”</blockquote>
+            <figcaption>{q.name}<br /><span class="s-dim">{q.company}</span></figcaption>
+          </figure>
+        ))}
+      </div>
+    </section>
+
+    <!-- ───── Blog ───── -->
+    <section class="s-blog" id="blog">
+      <p class="s-rule"><span>Blog</span><a class="s-u" href={t.blog.href}>Wszystkie wpisy</a></p>
+      <ul>
+        {t.blog.posts.map((p) => (
+          <li data-fade>
+            <a href={p.href}>
+              <time class="s-dim" datetime={p.date}>{formatDate(p.date, 'pl')}</time>
+              <h3>{p.title}</h3>
+              <span class="s-dim">Czytaj</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <!-- ───── Contact ───── -->
+    <section class="s-contact" id="contact">
+      <p class="s-dim" data-fade>(Kontakt)</p>
+      <p class="s-big" data-fade>
+        Czas na Twój ruch. Napisz na <a class="s-u" href={`mailto:${t.contact.email}`}>{t.contact.email}</a> albo <a class="s-u" href={t.contact.bookHref}>umów bezpłatną, 15-minutową rozmowę</a>.
+      </p>
+    </section>
+
+    <footer class="s-foot">
+      <span>© {year} Nuuvie Studio</span>
+      <ul>{socials.map((s) => <li><a class="s-u" href={s.href} target="_blank" rel="noopener">{s.label}</a></li>)}</ul>
+      <ul>{t.footer.legal.map((l) => <li><a class="s-u" href={l.href}>{l.label}</a></li>)}</ul>
+      <a class="s-u" href="#top">Do góry</a>
+    </footer>
+  </main>
+
+  <div class="cursor" data-cursor-el aria-hidden="true"><span></span></div>
+  <script>
+    import '../../scripts/studio';
+  </script>
+</Base>

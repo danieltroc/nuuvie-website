@@ -1,0 +1,65 @@
+/* Nuuvie design tokens — the whole system lives here.
+   Change a value in this file and it changes everywhere. */
+
+@font-face {
+  font-family: 'BDO Grotesk';
+  src: url('/fonts/BDOGrotesk-VF.ttf') format('truetype');
+  font-weight: 300 900;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Roboto Mono';
+  src: url('/fonts/RobotoMono-VF.woff2') format('woff2');
+  font-weight: 100 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  /* Colour — warm paper, soft ink, one brand gradient used sparingly */
+  --paper: #f5f3ee;
+  --paper-2: #ebe8e1;
+  --ink: #0c0c0d;
+  --ink-2: #18181a;
+  --muted: #6d6a64;
+  --line: rgb(12 12 13 / 0.14);
+  --on-ink: #f5f3ee;
+  --on-ink-muted: rgb(245 243 238 / 0.56);
+  --line-on-ink: rgb(245 243 238 / 0.16);
+  --violet: #864af9;
+  --pink: #f0386b;
+  --grad: linear-gradient(90deg, #864af9 0%, #f0386b 70%, #882e47 100%);
+
+  /* Type */
+  --font-sans: 'BDO Grotesk', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --font-mono: 'Roboto Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+
+  --fs-mono: 0.75rem;
+  --fs-body: clamp(1rem, 0.95rem + 0.2vw, 1.125rem);
+  --fs-lead: clamp(1.125rem, 1rem + 0.6vw, 1.5rem);
+  --fs-h3: clamp(1.5rem, 1.1rem + 1.6vw, 2.5rem);
+  --fs-h2: clamp(2.25rem, 1.2rem + 4.4vw, 5.5rem);
+  --fs-h1: clamp(2rem, 1.1rem + 3.6vw, 4.5rem);
+  --fs-display: clamp(3.25rem, 1rem + 10.5vw, 13rem);
+
+  --lh-tight: 0.95;
+  --lh-snug: 1.08;
+  --lh-body: 1.5;
+  --tracking-tight: -0.035em;
+  --tracking-display: -0.055em;
+
+  /* Space */
+  --gutter: clamp(1rem, 0.4rem + 2.4vw, 2.5rem);
+  --section: clamp(6rem, 3rem + 11vw, 13rem);
+  --radius: clamp(0.75rem, 0.5rem + 0.8vw, 1.25rem);
+  --max: 110rem;
+
+  /* Motion — strong custom curves, never the CSS defaults */
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+  --dur-press: 160ms;
+  --dur-ui: 240ms;
+  --dur-reveal: 600ms;
+}

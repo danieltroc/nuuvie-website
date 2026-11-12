@@ -1,0 +1,12 @@
+---
+// Nuuvie logo mark. `id` keeps gradient ids unique when the mark appears more than once on a page.
+const { id = 'mark' } = Astro.props;
+---
+<svg viewBox="0 0 121 121" fill="none" aria-hidden="true">
+  <path d="M60.419 90.627C60.419 107.311 46.894 120.836 30.21 120.836C13.526 120.836 0.0002 107.311 0 90.627V30.21C0 13.526 13.526 0 30.21 0H60.419V90.627ZM90.633 0C107.317 0 120.842 13.526 120.842 30.21C120.842 46.868 107.359 60.376 90.711 60.418H120.842V90.627C120.842 107.311 107.317 120.836 90.633 120.836C73.949 120.836 60.424 107.311 60.424 90.627V60.418H90.555C73.907 60.376 60.424 46.868 60.424 30.21C60.424 13.526 73.949 0 90.633 0Z" fill={`url(#${id})`}/>
+  <defs>
+    <linearGradient id={id} x1="0" y1="60.4" x2="120.8" y2="60.4" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#864AF9"/><stop offset="0.69" stop-color="#F0386B"/><stop offset="1" stop-color="#882E47"/>
+    </linearGradient>
+  </defs>
+</svg>
