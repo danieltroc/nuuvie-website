@@ -17,8 +17,9 @@ const markPath = 'M60.419 90.627C60.419 107.311 46.894 120.836 30.21 120.836C13.
 const nav = [
   { href: '#work', label: 'Prace' },
   { href: '#services', label: 'Usługi' },
-  { href: '#paths', label: 'Mentoring' },
+  { href: '/strefa-designera/', label: 'Strefa Designera' },
   { href: '#blog', label: 'Blog' },
+  { href: '/fonty/', label: 'Fonty' },
 ];
 const services = [
   { key: 'brand', title: 'Logo i branding', body: 'Identyfikacja, która buduje rozpoznawalność. Od logo po kompletny brandbook.' },
@@ -28,6 +29,18 @@ const services = [
   { key: 'team', title: 'Wsparcie Twojego zespołu', body: 'Senior designer w Twoim teamie, bez długiej rekrutacji.' },
 ];
 const audit = [['Czytelność', 92], ['Hierarchia', 74], ['Spójność', 81], ['Dostępność', 68]];
+// Isometric line figures for the statement section (pure geometry, drawn as SVG paths)
+const box = (cx, cy, w, h, t) =>
+  `M${cx - w} ${cy}L${cx} ${cy - h}L${cx + w} ${cy}V${cy + t}L${cx} ${cy + h + t}L${cx - w} ${cy + t}Z M${cx - w} ${cy}L${cx} ${cy + h}L${cx + w} ${cy} M${cx} ${cy + h}V${cy + h + t}`;
+const fin = (x, y, hgt) => `M${x} ${y}L${x + 90} ${y + 45}V${y + 45 - hgt}L${x} ${y - hgt}Z`;
+const figs = [
+  { title: '15 lat doświadczenia', text: 'Doświadczenia, które oszczędzi Ci błędów.',
+    paths: [...[0, 1, 2, 3, 4].map((i) => box(160, 190 - i * 18, 110, 55, 10)), box(160, 86, 110, 55, 10)] },
+  { title: '11 krajów', text: 'Współpraca międzynarodowa.',
+    paths: [box(160, 70, 52, 26, 70), box(102, 105, 52, 26, 80), box(218, 105, 52, 26, 50), box(160, 150, 52, 26, 60)] },
+  { title: '2540+ projektów', text: 'Pewność, że Twój jest w dobrych rękach.',
+    paths: [0, 1, 2, 3, 4, 5, 6, 7, 8].map((i) => fin(160 - i * 11, 160 + i * 5.5, 140 - i * 14)) },
+];
 const issues = [
   ['NUV-24', 'Onboarding: nowy flow', 'progress'],
   ['NUV-23', 'Design system: przyciski', 'todo'],
@@ -103,20 +116,33 @@ const issues = [
       </div>
     </section>
 
+    <!-- ───── Statement + three figures ───── -->
+    <section class="x-wrap x-sec" id="about">
+      <p class="x-statement" data-fade>Design to narzędzie, które eliminuje domysły Twoich klientów. <span>Moim zadaniem jest sprawić, by Twoja marka mówiła to, co najważniejsze, zanim użytkownik przeczyta pierwsze słowo.</span></p>
+      <div class="x-figs">
+        {figs.map((f, i) => (
+          <div class="x-fig" data-fade>
+            <small>FIG 0.{i + 1}</small>
+            <svg viewBox="0 0 320 260" aria-hidden="true" data-x-fig>{f.paths.map((d, n) => <path d={d} class:list={[n === f.paths.length - 1 && 'is-accent']} />)}</svg>
+            <h3>{f.title}</h3>
+            <p>{f.text}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+
     <!-- ───── Work ───── -->
     <section class="x-wrap x-sec" id="work">
-      <header class="x-head">
+      <header class="x-head x-head--split">
         <h2 data-split="lines">Wybrane projekty</h2>
-        <p data-fade>Marki i produkty, które zaprojektowałem od podstaw.</p>
+        <div data-fade><p>Marki i produkty, które zaprojektowałem od podstaw: od identyfikacji po aplikacje.</p></div>
       </header>
-      <div class="x-work">
+      <div class="x-cols">
         {t.work.items.map((w, i) => (
-          <a class="x-card x-project" href={w.href} data-fade>
+          <a class="x-col" href={w.href} data-fade>
             <div class="x-project__img"><img src={w.img} alt="" width="2400" height="1350" loading={i === 0 ? 'eager' : 'lazy'} /></div>
-            <div class="x-project__cap">
-              <div><h3>{w.name}</h3><p>{w.desc}</p></div>
-              <span class="x-arrow" aria-hidden="true"><Arrow /></span>
-            </div>
+            <h3>{w.name}. <span>{w.desc}</span></h3>
+            <span class="x-more">Zobacz projekt →</span>
           </a>
         ))}
       </div>
@@ -124,9 +150,9 @@ const issues = [
 
     <!-- ───── Services: feature bento with UI graphics ───── -->
     <section class="x-wrap x-sec" id="services">
-      <header class="x-head">
+      <header class="x-head x-head--split">
         <h2 data-split="lines">Co zrobię dla Twojego biznesu</h2>
-        <p data-fade>Pełen proces projektowy, od pierwszego szkicu po wdrożenie.</p>
+        <div data-fade><p>Pełen proces projektowy, od pierwszego szkicu po wdrożenie.</p><a class="x-more" href="#contact">Porozmawiajmy →</a></div>
       </header>
       <div class="x-bento">
         {services.map((s) => (
@@ -194,16 +220,6 @@ const issues = [
       </div>
     </section>
 
-    <!-- ───── Numbers ───── -->
-    <section class="x-wrap x-stats">
-      {t.stats.map((s) => (
-        <div data-fade>
-          <b><span data-count={s.value}>{s.value}</span>{s.suffix}</b>
-          <p>{s.unit}. {s.text}</p>
-        </div>
-      ))}
-    </section>
-
     <!-- ───── Quotes ───── -->
     <section class="x-wrap x-sec">
       <header class="x-head">
@@ -221,9 +237,9 @@ const issues = [
 
     <!-- ───── Two paths ───── -->
     <section class="x-wrap x-sec" id="paths">
-      <header class="x-head">
+      <header class="x-head x-head--split">
         <h2 data-split="lines">Jak mogę Ci pomóc?</h2>
-        <p data-fade>Projektuję dla firm i pomagam rosnąć designerom.</p>
+        <div data-fade><p>Projektuję dla firm i pomagam rosnąć designerom. Wybierz ścieżkę, która jest Twoja.</p></div>
       </header>
       <div class="x-paths">
         <article class="x-card x-path" data-fade>
@@ -245,7 +261,7 @@ const issues = [
           </div>
           <h3>Dla designerów</h3>
           <p>Przegląd portfolio, plan rozwoju i feedback do projektów. Konsultacja 1:1, 90 minut.</p>
-          <a class="x-btn x-btn--ghost" href={`${LIVE}/strefa-designera`}>Strefa Designera</a>
+          <a class="x-btn x-btn--ghost" href="/strefa-designera/">Strefa Designera</a>
         </article>
       </div>
     </section>
@@ -287,13 +303,14 @@ const issues = [
   </main>
 
   <footer class="x-foot">
-    <div class="x-wrap x-foot__grid">
+    <div class="x-wrap x-foot__grid x-foot__grid--5">
       <div>
         <a class="x-brand" href="/design/next/" aria-label="Nuuvie Studio"><Mark id="mark-x-foot" /><span>Nuuvie</span></a>
         <p>Studio projektowe Daniela Trocia.</p>
       </div>
-      <div><p>Nawigacja</p><ul>{nav.map((l) => <li><a href={l.href}>{l.label}</a></li>)}</ul></div>
-      <div><p>Social media</p><ul>{socials.map((s) => <li><a href={s.href} target="_blank" rel="noopener">{s.label}</a></li>)}</ul></div>
+      <div><p>Usługi</p><ul>{services.map((s) => <li><a href="#services">{s.title}</a></li>)}</ul></div>
+      <div><p>Studio</p><ul>{nav.map((l) => <li><a href={l.href}>{l.label}</a></li>)}<li><a href="#about">O studiu</a></li></ul></div>
+      <div><p>Kontakt</p><ul><li><a href={`mailto:${t.contact.email}`}>{t.contact.email}</a></li><li><a href={t.contact.bookHref}>Umów rozmowę</a></li>{socials.map((s) => <li><a href={s.href} target="_blank" rel="noopener">{s.label}</a></li>)}</ul></div>
       <div><p>Informacje</p><ul>{t.footer.legal.map((l) => <li><a href={l.href}>{l.label}</a></li>)}</ul></div>
     </div>
     <p class="x-wrap x-foot__copy">© {year} Nuuvie Studio</p>

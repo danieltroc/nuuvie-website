@@ -2,8 +2,8 @@
 import '../styles/global.css';
 import { type Locale, locales, homePath, getDict } from '../i18n';
 import '../styles/themes.css';
-interface Props { locale: Locale; theme?: string }
-const { locale, theme } = Astro.props;
+interface Props { locale: Locale; theme?: string; title?: string; description?: string }
+const { locale, theme, title, description } = Astro.props;
 const t = getDict(locale);
 const site = Astro.site ?? new URL('https://www.nuuvie.com');
 ---
@@ -12,18 +12,19 @@ const site = Astro.site ?? new URL('https://www.nuuvie.com');
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <title>{t.meta.title}</title>
-    <meta name="description" content={t.meta.description} />
+    <title>{title ?? t.meta.title}</title>
+    <meta name="description" content={description ?? t.meta.description} />
     <meta name="theme-color" content="#f5f3ee" />
     {theme && <meta name="robots" content="noindex" />}
     <link rel="canonical" href={new URL(homePath(locale), site)} />
     {locales.map((l) => <link rel="alternate" hreflang={l} href={new URL(homePath(l), site)} />)}
     <link rel="alternate" hreflang="x-default" href={new URL(homePath('pl'), site)} />
     <meta property="og:type" content="website" />
-    <meta property="og:title" content={t.meta.title} />
-    <meta property="og:description" content={t.meta.description} />
+    <meta property="og:title" content={title ?? t.meta.title} />
+    <meta property="og:description" content={description ?? t.meta.description} />
     <meta property="og:locale" content={locale === 'pl' ? 'pl_PL' : 'en_GB'} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <slot name="head" />
     <link rel="preload" href="/fonts/BDOGrotesk-VF.ttf" as="font" type="font/ttf" crossorigin />
     <script is:inline>
       (function () {

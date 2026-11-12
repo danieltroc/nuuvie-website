@@ -1,0 +1,107 @@
+/* Strefa Designera (/strefa-designera/). Builds on next.css; only page-specific pieces live here. */
+
+.z .x-hero h1 { max-width: 15ch; }
+.z .x-hero__text p { max-width: 40ch; }
+.z-facts { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.4rem; margin-top: 2rem; }
+.z-facts li { padding: 0.4rem 0.8rem; border-radius: 999px; background: var(--paper-2); font-size: 0.8125rem; color: var(--muted); }
+.z h3 { letter-spacing: -0.02em; font-weight: 500; }
+
+/* ───── Hero: portfolio review window ───── */
+.z-ava--you { background: var(--ink); margin-left: -0.6rem; box-shadow: 0 0 0 2px #fff; }
+.z-review { display: grid; }
+.z-board { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(0.4rem, 1vw, 0.75rem); align-content: center; padding: clamp(1rem, 3vw, 2.5rem); background: var(--paper-2); }
+.z-thumb { position: relative; aspect-ratio: 16 / 10; border-radius: 0.5rem; background: #111; }
+.z-thumb img { width: 100%; height: 100%; object-fit: cover; border-radius: inherit; }
+.z-pin { position: absolute; right: -0.4rem; top: -0.4rem; display: grid; place-items: center; width: 1.5rem; height: 1.5rem; border-radius: 50% 50% 50% 0.25rem; background: var(--accent); color: #fff; font-style: normal; font-size: 0.6875rem; font-weight: 600; box-shadow: 0 0 0 2px #fff; transform-origin: left bottom; transition: transform 300ms var(--ease-out), background-color 300ms ease; }
+.z-pin.is-on { transform: scale(1.25); background: var(--pink); }
+.z-comments { display: none; padding: 0.9rem; border-left: 1px solid var(--line); }
+.z-comments > p { color: var(--muted); font-size: 0.6875rem; margin-bottom: 0.6rem; }
+.z-comment { display: flex; gap: 0.6rem; padding: 0.6rem; border-radius: 0.5rem; transition: background-color 300ms ease; }
+.z-comment i { flex: none; display: grid; place-items: center; width: 1.25rem; height: 1.25rem; border-radius: 50%; background: var(--accent); color: #fff; font-style: normal; font-size: 0.625rem; font-weight: 600; }
+.z-comment b { display: block; font-weight: 500; }
+.z-comment span { color: var(--muted); }
+.z-comment b { color: var(--ink); }
+.z-comment.is-on { background: #f3eeff; }
+@media (min-width: 900px) {
+  .z-review { grid-template-columns: 1fr 16rem; }
+  .z-comments { display: block; }
+}
+
+/* ───── Questions ───── */
+.z-questions { display: grid; gap: 0.75rem; }
+.z-questions p { padding: clamp(1.5rem, 3vw, 2.5rem); font-size: clamp(1.25rem, 1rem + 1vw, 1.75rem); line-height: 1.15; letter-spacing: -0.03em; text-wrap: balance; }
+@media (min-width: 700px) { .z-questions { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1000px) { .z-questions { grid-template-columns: repeat(4, 1fr); } .z-questions p { min-height: 11rem; } }
+
+/* ───── What you get: 2 × 2 with small scenes ───── */
+@media (min-width: 900px) { .z-bento .x-feat { grid-column: span 3; } .z-bento .x-feat__gfx { height: 16rem; } }
+.z-g-port { display: flex; gap: 0.5rem; width: min(86%, 24rem); }
+.z-g-port span { position: relative; flex: 1; aspect-ratio: 4 / 5; border-radius: 0.5rem; background: #111; }
+.z-g-port img { width: 100%; height: 100%; object-fit: cover; border-radius: inherit; }
+.z-g-port em { position: absolute; left: 0.4rem; bottom: 0.4rem; font-style: normal; font-size: 0.6875rem; padding: 0.2rem 0.5rem; border-radius: 99px; background: #fff; color: var(--ink); }
+.z-g-port em.is-fix { background: var(--pink); color: #fff; }
+.z-g-plan { display: grid; gap: 0.35rem; width: min(84%, 20rem); }
+.z-g-plan li { display: flex; align-items: center; gap: 0.6rem; padding: 0.55rem 0.7rem; border-radius: 0.5rem; background: #fff; color: var(--muted); transition: color 300ms ease; }
+.z-g-plan i { flex: none; display: grid; place-items: center; width: 1.25rem; height: 1.25rem; border-radius: 50%; background: #efefef; font-style: normal; font-size: 0.6875rem; transition: background-color 300ms ease, color 300ms ease; }
+.z-g-plan li.is-on { color: var(--ink); }
+.z-g-plan li.is-on i { background: var(--accent); color: #fff; }
+.z-g-chips { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.4rem; width: min(86%, 22rem); }
+.z-g-chips span { padding: 0.45rem 0.8rem; border-radius: 999px; background: #fff; }
+.z-g-chips span:nth-child(3n + 1) { background: var(--ink); color: #fff; }
+.z-g-chat { display: grid; gap: 0.4rem; width: min(84%, 19rem); }
+.z-g-chat p { justify-self: start; padding: 0.5rem 0.8rem; border-radius: 0.9rem 0.9rem 0.9rem 0.25rem; background: #fff; }
+.z-g-chat p.is-me { justify-self: end; border-radius: 0.9rem 0.9rem 0.25rem 0.9rem; background: var(--accent); color: #fff; }
+
+/* ───── Text boxes ───── */
+.z-pair { display: grid; gap: 0.75rem; }
+.z-box { display: flex; flex-direction: column; align-items: flex-start; gap: 1rem; padding: clamp(1.5rem, 3.5vw, 3rem); }
+.z-box h3 { font-size: clamp(1.5rem, 1rem + 1.5vw, 2.25rem); line-height: 1.1; letter-spacing: -0.035em; max-width: 18ch; text-wrap: balance; }
+.z-box p { color: var(--muted); line-height: 1.55; max-width: 52ch; }
+.z-box .x-btn { margin-top: auto; }
+.z-box--dark { background: var(--ink); color: #fff; }
+.z-box--dark p { color: rgb(255 255 255 / 0.66); }
+.z-box--dark .x-btn { background: #fff; color: var(--ink); }
+@media (hover: hover) and (pointer: fine) { .z-box--dark .x-btn:hover { background: #e9e9e9; } }
+@media (min-width: 900px) { .z-pair { grid-template-columns: 7fr 5fr; } .z-pair--even { grid-template-columns: 1fr 1fr; } }
+
+/* ───── Opinions as message bubbles ───── */
+.z-opinions { display: grid; gap: 1.5rem 0.75rem; align-items: start; }
+.z-opinions blockquote { padding: clamp(1.25rem, 2.2vw, 1.75rem); border-radius: 1.5rem 1.5rem 1.5rem 0.375rem; background: var(--ink); color: #fff; font-size: 1.0625rem; line-height: 1.5; letter-spacing: -0.01em; }
+.z-opinions figcaption { margin: 0.6rem 0 0 0.4rem; font-size: 0.875rem; color: var(--muted); }
+@media (min-width: 900px) { .z-opinions { grid-template-columns: repeat(3, 1fr); } }
+
+/* ───── Ways to work together ───── */
+.z-forms { display: grid; gap: 0.75rem; }
+.z-forms .z-box h3 { font-size: 1.375rem; margin-top: clamp(1.5rem, 4vw, 3.5rem); }
+.z-num { font-size: 0.875rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+@media (min-width: 900px) { .z-forms { grid-template-columns: repeat(3, 1fr); } }
+
+/* ───── About ───── */
+.z-about { display: grid; gap: 2rem var(--gutter); padding: clamp(1.5rem, 4vw, 4rem); }
+.z-about h2 { font-size: clamp(1.875rem, 1rem + 2.6vw, 3.25rem); line-height: 1.06; letter-spacing: -0.04em; font-weight: 500; max-width: 14ch; text-wrap: balance; }
+.z-brands { display: flex; flex-wrap: wrap; gap: 0 0.75rem; margin-top: clamp(1.5rem, 3vw, 2.5rem); }
+.z-brands img { width: 5.5rem; height: auto; filter: invert(1); opacity: 0.55; }
+.z-about__text { display: grid; gap: 1rem; color: var(--muted); line-height: 1.6; }
+@media (min-width: 900px) { .z-about { grid-template-columns: 5fr 6fr; align-items: start; } }
+
+/* ───── Pricing ───── */
+.z-price { display: flex; flex-direction: column; align-items: flex-start; gap: 0.75rem; padding: clamp(1.5rem, 3.5vw, 3rem); }
+.z-price__for { font-size: 0.875rem; color: var(--muted); }
+.z-price h3 { font-size: clamp(1.5rem, 1rem + 1.5vw, 2.25rem); line-height: 1.1; letter-spacing: -0.035em; }
+.z-price > p:not([class]) { color: var(--muted); line-height: 1.55; max-width: 44ch; }
+.z-price__val { display: flex; align-items: baseline; gap: 0.75rem; margin: auto 0 0.5rem; padding-top: clamp(1.5rem, 4vw, 3rem); }
+.z-price__val b { font-size: clamp(2.75rem, 1.5rem + 4vw, 4.5rem); line-height: 1; letter-spacing: -0.05em; font-weight: 500; }
+.z-price__val s { color: var(--muted); }
+.z-price.z-box--dark :is(.z-price__for, p:not([class]), s) { color: rgb(255 255 255 / 0.62); }
+.z-alt { margin-top: 1.5rem; text-align: center; color: var(--muted); }
+.z-alt a { color: var(--ink); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 0.2em; }
+
+/* ───── FAQ ───── */
+.z-faq { display: grid; gap: 0.5rem; max-width: 52rem; margin-inline: auto; }
+.z-faq summary { display: flex; justify-content: space-between; align-items: center; gap: 1.5rem; padding: 1.25rem 1.5rem; cursor: pointer; list-style: none; font-size: clamp(1.0625rem, 1rem + 0.3vw, 1.25rem); line-height: 1.3; letter-spacing: -0.02em; -webkit-tap-highlight-color: transparent; }
+.z-faq summary::-webkit-details-marker { display: none; }
+.z-faq summary i { position: relative; flex: none; width: 2rem; height: 2rem; border-radius: 50%; background: #fff; }
+.z-faq summary i::before, .z-faq summary i::after { content: ''; position: absolute; left: 50%; top: 50%; width: 0.7rem; height: 1.5px; margin: -0.75px 0 0 -0.35rem; background: var(--ink); transition: transform 300ms var(--ease-out); }
+.z-faq summary i::after { transform: rotate(90deg); }
+.z-faq details[open] summary i::after { transform: rotate(0deg); }
+.z-faq details p { padding: 0 1.5rem 1.5rem; color: var(--muted); line-height: 1.6; max-width: 64ch; }

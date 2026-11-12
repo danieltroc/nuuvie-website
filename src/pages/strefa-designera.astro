@@ -1,0 +1,285 @@
+---
+// Strefa Designera — consultations and mentoring for designers. Content comes from the live
+// page at nuuvie.com/strefa-designera, shortened; design is "Next" (styles/next.css).
+import '../styles/next.css';
+import '../styles/strefa.css';
+import Base from '../layouts/Base.astro';
+import Mark from '../components/Mark.astro';
+import { getDict, socials } from '../i18n';
+
+const t = getDict('pl');
+const year = new Date().getFullYear();
+const BUY = 'https://cart.easy.tools/checkout/nuuvie-studio/spotkanie-11?lang=pl';
+const INTRO = 'https://cal.com/nuuvie/15-minutowa-konsultacja';
+const MAIL = `mailto:${t.contact.email}?subject=Mentoring%20%2F%20Konsultacja`;
+
+const nav = [
+  { href: '#co-otrzymasz', label: 'Co otrzymasz' },
+  { href: '#formy', label: 'Formy współpracy' },
+  { href: '#cennik', label: 'Cennik' },
+  { href: '#faq', label: 'FAQ' },
+];
+const facts = ['90 minut', 'Dopasowany termin', 'Google Meet', 'Dedykowany program'];
+const questions = ['Czy moje portfolio jest dobre?', 'Co wrzucić do portfolio?', 'Jakie skille mają znaczenie?', 'Jak dostać pierwszą pracę w designie?'];
+const thumbs = [...t.work.items.map((w) => w.img), ...t.blog.posts.slice(3, 6).map((p) => p.img)];
+// Illustrative review comments for the hero graphic (not quotes from real sessions)
+const comments = [
+  { at: 0, text: 'Ten case daj na początek.' },
+  { at: 4, text: 'Pokaż proces, nie tylko efekt.' },
+  { at: 2, text: 'Mocniejsza hierarchia nagłówków.' },
+];
+const gets = [
+  { key: 'portfolio', title: 'Portfolio review', body: 'Pokażę, które projekty zostawić, które poprawić i czego brakuje, żeby portfolio było konkurencyjne.' },
+  { key: 'plan', title: 'Plan rozwoju', body: 'Ustalimy, jakie umiejętności rozwijać i w jakiej kolejności. Wychodzisz z jasnym planem działania.' },
+  { key: 'feedback', title: 'Feedback projektowy', body: 'Przeanalizujemy Twój projekt: od UX/UI i layoutów po typografię i prezentację.' },
+  { key: 'qa', title: 'Q&A', body: 'Pytasz o wszystko: rynek pracy, freelancing, zdobywanie klientów, narzędzia, rozwój kariery.' },
+];
+const planSteps = ['Jakie umiejętności rozwijać', 'W jakiej kolejności', 'Jakie projekty do portfolio', 'Jakie narzędzia mają znaczenie'];
+const areas = ['UX/UI', 'Webdesign', 'Branding', 'Layouty', 'Typografia', 'Hierarchia informacji', 'Prezentacja projektu'];
+const asks = ['Jak wygląda rynek pracy?', 'Jak zdobywać klientów?', 'Figma czy Webflow?'];
+const opinions = [
+  { name: 'Marta', text: 'Szukałam kogoś, kto pokaże mi, jak ogarnąć Figmę na poziomie zaawansowanym. Daniel pokazał mi swoje pliki i sposób pracy nad komponentami dla dużych marek. Polecam każdemu kto potrzebuje dopracowania konkretnej umiejętności!' },
+  { name: 'Michał', text: 'Daniel często na Instagramie mówił o tym, że konsultacja z nim skraca drogę, teraz już wiem, o czym mówił. Długo kręciłem się w miejscu przez natłok informacji. Teraz mam jasny kierunek rozwoju i listę skilli do wypracowania! Dziękuję!' },
+  { name: 'Wojtek', text: 'Polecam, Daniel pomógł mi podszlifować proces projektowy w moim portfolio. Dostałem konkretne wskazówki, wszystko w luźnej atmosferze.' },
+];
+const forms = [
+  { title: 'Mentoring Solo', body: 'Regularna współpraca, zadania, feedback i mierzalny rozwój. Pracujemy nad Twoimi projektami, umiejętnościami i kolejnymi krokami w karierze. Dzielę się moimi plikami, procesami i błędami, które popełniłem przez 15 lat.' },
+  { title: 'Dedykowany Program', body: 'Chcesz rozwinąć konkretny skill? Webdesign, Webflow, Variables, projektowanie logo, UX/UI? Zaprojektujemy plan pracy dopasowany do Twojego celu.' },
+  { title: 'Design w grupie', body: 'Zorganizujemy wspólne sesje rozwojowe i uporządkujemy proces projektowy. Skupiamy się na praktyce, konkretnej strukturze pracy i konstruktywnym feedbacku.' },
+];
+const brands = ['maersk', 'jabra', 'polpharma', 'leroymerlin', 'tedee'];
+const faq = [
+  ['Czy konsultacja jest dla początkujących designerów?', 'Tak. Konsultacja jest idealna zarówno dla osób, które dopiero myślą o wejściu w świat designu, jak i dla tych, którzy mają już pierwsze projekty, ale czują, że stoją w miejscu. Jeśli nie wiesz, od czego zacząć, ułożymy Twój plan nauki tak, byś nie tracił czasu na nieistotne tutoriale.'],
+  ['Czy konsultacja obejmuje portfolio review UX/UI?', 'Oczywiście. To jeden z najczęstszych powodów spotkań. Przejdziemy przez Twoje pliki (najlepiej bezpośrednio w Figmie), a ja wskażę Ci błędy w hierarchii, typografii czy procesie UX. Nie będę Cię oceniał, pokażę Ci, jak zmienić Twój projekt, by stał się atrakcyjny dla rekrutera w topowej agencji.'],
+  ['Czy audyt moich projektów odbywa się na żywo w Figmie?', 'Tak. Nie wysyłam suchych raportów PDF. Podczas spotkania udostępniam ekran lub wchodzę do Twojego pliku. Na żywo pokazuję Ci triki warsztatowe, zasady budowania komponentów czy auto-layoutu, które sprawiają, że projekt wygląda profesjonalnie i jest gotowy do wdrożenia.'],
+  ['Czy konsultacja pomoże mi znaleźć pracę jako UX/UI Designer?', 'Pomogę Ci stać się kandydatem, którego firmy chcą zatrudnić. Nie szukam pracy za Ciebie, ale dam Ci konkretne narzędzia: poprawimy portfolio, dopracujemy proces projektowy i przygotujemy Cię do rozmowy technicznej. Moim celem jest sprawić, by Twoje CV nie lądowało w koszu, a wyróżniło się na tle kandydatów.'],
+  ['Figma, Webflow czy AI – czego uczyć się najpierw w 2026 roku?', 'Podczas spotkania dobierzemy Twój stack technologiczny. Podpowiem Ci, jak wykorzystać AI, by przyspieszyć nudne procesy, ale skupimy się na fundamentach. Rynek potrzebuje dziś projektantów, którzy potrafią dowieźć gotowy produkt (np. Webflow) i rozumieją biznes, a nie tylko sprawnie klikają w narzędziach.'],
+  ['Jak przygotować portfolio UX/UI, by wyróżnić się na rynku?', 'Większość portfolio wygląda tak samo. Pokażę Ci, jak opisywać Twoje myślenie projektowe i decyzje biznesowe, a nie tylko pokazywać ładne obrazki. Skupimy się na tzw. case studies, które udowadniają, że rozumiesz problem użytkownika i potrafisz go rozwiązać.'],
+  ['Jak wygląda konsultacja online i ile trwa?', 'Spotykamy się na Google Meet. Standardowa sesja trwa 90 minut – to optymalny czas, by wejść głęboko w Twoje projekty i odpowiedzieć na wszystkie pytania. Po spotkaniu otrzymasz ode mnie nagranie oraz listę konkretnych kroków do wykonania (Twoją osobistą mapę drogową).'],
+  ['Czy mogę zapytać o freelancing i zdobywanie klientów?', 'Jak najbardziej. Jako właściciel studia Nuuvie na co dzień zarządzam projektami i Klientami. Mogę Ci podpowiedzieć, jak wyceniać swoją pracę, jak konstruować oferty i jak budować markę osobistą designera, która budzi zaufanie i pozwala windować stawki.'],
+  ['Czy konsultacja pomoże mi zdecydować, czy UX/UI design jest dla mnie?', 'Tak. Wiele osób uczących się designu nie ma pewności, czy idą w dobrą stronę. Podczas konsultacji możemy przeanalizować Twoje projekty, sposób nauki i poziom umiejętności, aby zobaczyć, na jakim etapie jesteś i jakie kroki warto podjąć dalej. Często pomaga to uporządkować kierunek rozwoju w designie.'],
+  ['Czy konsultacja zastępuje pełny kurs UX/UI?', 'Nie, to coś lepszego – to skrót. Kursy dają ogólną wiedzę dla każdego. Konsultacja 1:1 daje Ci odpowiedzi na Twoje konkretne problemy. Zamiast przechodzić przez 40 godzin nagrań, dostajesz 90 minut intensywnej pracy nad Twoim przypadkiem. Często jedna taka rozmowa klaruje w głowie więcej niż miesiące samodzielnej nauki.'],
+];
+---
+<Base locale="pl" theme="next" title="Konsultacje UX/UI i mentoring dla designerów – Strefa Designera Nuuvie" description="Konsultacje z designerem z 15-letnim stażem: portfolio review, plan rozwoju, feedback projektowy i Q&A. 90 minut na Google Meet.">
+  <header class="x-nav">
+    <div class="x-wrap x-nav__in">
+      <a class="x-brand" href="/design/next/" aria-label="Nuuvie Studio"><Mark id="mark-z-nav" /><span>Nuuvie</span></a>
+      <nav aria-label="Menu">{nav.map((l) => <a href={l.href}>{l.label}</a>)}</nav>
+      <div class="x-nav__right">
+        <a class="x-btn x-btn--sm" href={BUY}>Zaczynamy współpracę</a>
+      </div>
+    </div>
+  </header>
+
+  <main id="top" class="x z">
+    <!-- ───── Hero ───── -->
+    <section class="x-hero">
+      <div class="x-wrap x-hero__text">
+        <h1 data-x-in>Konsultacje z designerem z&nbsp;<span style="white-space:nowrap">15-letnim</span> stażem.</h1>
+        <p data-x-in>Jeśli poważnie myślisz o karierze w designie, to spotkanie pomoże Ci uporządkować kierunek.</p>
+        <div class="x-actions" data-x-in>
+          <a class="x-btn" href={BUY}>Zaczynamy współpracę · 249 zł</a>
+          <a class="x-btn x-btn--ghost" href={INTRO}>Darmowe 15 minut intro</a>
+        </div>
+        <ul class="z-facts" data-x-in>{facts.map((f) => <li>{f}</li>)}</ul>
+      </div>
+
+      <div class="x-wrap x-stage" data-x-stage>
+        <div class="x-win" data-x-win aria-hidden="true">
+          <div class="x-win__bar">
+            <span class="x-dots"><i></i><i></i><i></i></span>
+            <span class="x-win__title">Portfolio review</span>
+            <span class="x-win__share"><b class="x-ava">D</b><b class="x-ava z-ava--you">Ty</b></span>
+          </div>
+          <div class="z-review" data-z-review>
+            <div class="z-board">
+              {thumbs.map((src, i) => {
+                const n = comments.findIndex((c) => c.at === i);
+                return <span class="z-thumb"><img src={src} alt="" loading="eager" />{n > -1 && <i class="z-pin" data-z-pin={n}>{n + 1}</i>}</span>;
+              })}
+            </div>
+            <aside class="z-comments">
+              <p>Komentarze</p>
+              {comments.map((c, i) => (
+                <div class="z-comment" data-z-comment={i}><i>{i + 1}</i><span><b>Daniel</b>{c.text}</span></div>
+              ))}
+            </aside>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ───── The problem ───── -->
+    <section class="x-wrap x-sec">
+      <header class="x-head">
+        <h2 data-split="lines">W designie łatwo się zgubić</h2>
+      </header>
+      <div class="z-questions">
+        {questions.map((q) => <p class="x-card" data-fade>{q}</p>)}
+      </div>
+    </section>
+
+    <!-- ───── What you get ───── -->
+    <section class="x-wrap x-sec" id="co-otrzymasz">
+      <header class="x-head">
+        <h2 data-split="lines">Co otrzymasz na spotkaniu</h2>
+        <p data-fade>Pracujemy na Twoim konkretnym przypadku. 90 minut czystej praktyki opartej na moich 15 latach w branży.</p>
+      </header>
+      <div class="x-bento z-bento">
+        {gets.map((g) => (
+          <article class="x-card x-feat" data-fade>
+            <div class="x-feat__gfx" aria-hidden="true">
+              {g.key === 'portfolio' && (
+                <div class="z-g-port">
+                  {thumbs.slice(0, 3).map((src, i) => (
+                    <span><img src={src} alt="" loading="lazy" /><em class:list={[i === 1 && 'is-fix']}>{i === 1 ? 'Popraw' : 'Zostaw'}</em></span>
+                  ))}
+                </div>
+              )}
+              {g.key === 'plan' && (
+                <ol class="z-g-plan">{planSteps.map((s, i) => <li data-z-plan={i}><i>{i + 1}</i>{s}</li>)}</ol>
+              )}
+              {g.key === 'feedback' && (
+                <div class="z-g-chips">{areas.map((a) => <span data-z-chip>{a}</span>)}</div>
+              )}
+              {g.key === 'qa' && (
+                <div class="z-g-chat">{asks.map((a) => <p data-z-ask>{a}</p>)}<p class="is-me" data-z-ask>Zaraz Ci pokażę.</p></div>
+              )}
+            </div>
+            <div class="x-feat__text"><h3>{g.title}</h3><p>{g.body}</p></div>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <!-- ───── Free intro + who it is not for ───── -->
+    <section class="x-wrap x-sec">
+      <div class="z-pair">
+        <article class="x-card z-box" data-fade>
+          <h3>Nie wiesz, czy mentoring jest dla Ciebie? Pogadajmy chwilę.</h3>
+          <p>Ty powiesz mi, na czym stoisz, a ja powiem Ci szczerze, czy jestem w stanie Ci pomóc. W trakcie 15-minutowego intro nie będę Cię namawiał na zakup. Jeśli uznam, że moje konsultacje Ci nie pomogą, powiem Ci to wprost i skieruję do darmowych źródeł.</p>
+          <a class="x-btn" href={INTRO}>Rezerwuję termin</a>
+        </article>
+        <article class="x-card z-box z-box--dark" data-fade>
+          <h3>A dla kogo ten mentoring nie jest?</h3>
+          <p>Nie pomogę Ci, jeśli szukasz magicznego przycisku „zostań seniorem w tydzień".</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- ───── Opinions ───── -->
+    <section class="x-wrap x-sec">
+      <header class="x-head">
+        <h2 data-split="lines">Wasze opinie</h2>
+      </header>
+      <div class="z-opinions">
+        {opinions.map((o) => (
+          <figure data-fade>
+            <blockquote>{o.text}</blockquote>
+            <figcaption>{o.name}</figcaption>
+          </figure>
+        ))}
+      </div>
+    </section>
+
+    <!-- ───── Ways to work together ───── -->
+    <section class="x-wrap x-sec" id="formy">
+      <header class="x-head x-head--split">
+        <h2 data-split="lines">1:1 jest pierwszym krokiem</h2>
+        <div data-fade><p>Jeśli po spotkaniu będziesz chciał rozwijać się ze mną dalej, możliwe są także inne formy współpracy.</p></div>
+      </header>
+      <ol class="x-timeline">
+        <li data-fade><i></i><h3>Konsultacja 1:1</h3><p>90 minut pracy na Twoim przypadku. Od tego zaczynamy.</p></li>
+        {forms.map((f) => (
+          <li data-fade><i></i><h3>{f.title}</h3><p>{f.body}</p></li>
+        ))}
+      </ol>
+    </section>
+
+    <!-- ───── About ───── -->
+    <section class="x-wrap x-sec">
+      <div class="x-card z-about" data-fade>
+        <div>
+          <h2>Przeszedłem drogę, którą Ty właśnie zaczynasz.</h2>
+          <div class="z-brands">{brands.map((b) => <img src={`/img/logos/${b}.svg`} alt={b} width="150" height="100" loading="lazy" />)}</div>
+        </div>
+        <div class="z-about__text">
+          <p>Nazywam się Daniel Troć. Od ponad 15 lat moje życie kręci się wokół designu. Zaczynałem od własnego startupu, bo chciałem robić gry. Szybko jednak zrozumiałem, że prawdziwe wyzwania leżą w systemach.</p>
+          <p>Przez lata, pracując w agencjach i zespołach produktowych, brałem odpowiedzialność za UX/UI i branding dla marek takich jak Maersk, Jabra czy Polpharma. Praca z Klientami takimi jak Leroy Merlin czy Tedee nauczyła mnie, czego realnie szukają szefowie designu w portfolio.</p>
+          <p>Dziś prowadzę studio Nuuvie. Nie jestem teoretykiem: dzielę się praktyczną wiedzą, plikami i procesami. Moim celem jest skrócić Twoją drogę do pracy marzeń.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ───── Pricing ───── -->
+    <section class="x-wrap x-sec" id="cennik">
+      <header class="x-head">
+        <h2 data-split="lines">Zacznijmy od tego, czego teraz potrzebujesz</h2>
+        <p data-fade>Wybierz opcję, która najlepiej pasuje do Twojego momentu w karierze.</p>
+      </header>
+      <div class="z-pair z-pair--even">
+        <article class="x-card z-price z-box--dark" data-fade>
+          <p class="z-price__for">Dla zdecydowanych na progres</p>
+          <h3>Indywidualna konsultacja</h3>
+          <p>90 minut czystej praktyki. Dla stawiających pierwsze kroki, zmieniających branżę oraz tych, którzy chcą wyższych stawek.</p>
+          <p class="z-price__val"><b>249 zł</b><s>350 zł</s></p>
+          <a class="x-btn" href={BUY}>Zaczynamy współpracę</a>
+        </article>
+        <article class="x-card z-price" data-fade>
+          <p class="z-price__for">Dla tych, którzy chcą sprawdzić chemię</p>
+          <h3>Wstępna analiza Twoich potrzeb</h3>
+          <p>Nie wiesz, czy mój mentoring jest dla Ciebie? Umów się na krótką, darmową rozmowę. Sprawdzimy, jak mogę Ci pomóc.</p>
+          <p class="z-price__val"><b>0 zł</b></p>
+          <a class="x-btn" href={INTRO}>Umów spotkanie</a>
+        </article>
+      </div>
+      <p class="z-alt" data-fade>Wolisz najpierw pogadać na czacie? Napisz na <a href={MAIL}>{t.contact.email}</a> albo odezwij się na <a href="https://www.instagram.com/nuuvie.studio" target="_blank" rel="noopener">Instagramie</a>.</p>
+    </section>
+
+    <!-- ───── FAQ ───── -->
+    <section class="x-wrap x-sec" id="faq">
+      <header class="x-head">
+        <h2 data-split="lines">Masz pytania?</h2>
+      </header>
+      <div class="z-faq">
+        {faq.map(([q, a]) => (
+          <details class="x-card" data-fade>
+            <summary>{q}<i aria-hidden="true"></i></summary>
+            <p>{a}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <!-- ───── Final ───── -->
+    <section class="x-wrap x-final">
+      <div class="x-final__in">
+        <h2 data-split="lines">Działajmy razem.</h2>
+        <p data-fade>90 minut, po których wiesz, co robić dalej.</p>
+        <div class="x-actions" data-fade>
+          <a class="x-btn" href={BUY}>Zaczynamy współpracę</a>
+          <a class="x-btn x-btn--ghost" href={INTRO}>Darmowe 15 minut intro</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="x-foot">
+    <div class="x-wrap x-foot__grid">
+      <div>
+        <a class="x-brand" href="/design/next/" aria-label="Nuuvie Studio"><Mark id="mark-z-foot" /><span>Nuuvie</span></a>
+        <p>Studio projektowe Daniela Trocia.</p>
+      </div>
+      <div><p>Strefa Designera</p><ul>{nav.map((l) => <li><a href={l.href}>{l.label}</a></li>)}</ul></div>
+      <div><p>Social media</p><ul>{socials.map((s) => <li><a href={s.href} target="_blank" rel="noopener">{s.label}</a></li>)}</ul></div>
+      <div><p>Informacje</p><ul>{t.footer.legal.map((l) => <li><a href={l.href}>{l.label}</a></li>)}</ul></div>
+    </div>
+    <p class="x-wrap x-foot__copy">© {year} Nuuvie Studio</p>
+  </footer>
+
+  <script>
+    import '../scripts/next';
+    import '../scripts/strefa';
+  </script>
+</Base>

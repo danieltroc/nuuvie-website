@@ -1,0 +1,242 @@
+---
+// Landing page for the font-pairing set. Built on the "Next" design (styles/next.css).
+// PLACEHOLDERS to replace with real product data: the example pairs below, the price,
+// the checkout link (BUY) and the sample prompt.
+import '../styles/next.css';
+import '../styles/fonty.css';
+import Base from '../layouts/Base.astro';
+import Mark from '../components/Mark.astro';
+import { getDict, socials } from '../i18n';
+
+const t = getDict('pl');
+const year = new Date().getFullYear();
+const BUY = `mailto:${t.contact.email}?subject=Zestaw%20font%C3%B3w`;
+
+// Example pairs (open-source fonts) used only to demonstrate the page. Swap for pairs from the real set.
+const pairs = [
+  { h: 'Fraunces', hw: 600, b: 'Inter' },
+  { h: 'Space Grotesk', hw: 600, b: 'IBM Plex Sans' },
+  { h: 'Playfair Display', hw: 600, b: 'Source Sans 3' },
+  { h: 'DM Serif Display', hw: 400, b: 'DM Sans' },
+  { h: 'Sora', hw: 600, b: 'Manrope' },
+  { h: 'Instrument Serif', hw: 400, b: 'Inter' },
+];
+const fontsUrl = 'https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600&family=Inter:wght@400;500&family=Space+Grotesk:wght@600&family=IBM+Plex+Sans:wght@400&family=Playfair+Display:wght@600&family=Source+Sans+3:wght@400&family=DM+Serif+Display&family=DM+Sans:wght@400&family=Sora:wght@600&family=Manrope:wght@400&family=Instrument+Serif&display=swap';
+const tiles = ['Fraunces', 'Inter', 'Space Grotesk', 'Playfair Display', 'DM Sans', 'Sora', 'Instrument Serif', 'Manrope', 'DM Serif Display', 'IBM Plex Sans', 'Source Sans 3', 'Fraunces'];
+
+// Type scale shown in the live demo: [name, role, sample, size px, line-height, letter-spacing em]
+const scale = [
+  ['Display', 'h', 'Typografia', 72, 1.0, -0.03],
+  ['H1', 'h', 'Nagłówek strony', 48, 1.08, -0.025],
+  ['H2', 'h', 'Tytuł sekcji', 32, 1.15, -0.02],
+  ['H3', 'h', 'Śródtytuł w treści', 24, 1.25, -0.01],
+  ['Lead', 'b', 'Wstęp, który prowadzi czytelnika dalej.', 20, 1.5, 0],
+  ['Body', 'b', 'Tekst główny. Tu liczy się czytelność i spokojny rytm.', 16, 1.6, 0],
+  ['Small', 'b', 'Podpisy, etykiety i drobny druk.', 14, 1.5, 0.005],
+] as const;
+
+const prompt = `Mam parę fontów: nagłówki — {NAGŁÓWEK}, tekst — {TEKST}.
+Zbuduj z nich pełną skalę typograficzną dla strony www:
+Display, H1–H4, Lead, Body, Small, Caption.
+Dla każdego stylu podaj rozmiar (desktop i mobile),
+interlinię, światło międzyliterowe i grubość.
+Wynik oddaj jako zmienne CSS gotowe do wklejenia.`;
+
+const includes = [
+  '250 fontów dobranych w pary',
+  'Parametry każdej pary pod web',
+  'PDF z zasadami i promptami',
+  'Album do wysłania klientowi',
+];
+const nav = [
+  { href: '#srodek', label: 'Co w środku' },
+  { href: '#demo', label: 'Demo' },
+  { href: '#album', label: 'Album' },
+];
+---
+<Base locale="pl" theme="next" title="Zestaw 250 fontów dobranych w pary – Nuuvie" description="250 fontów dobranych w pary, z parametrami pod web, przewodnikiem PDF z promptami i albumem do wysłania klientowi.">
+  <link slot="head" rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link slot="head" rel="stylesheet" href={fontsUrl} />
+
+  <header class="x-nav">
+    <div class="x-wrap x-nav__in">
+      <a class="x-brand" href="/design/next/" aria-label="Nuuvie Studio"><Mark id="mark-f-nav" /><span>Nuuvie</span></a>
+      <nav aria-label="Menu">{nav.map((l) => <a href={l.href}>{l.label}</a>)}</nav>
+      <div class="x-nav__right">
+        <a class="x-btn x-btn--sm" href="#kup">Kup zestaw</a>
+      </div>
+    </div>
+  </header>
+
+  <main id="top" class="x f">
+    <!-- ───── Hero ───── -->
+    <section class="x-hero">
+      <div class="x-wrap x-hero__text">
+        <h1 data-x-in>250 fontów. Dobranych w pary.</h1>
+        <p data-x-in>Gotowe zestawienia z parametrami pod web, przewodnikiem PDF i albumem, który wysyłasz klientowi do wyboru.</p>
+        <div class="x-actions" data-x-in>
+          <a class="x-btn" href="#kup">Kup zestaw</a>
+          <a class="x-btn x-btn--ghost" href="#demo">Zobacz, jak to działa</a>
+        </div>
+      </div>
+
+      <div class="x-wrap x-stage" data-x-stage>
+        <div class="x-win f-spec" data-x-win data-f-spec data-pairs={JSON.stringify(pairs)} aria-hidden="true">
+          <div class="x-win__bar">
+            <span class="x-dots"><i></i><i></i><i></i></span>
+            <span class="x-win__title">Para <b data-f-idx>01</b> / {pairs.length} · przykład</span>
+            <span class="x-win__share"><em>Kopiuj CSS</em></span>
+          </div>
+          <div class="f-spec__body">
+            <div class="f-spec__sample" data-f-sample>
+              <span class="f-spec__aa" data-f-h>Aa</span>
+              <p class="f-spec__h" data-f-h>Dobra para robi połowę roboty.</p>
+              <p class="f-spec__b" data-f-b>Nagłówek przyciąga, tekst prowadzi. Kiedy dwa kroje do siebie pasują, cała strona od razu wygląda na przemyślaną.</p>
+            </div>
+            <aside class="f-spec__props">
+              <p>Nagłówki</p><span class="x-prop" data-f-hname>{pairs[0].h}</span>
+              <p>Tekst</p><span class="x-prop" data-f-bname>{pairs[0].b}</span>
+              <p>H1</p><span class="x-prop">48 / 1.08 / −0.025em</span>
+              <p>Body</p><span class="x-prop">16 / 1.6 / 0</span>
+            </aside>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ───── What is inside ───── -->
+    <section class="x-wrap x-sec" id="srodek">
+      <header class="x-head">
+        <h2 data-split="lines">Co jest w zestawie</h2>
+        <p data-fade>Cztery rzeczy, które zamykają temat typografii w projekcie.</p>
+      </header>
+      <div class="x-bento f-bento">
+        <article class="x-card x-feat" data-fade>
+          <div class="x-feat__gfx" aria-hidden="true">
+            <div class="f-tiles">{tiles.map((f) => <span style={`font-family:'${f}'`} data-f-tile>Aa</span>)}</div>
+          </div>
+          <div class="x-feat__text"><h3>250 fontów w parach</h3><p>Każdy krój ma partnera. Nie zgadujesz, co do czego pasuje.</p></div>
+        </article>
+        <article class="x-card x-feat" data-fade>
+          <div class="x-feat__gfx" aria-hidden="true">
+            <pre class="f-code"><code><i>--font-heading</i>: "Fraunces";
+<i>--font-body</i>: "Inter";
+<i>--h1</i>: 3rem / 1.08;
+<i>--tracking-h1</i>: -0.025em;
+<i>--body</i>: 1rem / 1.6;</code></pre>
+          </div>
+          <div class="x-feat__text"><h3>Parametry pod web</h3><p>Rozmiary, interlinie i światła dla każdej pary. Wklejasz i działa.</p></div>
+        </article>
+        <article class="x-card x-feat" data-fade>
+          <div class="x-feat__gfx" aria-hidden="true">
+            <div class="f-pdf">
+              <div class="f-sheet"><b>Typografia z pary fontów</b><span class="x-sk"></span><span class="x-sk"></span><span class="x-sk"></span><em>PDF</em></div>
+              <div class="f-bubble" data-f-bubble>Zbuduj skalę typograficzną z tej pary…</div>
+            </div>
+          </div>
+          <div class="x-feat__text"><h3>PDF z zasadami i promptami</h3><p>Najważniejsze reguły i gotowe prompty, które z pary fontów robią całą typografię.</p></div>
+        </article>
+        <article class="x-card x-feat" data-fade>
+          <div class="x-feat__gfx" aria-hidden="true">
+            <div class="f-album">
+              {pairs.slice(0, 3).map((p, i) => (
+                <div class:list={['f-page', i === 1 && 'is-pick']} data-f-page>
+                  <b style={`font-family:'${p.h}';font-weight:${p.hw}`}>Aa</b>
+                  <span style={`font-family:'${p.b}'`}>{p.h} + {p.b}</span>
+                  {i === 1 && <em>Wybrane</em>}
+                </div>
+              ))}
+            </div>
+          </div>
+          <div class="x-feat__text"><h3>Album dla klienta</h3><p>Cały zbiór w jednym pliku. Wysyłasz, klient wskazuje parę.</p></div>
+        </article>
+      </div>
+    </section>
+
+    <!-- ───── Live demo: from a pair to a full type system ───── -->
+    <section class="x-wrap x-sec" id="demo">
+      <header class="x-head">
+        <h2 data-split="lines">Z pary fontów do całej typografii</h2>
+        <p data-fade>Wybierz parę i zobacz gotową skalę z parametrami.</p>
+      </header>
+      <div class="x-card f-demo" data-fade data-f-demo>
+        <div class="f-chips" role="tablist" aria-label="Przykładowe pary">
+          {pairs.map((p, i) => (
+            <button type="button" role="tab" aria-selected={i === 0 ? 'true' : 'false'} data-f-chip={i}>{p.h} + {p.b}</button>
+          ))}
+        </div>
+        <div class="f-scale" data-f-scale>
+          {scale.map(([name, role, sample, size, lh, ls]) => (
+            <div class="f-row">
+              <span class="f-row__name">{name}</span>
+              <p class:list={['f-row__sample', role === 'h' ? 'is-h' : 'is-b']} style={`font-size:clamp(${Math.max(14, Math.round(size * 0.55))}px, ${(size / 14.4).toFixed(2)}vw, ${size}px);line-height:${lh};letter-spacing:${ls}em`}>{sample}</p>
+              <span class="f-row__params">{size}px · {lh} · {ls === 0 ? '0' : `${ls}em`}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- ───── Prompt ───── -->
+    <section class="x-wrap x-sec">
+      <div class="f-split">
+        <div class="f-split__text">
+          <h2 data-split="lines">Prompt, który robi resztę</h2>
+          <p data-fade>W PDF-ie znajdziesz gotowe prompty. Wklejasz nazwy fontów i dostajesz kompletną typografię: od nagłówków po drobny druk.</p>
+        </div>
+        <div class="x-card f-prompt" data-fade>
+          <div class="f-prompt__bar"><span>Przykładowy prompt</span><button class="x-btn x-btn--ghost x-btn--sm" type="button" data-f-copy><span data-f-copy-label>Kopiuj</span></button></div>
+          <pre data-f-prompt>{prompt}</pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- ───── Album ───── -->
+    <section class="x-wrap x-sec" id="album">
+      <div class="f-split f-split--rev">
+        <div class="x-card f-albumbig" data-fade aria-hidden="true">
+          {pairs.map((p) => (
+            <div class="f-page">
+              <b style={`font-family:'${p.h}';font-weight:${p.hw}`}>Aa</b>
+              <span style={`font-family:'${p.b}'`}>{p.h} + {p.b}</span>
+            </div>
+          ))}
+        </div>
+        <div class="f-split__text">
+          <h2 data-split="lines">Album gotowy do wysłania</h2>
+          <p data-fade>Zamiast tłumaczyć klientowi różnicę między krojami, wysyłasz mu album z całym zbiorem. Ogląda, wybiera, a Ty masz od razu wszystkie parametry do wdrożenia.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ───── Buy ───── -->
+    <section class="x-wrap x-final" id="kup">
+      <div class="x-final__in f-buy">
+        <h2 data-split="lines">Zestaw fontów Nuuvie</h2>
+        <ul data-fade>{includes.map((i) => <li>{i}</li>)}</ul>
+        <p class="f-buy__price" data-fade>Cena wkrótce</p>
+        <div class="x-actions" data-fade>
+          <a class="x-btn" href={BUY}>Zapytaj o zestaw</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="x-foot">
+    <div class="x-wrap x-foot__grid">
+      <div>
+        <a class="x-brand" href="/design/next/" aria-label="Nuuvie Studio"><Mark id="mark-f-foot" /><span>Nuuvie</span></a>
+        <p>Studio projektowe Daniela Trocia.</p>
+      </div>
+      <div><p>Zestaw fontów</p><ul>{nav.map((l) => <li><a href={l.href}>{l.label}</a></li>)}</ul></div>
+      <div><p>Social media</p><ul>{socials.map((s) => <li><a href={s.href} target="_blank" rel="noopener">{s.label}</a></li>)}</ul></div>
+      <div><p>Informacje</p><ul>{t.footer.legal.map((l) => <li><a href={l.href}>{l.label}</a></li>)}</ul></div>
+    </div>
+    <p class="x-wrap x-foot__copy">© {year} Nuuvie Studio</p>
+  </footer>
+
+  <script>
+    import '../scripts/next';
+    import '../scripts/fonty';
+  </script>
+</Base>

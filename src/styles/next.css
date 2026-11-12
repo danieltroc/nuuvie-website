@@ -303,3 +303,65 @@ html[data-theme='next']:root { --paper-2: #f5f5f5; }
   .x-final .x-btn--ghost:hover { background: rgb(255 255 255 / 0.2); }
 }
 .x-foot { border-top: 0; padding-top: clamp(3rem, 6vw, 5rem); }
+
+/* ═════════════ Third pass: layouts borrowed from the Linear home page ═════════════ */
+
+/* Section head: big title left, text + link right */
+.x-head--split { display: grid; gap: 1rem var(--gutter); text-align: left; align-items: start; }
+.x-head--split h2 { font-size: clamp(2.25rem, 1.2rem + 3.6vw, 4.25rem); line-height: 1.02; max-width: 11ch; }
+.x-head--split p { margin: 0; max-width: 34ch; }
+.x-more { display: inline-block; margin-top: 1.25rem; font-size: 0.9375rem; color: var(--muted); transition: color 200ms ease; }
+@media (hover: hover) and (pointer: fine) { a.x-more:hover, a:hover > .x-more { color: var(--ink); } }
+@media (min-width: 900px) { .x-head--split { grid-template-columns: 1fr 1fr; } .x-head--split > div { padding-top: 0.5rem; } }
+
+/* Two-tone statement + three figures */
+.x-statement { font-size: clamp(1.75rem, 1rem + 2.8vw, 3.5rem); line-height: 1.1; letter-spacing: -0.035em; font-weight: 500; max-width: 30ch; text-wrap: pretty; }
+.x-statement span { color: #9a9a9a; }
+.x-figs { display: grid; gap: 3rem 0; margin-top: clamp(3rem, 7vw, 6rem); }
+.x-fig small { display: block; font: 0.6875rem var(--font-mono); letter-spacing: 0.08em; color: #a3a3a3; }
+.x-fig svg { display: block; width: min(100%, 19rem); height: auto; margin: 1.5rem auto 2rem; overflow: visible; }
+.x-fig svg path { fill: var(--paper); stroke: var(--ink); stroke-opacity: 0.5; stroke-width: 1; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
+.x-fig svg path.is-accent { stroke: var(--accent); stroke-opacity: 1; fill: #f3eeff; }
+.x-fig h3 { font-size: 1.0625rem; font-weight: 500; letter-spacing: -0.01em; }
+.x-fig p { color: var(--muted); font-size: 0.9375rem; line-height: 1.5; margin-top: 0.4rem; max-width: 30ch; }
+@media (min-width: 900px) {
+  .x-figs { grid-template-columns: repeat(3, 1fr); }
+  .x-fig { padding-inline: clamp(1.5rem, 3vw, 3rem); border-left: 1px solid var(--line); }
+  .x-fig:first-child { padding-left: 0; border-left: 0; }
+  .x-fig:last-child { padding-right: 0; }
+}
+
+/* Three columns: picture, title, link */
+.x-cols { display: grid; gap: 3rem 0; }
+.x-col { display: block; }
+.x-col .x-project__img { aspect-ratio: 16 / 9; border-radius: 0.5rem; }
+.x-col h3 { margin-top: 1.25rem; font-size: clamp(1.125rem, 1rem + 0.6vw, 1.5rem); line-height: 1.22; letter-spacing: -0.02em; font-weight: 500; max-width: 24ch; text-wrap: balance; }
+.x-col h3 span { color: var(--muted); }
+@media (hover: hover) and (pointer: fine) { .x-col:hover img { transform: scale(1.03); } }
+@media (min-width: 900px) {
+  .x-cols { grid-template-columns: repeat(3, 1fr); }
+  .x-col { padding-inline: clamp(1rem, 2.4vw, 2.5rem); border-left: 1px solid var(--line); }
+  .x-col:first-child { padding-left: 0; border-left: 0; }
+  .x-col:last-child { padding-right: 0; }
+}
+
+/* Timeline: dots on a line, entries underneath */
+.x-timeline { display: grid; gap: 2.5rem; }
+.x-timeline li { position: relative; padding-left: 2.75rem; }
+.x-timeline i { position: absolute; left: 0; top: 0; width: 1.5rem; height: 1.5rem; border-radius: 50%; background: var(--paper-2); }
+.x-timeline i::after { content: ''; position: absolute; inset: 0; margin: auto; width: 0.375rem; height: 0.375rem; border-radius: 50%; background: #8f8f8f; }
+.x-timeline li:first-child i { background: #f3eeff; }
+.x-timeline li:first-child i::after { background: var(--accent); }
+.x-timeline li::before { content: ''; position: absolute; left: 0.75rem; top: 2rem; bottom: -2rem; width: 1px; background: var(--line); }
+.x-timeline li:last-child::before { display: none; }
+.x-timeline h3 { font-size: 1.125rem; line-height: 1.3; letter-spacing: -0.02em; font-weight: 500; }
+.x-timeline p { margin-top: 0.5rem; color: var(--muted); font-size: 0.9375rem; line-height: 1.55; max-width: 36ch; }
+@media (min-width: 900px) {
+  .x-timeline { grid-auto-flow: column; grid-auto-columns: 1fr; gap: 0; }
+  .x-timeline li { padding: 4rem 2rem 0 0; }
+  .x-timeline li::before { left: 2.25rem; right: 0.75rem; top: 0.75rem; bottom: auto; width: auto; height: 1px; }
+  .x-timeline li:last-child::before { display: block; }
+}
+
+/* Larger footer */
+@media (min-width: 800px) { .x-foot__grid--5 { grid-template-columns: 1.4fr repeat(4, 1fr); } }

@@ -146,3 +146,16 @@ document.fonts.ready.then(() => {
   initGraphics();
   ScrollTrigger.refresh();
 });
+
+/* ───── Statement figures: lines draw in once ───── */
+if (!reduced) {
+  document.fonts.ready.then(() => {
+    document.querySelectorAll<SVGSVGElement>('[data-x-fig]').forEach((svg) => {
+      const paths = Array.from(svg.querySelectorAll('path'));
+      gsap.from(paths, {
+        opacity: 0, y: 14, duration: 0.8, ease: 'expo.out', stagger: 0.07,
+        scrollTrigger: { trigger: svg, start: 'top 85%', once: true },
+      });
+    });
+  });
+}
