@@ -8,7 +8,7 @@ import { LANGUAGES } from './locales'
 export default defineConfig({
   name: 'nuuvie',
   title: 'Nuuvie',
-  projectId: process.env.SANITY_STUDIO_PROJECT_ID || 'missing-project-id',
+  projectId: process.env.SANITY_STUDIO_PROJECT_ID || '89d58rpp',
   dataset: process.env.SANITY_STUDIO_DATASET || 'production',
 
   plugins: [

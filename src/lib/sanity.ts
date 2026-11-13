@@ -1,5 +1,6 @@
 /**
- * Blog data. Posts come from Sanity when PUBLIC_SANITY_PROJECT_ID is set; until then the
+ * Blog data. Posts come from Sanity (project 89d58rpp) when PUBLIC_SANITY_PROJECT_ID is set and
+ * at least one post exists in that language; until then the
  * site falls back to the sample posts in src/i18n so every page still builds and renders.
  * Data is fetched at build time only (static site), so publishing in Sanity triggers a rebuild.
  */
@@ -100,7 +101,10 @@ export function getPosts(language: Locale): Promise<Post[]> {
     cache.set(
       language,
       client
-        ? client.fetch<RawPost[]>(POSTS_QUERY, { language }).then((rows) => rows.map(fromSanity))
+        ? client
+            .fetch<RawPost[]>(POSTS_QUERY, { language })
+            // Until the first real post in a language is published, keep showing the samples
+            .then((rows) => (rows.length ? rows.map(fromSanity) : samplePosts(language)))
         : Promise.resolve(samplePosts(language)),
     );
   }

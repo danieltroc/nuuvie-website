@@ -1,6 +1,7 @@
 {
   "version": "0.0.1",
   "configurations": [
-    { "name": "nuuvie-dev", "runtimeExecutable": "npm", "runtimeArgs": ["run", "dev", "--", "--port", "4321"], "port": 4321 }
+    { "name": "nuuvie-dev", "runtimeExecutable": "npm", "runtimeArgs": ["run", "dev", "--", "--port", "4321"], "port": 4321 },
+    { "name": "sanity-studio", "runtimeExecutable": "npm", "runtimeArgs": ["--prefix", "studio", "run", "dev"], "port": 3333 }
   ]
 }
