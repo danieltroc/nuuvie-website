@@ -1,0 +1,19 @@
+---
+// Closed-box post card. `featured` lays it out wide: picture left, text right.
+import { formatDate, type Locale } from '../../i18n';
+import { postPath, type Post } from '../../lib/sanity';
+import { readingMinutes } from '../../lib/text';
+interface Props { post: Post; language: Locale; featured?: boolean }
+const { post, language, featured = false } = Astro.props;
+const pl = language === 'pl';
+const minutes = readingMinutes(post.body);
+---
+<a class:list={['x-card', 'b-card', featured && 'b-card--featured']} href={postPath(language, post.slug)} data-fade>
+  <div class="b-card__img">{post.image && <img src={post.image} alt="" width="1344" height="896" loading={featured ? 'eager' : 'lazy'} />}</div>
+  <div class="b-card__text">
+    <p class="b-meta"><time datetime={post.publishedAt}>{formatDate(post.publishedAt, language)}</time><span>{minutes} min {pl ? 'czytania' : 'read'}</span></p>
+    <h2>{post.title}</h2>
+    {post.excerpt && <p class="b-card__excerpt">{post.excerpt}</p>}
+    <span class="x-more">{pl ? 'Czytaj' : 'Read'} →</span>
+  </div>
+</a>

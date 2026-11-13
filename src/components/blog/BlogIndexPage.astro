@@ -4,27 +4,44 @@ import '../../styles/blog.css';
 import Base from '../../layouts/Base.astro';
 import SiteNav from '../site/SiteNav.astro';
 import SiteFooter from '../site/SiteFooter.astro';
-import BlogList from './BlogList.astro';
-import { type Locale } from '../../i18n';
+import BlogCard from './BlogCard.astro';
+import { getDict, type Locale } from '../../i18n';
 import { getPosts, blogPath } from '../../lib/sanity';
 interface Props { language: Locale }
 const { language } = Astro.props;
 const pl = language === 'pl';
-const posts = await getPosts(language);
-const title = pl ? 'Blog – Nuuvie Studio' : 'Blog – Nuuvie Studio';
+const t = getDict(language);
+const [featured, ...rest] = await getPosts(language);
 const description = pl
-  ? 'Piszę o designie: branding, UX/UI, strony internetowe i praca z marką.'
-  : 'Writing about design: branding, UX/UI, websites and building brands.';
+  ? 'Piszę o designie: branding, UX/UI, strony internetowe i to, jak marka buduje zaufanie.'
+  : 'Writing about design: branding, UX/UI, websites and how a brand builds trust.';
 ---
-<Base locale={language} title={title} description={description}>
+<Base locale={language} title="Blog – Nuuvie Studio" description={description}>
   <SiteNav language={language} alternate={blogPath(pl ? 'en' : 'pl')} />
   <main id="top" class="x b">
     <section class="x-wrap b-index">
       <header class="x-head x-head--split">
-        <h1 data-split="lines">{pl ? 'Piszę o designie' : 'Writing about design'}</h1>
+        <h1 data-split="lines">Blog</h1>
         <div data-fade><p>{description}</p></div>
       </header>
-      <BlogList posts={posts} language={language} />
+
+      {featured && <BlogCard post={featured} language={language} featured />}
+
+      {rest.length > 0 && (
+        <div class="b-grid">
+          {rest.map((post) => <BlogCard post={post} language={language} />)}
+        </div>
+      )}
+    </section>
+
+    <section class="x-wrap x-final b-cta">
+      <div class="x-final__in">
+        <h2 data-split="lines">{pl ? 'Wolisz porozmawiać?' : 'Rather talk it through?'}</h2>
+        <p data-fade>{pl ? 'Umów bezpłatną, 15-minutową rozmowę o Twoim projekcie.' : 'Book a free 15-minute call about your project.'}</p>
+        <div class="x-actions" data-fade>
+          <a class="x-btn" href={t.contact.bookHref}>{pl ? 'Umów rozmowę' : 'Book a call'}</a>
+        </div>
+      </div>
     </section>
   </main>
   <SiteFooter language={language} />

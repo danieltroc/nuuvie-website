@@ -42,6 +42,8 @@ export type Post = {
   seoTitle?: string;
   seoDescription?: string;
   translations: Translation[];
+  /** True for the local placeholder posts shown before Sanity has content. */
+  sample?: boolean;
 };
 
 /** Public URL of a post (Polish has no prefix; the /blog-posts path matches the old Webflow URLs). */
@@ -71,6 +73,29 @@ const fromSanity = (p: RawPost): Post => ({
   translations: (p.translations ?? []).filter((x): x is Translation => Boolean(x && x.slug && x.language !== p.language)),
 });
 
+/* ───── Placeholder content (shown only until real posts exist in Sanity) ───── */
+let keyN = 0;
+const block = (text: string, style = 'normal') => ({
+  _type: 'block', _key: `k${keyN++}`, style, markDefs: [],
+  children: [{ _type: 'span', _key: `s${keyN++}`, text, marks: [] }],
+});
+
+/** Demo body so the post layout (headings, contents list, quote) can be reviewed before migration. */
+function sampleBody(language: Locale) {
+  const pl = language === 'pl';
+  const p = pl
+    ? 'To jest przykładowy akapit, który pokazuje układ wpisu. Prawdziwa treść pojawi się tutaj po przeniesieniu wpisów z Webflow do Sanity. Długość wiersza, interlinia i odstępy są ustawione tak, żeby dłuższy tekst czytało się wygodnie.'
+    : 'This is a sample paragraph that shows the post layout. The real text will appear here once the posts are moved from Webflow to Sanity. Line length, leading and spacing are set so longer text is comfortable to read.';
+  const h = pl ? ['Dlaczego to ma znaczenie', 'Jak podejść do tematu', 'Najczęstsze błędy', 'Podsumowanie'] : ['Why it matters', 'How to approach it', 'Common mistakes', 'Summary'];
+  return [
+    block(p), block(p),
+    block(h[0], 'h2'), block(p), block(p),
+    block(pl ? 'Dobry design nie zwraca na siebie uwagi. Sprawia, że marka mówi to, co najważniejsze.' : 'Good design does not call attention to itself. It lets the brand say what matters most.', 'blockquote'),
+    block(h[1], 'h2'), block(p), block(h[2], 'h3'), block(p),
+    block(h[3], 'h2'), block(p),
+  ];
+}
+
 /** Local sample posts (titles, dates and covers of the current blog) used until Sanity is connected. */
 function samplePosts(language: Locale): Post[] {
   const t = getDict(language);
@@ -88,6 +113,8 @@ function samplePosts(language: Locale): Post[] {
         : 'Sample post. The full text will appear here once the blog is connected to Sanity.',
       image: p.img,
       imageAlt: '',
+      body: sampleBody(language),
+      sample: true,
       translations: [{ language: other, slug: otherPosts[i]?.href.split('/').pop() ?? slug }],
     };
   });

@@ -1,0 +1,8 @@
+---
+// H2 / H3 inside a post body, with an id so the contents list can link to it.
+import { blockText, slugify } from '../../lib/text';
+const { node } = Astro.props as { node: { style: 'h2' | 'h3'; children?: { text?: string }[] } };
+const Tag = node.style;
+const id = slugify(blockText(node));
+---
+<Tag id={id} data-b-heading={node.style === 'h2' ? '' : undefined}><slot /></Tag>

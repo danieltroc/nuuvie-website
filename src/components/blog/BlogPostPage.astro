@@ -3,49 +3,79 @@ import '../../styles/next.css';
 import '../../styles/blog.css';
 import { PortableText } from 'astro-portabletext';
 import Base from '../../layouts/Base.astro';
+import Mark from '../Mark.astro';
 import SiteNav from '../site/SiteNav.astro';
 import SiteFooter from '../site/SiteFooter.astro';
 import PostImage from './PostImage.astro';
+import PostHeading from './PostHeading.astro';
+import BlogCard from './BlogCard.astro';
 import { formatDate, getDict, type Locale } from '../../i18n';
 import { getPosts, postPath, blogPath, type Post } from '../../lib/sanity';
+import { headingsOf, readingMinutes } from '../../lib/text';
 interface Props { post: Post }
 const { post } = Astro.props;
-const language = post.language;
+const language: Locale = post.language;
 const pl = language === 'pl';
 const t = getDict(language);
 const translation = post.translations[0];
+const toc = headingsOf(post.body);
+const minutes = readingMinutes(post.body);
 const more = (await getPosts(language)).filter((p) => p.slug !== post.slug).slice(0, 3);
+const url = new URL(postPath(language, post.slug), Astro.site ?? 'https://www.nuuvie.com').href;
+const components = { type: { image: PostImage }, block: { h2: PostHeading, h3: PostHeading } };
 ---
 <Base locale={language} title={`${post.seoTitle ?? post.title} – Nuuvie`} description={post.seoDescription ?? post.excerpt}>
+  <div class="b-progress" aria-hidden="true"><i data-b-progress></i></div>
   <SiteNav language={language} alternate={translation ? postPath(translation.language, translation.slug) : undefined} />
   <main id="top" class="x b">
-    <article>
+    <article data-b-article>
       <header class="x-wrap b-head">
-        <a class="x-more" href={blogPath(language)}>← Blog</a>
-        <time datetime={post.publishedAt} data-fade>{formatDate(post.publishedAt, language)}</time>
+        <a class="b-back" href={blogPath(language)}>← Blog</a>
         <h1 data-split="lines">{post.title}</h1>
-        {post.excerpt && <p data-fade>{post.excerpt}</p>}
+        {post.excerpt && <p class="b-lead" data-fade>{post.excerpt}</p>}
+        <p class="b-meta" data-fade>
+          <span class="b-author"><Mark id="mark-b-author" />Daniel Troć</span>
+          <time datetime={post.publishedAt}>{formatDate(post.publishedAt, language)}</time>
+          <span>{minutes} min {pl ? 'czytania' : 'read'}</span>
+        </p>
       </header>
+
       {post.image && (
         <div class="x-wrap"><div class="b-cover" data-fade><img src={post.image} alt={post.imageAlt ?? ''} width="1600" height="1067" /></div></div>
       )}
-      <div class="x-wrap b-body">
-        {post.body?.length
-          ? <PortableText value={post.body as never} components={{ type: { image: PostImage } }} />
-          : <p class="b-empty">{pl ? 'Treść tego wpisu pojawi się po podłączeniu bloga do Sanity.' : 'The full text will appear once the blog is connected to Sanity.'}</p>}
-      </div>
-    </article>
 
-    <section class="x-wrap x-final b-cta">
-      <div class="x-final__in">
-        <h2 data-split="lines">{pl ? 'Masz projekt?' : 'Have a project?'}</h2>
-        <p data-fade>{pl ? 'Umów bezpłatną, 15-minutową rozmowę.' : 'Book a free 15-minute call.'}</p>
-        <div class="x-actions" data-fade>
-          <a class="x-btn" href={t.contact.bookHref}>{pl ? 'Umów rozmowę' : 'Book a call'}</a>
-          <a class="x-btn x-btn--ghost" href={`mailto:${t.contact.email}`}>{t.contact.email}</a>
+      <div class="x-wrap b-layout">
+        <aside class="b-aside">
+          <div class="b-aside__in">
+            {toc.length > 1 && (
+              <nav class="b-toc" aria-label={pl ? 'Spis treści' : 'Contents'}>
+                <p>{pl ? 'Spis treści' : 'Contents'}</p>
+                <ol>{toc.map((h) => <li><a href={`#${h.id}`} data-b-toc={h.id}>{h.text}</a></li>)}</ol>
+              </nav>
+            )}
+            <div class="b-share">
+              <p>{pl ? 'Udostępnij' : 'Share'}</p>
+              <button type="button" class="x-btn x-btn--ghost x-btn--sm" data-b-copy={url}><span data-b-copy-label>{pl ? 'Kopiuj link' : 'Copy link'}</span></button>
+              <a class="x-btn x-btn--ghost x-btn--sm" href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`} target="_blank" rel="noopener">LinkedIn</a>
+            </div>
+          </div>
+        </aside>
+
+        <div class="b-body">
+          {post.sample && <p class="b-note">{pl ? 'Przykładowa treść. Prawdziwy wpis pojawi się po przeniesieniu bloga do Sanity.' : 'Sample content. The real post will appear once the blog is moved to Sanity.'}</p>}
+          {post.body?.length ? <PortableText value={post.body as never} components={components} /> : null}
+
+          <div class="x-card b-authorbox" data-fade>
+            <span class="b-authorbox__mark"><Mark id="mark-b-box" /></span>
+            <div>
+              <p><b>Daniel Troć</b>{pl ? ' · założyciel Nuuvie' : ' · founder of Nuuvie'}</p>
+              <p>{pl ? 'Od 15 lat projektuję marki i produkty cyfrowe. Jeśli chcesz porozmawiać o swoim projekcie, umów krótką rozmowę.' : 'I have designed brands and digital products for 15 years. If you want to talk about your project, book a short call.'}</p>
+              <a class="x-btn x-btn--sm" href={t.contact.bookHref}>{pl ? 'Umów rozmowę' : 'Book a call'}</a>
+            </div>
+          </div>
         </div>
       </div>
-    </section>
+    </article>
 
     {more.length > 0 && (
       <section class="x-wrap x-sec b-more">
@@ -53,17 +83,12 @@ const more = (await getPosts(language)).filter((p) => p.slug !== post.slug).slic
           <h2 data-split="lines">{pl ? 'Czytaj dalej' : 'Keep reading'}</h2>
           <a class="x-link" href={blogPath(language)}>{pl ? 'Wszystkie wpisy →' : 'All posts →'}</a>
         </header>
-        <div class="x-cols">
-          {more.map((p) => (
-            <a class="x-col" href={postPath(language, p.slug)} data-fade>
-              <div class="x-project__img">{p.image && <img src={p.image} alt="" loading="lazy" />}</div>
-              <h3>{p.title}</h3>
-              <span class="x-more">{formatDate(p.publishedAt, language)}</span>
-            </a>
-          ))}
-        </div>
+        <div class="b-grid">{more.map((p) => <BlogCard post={p} language={language} />)}</div>
       </section>
     )}
   </main>
   <SiteFooter language={language} />
+  <script>
+    import '../../scripts/blog';
+  </script>
 </Base>
