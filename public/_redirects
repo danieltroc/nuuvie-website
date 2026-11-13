@@ -1,0 +1,9 @@
+# Cloudflare Pages redirects (https://developers.cloudflare.com/pages/configuration/redirects/)
+
+# Booking link used on the old site
+/spotkanie  https://cal.com/nuuvie/15-minutowa-konsultacja  301
+
+# These "English" posts on Webflow only ever had Polish text; send visitors to the Polish post
+/en/blog-posts/audyt-ux-strony-internetowej-zrob-to-sam-lub-zlec-profesjonalistom  /blog-posts/audyt-ux-strony-internetowej-zrob-to-sam-lub-zlec-profesjonalistom  301
+/en/blog-posts/jak-wybrac-ux-ui-designera  /blog-posts/jak-wybrac-ux-ui-designera  301
+/en/blog-posts/ile-kosztuje-strona-internetowa-w-2026-roku  /blog-posts/ile-kosztuje-strona-internetowa-w-2026-roku  301
