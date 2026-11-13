@@ -7,4 +7,8 @@ export default defineCliConfig({
   },
   // Published at https://nuuvie.sanity.studio after `npm run deploy`
   studioHost: 'nuuvie',
+  deployment: {
+    // ID of the deployed Studio, so `npm run deploy` updates it without asking
+    appId: 'nswooc31j31l74128z3y89w7',
+  },
 })
