@@ -113,3 +113,9 @@
 .b-body--legal { font-size: 1rem; line-height: 1.65; }
 .b-body--legal h2 { font-size: clamp(1.25rem, 1.05rem + 0.7vw, 1.625rem); }
 .b-body--legal ol { list-style: decimal; }
+.b-kicker { margin-bottom: 1rem; font: 0.75rem var(--font-mono); letter-spacing: 0.04em; text-transform: uppercase; color: #a3a3a3; }
+.b-body .b-legalbox { margin-top: clamp(3rem, 6vw, 4.5rem); padding: clamp(1.25rem, 2.5vw, 2rem); font-size: 0.9375rem; line-height: 1.55; }
+.b-legalbox p { color: var(--muted); }
+.b-legalbox p:first-child { color: var(--ink); margin-bottom: 0.35rem; }
+.b-legalbox b { font-weight: 600; }
+.b-legalbox a { color: var(--ink); }

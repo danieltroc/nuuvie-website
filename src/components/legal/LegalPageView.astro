@@ -1,5 +1,6 @@
 ---
-// Legal page (/legal/…, /en/legal/…): plain reading layout with a contents list.
+// Legal page (/legal/…, /en/legal/…): the blog post's reading layout (title reveal, contents in the
+// sidebar or folded on phones, progress bar) with a short "questions about your data" box at the end.
 import '../../styles/next.css';
 import '../../styles/blog.css';
 import { PortableText } from 'astro-portabletext';
@@ -7,7 +8,7 @@ import Base from '../../layouts/Base.astro';
 import SiteNav from '../site/SiteNav.astro';
 import SiteFooter from '../site/SiteFooter.astro';
 import PostHeading from '../blog/PostHeading.astro';
-import { formatDate } from '../../i18n';
+import { formatDate, getDict } from '../../i18n';
 import { legalPath, type LegalPage } from '../../lib/sanity';
 import { headingsOf } from '../../lib/text';
 interface Props { page: LegalPage }
@@ -16,16 +17,19 @@ const language = page.language;
 const pl = language === 'pl';
 const translation = page.translations[0];
 const toc = headingsOf(page.body);
+const email = getDict(language).contact.email;
 // The same page in the other language (language switch + hreflang)
 const alternate = translation ? legalPath(translation.language, translation.slug) : undefined;
 ---
 <Base locale={language} alternate={alternate} title={`${page.title} – Nuuvie`} description={`${page.title} – Nuuvie Studio`}>
+  <div class="b-progress" aria-hidden="true"><i data-b-progress></i></div>
   <SiteNav language={language} alternate={alternate} />
   <main id="top" class="x b">
     <article data-b-article>
       <header class="x-wrap b-head">
-        <h1 data-split="lines">{page.title}</h1>
-        <p class="b-meta" data-fade><span>{pl ? 'Ostatnia aktualizacja' : 'Last updated'}: {formatDate(page.updatedAt, language)}</span></p>
+        <p class="b-kicker" data-x-in>{pl ? 'Informacje' : 'Legal'}</p>
+        <h1 data-x-title>{page.title}</h1>
+        <p class="b-meta" data-x-in><span>{pl ? 'Ostatnia aktualizacja' : 'Last updated'}: {formatDate(page.updatedAt, language)}</span></p>
       </header>
       <div class="x-wrap b-layout">
         <aside class="b-aside">
@@ -39,13 +43,24 @@ const alternate = translation ? legalPath(translation.language, translation.slug
           </div>
         </aside>
         <div class="b-body b-body--legal">
+          {toc.length > 1 && (
+            <details class="x-card b-toc-m">
+              <summary>{pl ? 'Spis treści' : 'Contents'}<i aria-hidden="true"></i></summary>
+              <ol>{toc.map((h) => <li><a href={`#${h.id}`}>{h.text}</a></li>)}</ol>
+            </details>
+          )}
           <PortableText value={page.body as never} components={{ block: { h2: PostHeading, h3: PostHeading } }} />
+          <div class="x-card b-legalbox" data-fade>
+            <p><b>{pl ? 'Masz pytania o swoje dane?' : 'Questions about your data?'}</b></p>
+            <p>{pl ? 'Napisz, odpowiem w ciągu kilku dni roboczych:' : 'Write to me and I will reply within a few working days:'} <a href={`mailto:${email}`}>{email}</a></p>
+          </div>
         </div>
       </div>
     </article>
   </main>
   <SiteFooter language={language} />
   <script>
+    import '../../scripts/next';
     import '../../scripts/blog';
   </script>
 </Base>

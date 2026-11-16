@@ -24,7 +24,7 @@ const year = new Date().getFullYear();
     </ul></div>
     <div><p>{pl ? 'Dla designerów' : 'For designers'}</p><ul>
       <li><a href={`${en}/strefa-designera`}>{pl ? 'Strefa Designera' : 'Designer Zone'}</a></li>
-      <li><a href="/fonty">{pl ? 'Zestaw fontów' : 'Font set'}</a></li>
+      {import.meta.env.DEV && <li><a href="/fonty">{pl ? 'Zestaw fontów' : 'Font set'}</a></li> /* dev only until launch, see astro.config.mjs */}
     </ul></div>
     <div><p>{pl ? 'Kontakt' : 'Contact'}</p><ul>
       <li><a href={`${en}/kontakt`}>{pl ? 'Formularz kontaktowy' : 'Contact form'}</a></li>

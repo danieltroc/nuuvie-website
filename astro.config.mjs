@@ -15,6 +15,16 @@ export default defineConfig({
   // `astro dev` has no Worker: send /api (the contact form) to `npm run preview:cf` on port 8787
   vite: { server: { proxy: { '/api': 'http://localhost:8787' } } },
   integrations: [
+    // Pages that only exist in `astro dev` (not built, not online): the font set until it launches.
+    // To publish one, move it back into src/pages and delete its line here.
+    {
+      name: 'dev-only-pages',
+      hooks: {
+        'astro:config:setup': ({ command, injectRoute }) => {
+          if (command === 'dev') injectRoute({ pattern: '/fonty', entrypoint: './src/dev/fonty.astro' });
+        },
+      },
+    },
     // Language pairs are declared on each page (hreflang links in Base.astro), not here
     sitemap({ filter: (page) => !page.includes('/404') }),
   ],

@@ -110,7 +110,7 @@ async function contact(request: Request, env: Env) {
     method: 'POST',
     headers: { authorization: `Bearer ${env.RESEND_API_KEY}`, 'content-type': 'application/json' },
     body: JSON.stringify({
-      from: env.CONTACT_FROM ?? 'Nuuvie <formularz@nuuvie.com>',
+      from: env.CONTACT_FROM ?? 'Formularz Nuuvie <strona@formularz.nuuvie.com>',
       to: [env.CONTACT_TO ?? 'hej@nuuvie.com'],
       reply_to: email,
       subject,

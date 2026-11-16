@@ -21,7 +21,7 @@
   // Non-secret settings. Secrets (TURNSTILE_SECRET, RESEND_API_KEY) are set in the Cloudflare dashboard.
   "vars": {
     "CONTACT_TO": "hej@nuuvie.com",
-    "CONTACT_FROM": "Nuuvie <formularz@nuuvie.com>"
+    "CONTACT_FROM": "Formularz Nuuvie <strona@formularz.nuuvie.com>"
   },
   // Keep the free *.workers.dev address for checking the site before DNS points here.
   // Every page has a canonical link to www.nuuvie.com, so search engines index only that.
