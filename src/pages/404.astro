@@ -1,0 +1,32 @@
+---
+// Served by Cloudflare for any unknown address (wrangler.jsonc: not_found_handling "404-page").
+// One page for both languages, since it cannot know which one the visitor wanted.
+import '../styles/next.css';
+import Base from '../layouts/Base.astro';
+import SiteNav from '../components/site/SiteNav.astro';
+import SiteFooter from '../components/site/SiteFooter.astro';
+---
+<Base locale="pl" title="Nie ma takiej strony – Nuuvie" noindex>
+  <SiteNav language="pl" />
+  <main id="top" class="x">
+    <section class="x-wrap x-final nf">
+      <div class="x-final__in">
+        <p class="nf__code">404</p>
+        <h1>Nie ma takiej strony.</h1>
+        <p>Adres mógł się zmienić albo zawierać literówkę.<br /><span lang="en">This page does not exist.</span></p>
+        <div class="x-actions">
+          <a class="x-btn" href="/">Strona główna</a>
+          <a class="x-btn x-btn--ghost" href="/en" lang="en">English site</a>
+          <a class="x-btn x-btn--ghost" href="/blog">Blog</a>
+        </div>
+      </div>
+    </section>
+  </main>
+  <SiteFooter language="pl" />
+</Base>
+
+<style>
+  .nf { margin-top: clamp(1.5rem, 4vw, 3rem); border-top: 0; }
+  .nf h1 { font-size: clamp(2.25rem, 1.4rem + 3.4vw, 4.5rem); line-height: 1.04; letter-spacing: -0.045em; font-weight: 500; }
+  .nf__code { font-size: 0.875rem; color: var(--muted); letter-spacing: 0.02em; margin-bottom: 1rem; font-variant-numeric: tabular-nums; }
+</style>

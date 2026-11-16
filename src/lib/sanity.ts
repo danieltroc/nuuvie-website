@@ -1,8 +1,7 @@
 /**
- * Content from Sanity (project 89d58rpp): blog posts, case studies and legal pages. Used when
- * PUBLIC_SANITY_PROJECT_ID is set and
- * at least one post exists in that language; until then the
- * site falls back to the sample posts in src/i18n so every page still builds and renders.
+ * Content from Sanity (project 89d58rpp, override with PUBLIC_SANITY_PROJECT_ID): blog posts,
+ * case studies and legal pages. When a language has no posts yet the site falls back to the
+ * sample posts in src/i18n so every page still builds and renders.
  * Data is fetched at build time only (static site), so publishing in Sanity triggers a rebuild.
  */
 import { createClient, type SanityClient } from '@sanity/client';
@@ -10,7 +9,8 @@ import { createImageUrlBuilder } from '@sanity/image-url';
 import { defineQuery } from 'groq';
 import { getDict, type Locale } from '../i18n';
 
-const projectId = import.meta.env.PUBLIC_SANITY_PROJECT_ID as string | undefined;
+// The project ID is public; the default keeps Cloudflare builds working without extra settings
+const projectId = (import.meta.env.PUBLIC_SANITY_PROJECT_ID as string | undefined) || '89d58rpp';
 const dataset = (import.meta.env.PUBLIC_SANITY_DATASET as string | undefined) || 'production';
 
 export const sanityEnabled = Boolean(projectId);

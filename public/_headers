@@ -1,0 +1,13 @@
+# Cloudflare response headers (https://developers.cloudflare.com/workers/static-assets/headers/)
+
+# Built JS/CSS have a content hash in the file name, so they can be cached forever
+/_astro/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/fonts/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  X-Frame-Options: SAMEORIGIN

@@ -31,7 +31,7 @@ Adresy są takie same jak w Webflow, więc Google nie straci istniejących wpis�
    ```
 3. **Strona lokalnie:** w głównym folderze skopiuj `.env.example` do `.env` i wpisz `PUBLIC_SANITY_PROJECT_ID`. Po `npm run dev` strona pobierze wpisy z Sanity.
 4. **Studio online:** opublikowane pod https://nuuvie.sanity.studio (bezpłatnie). Po zmianach w `studio/` aktualizujesz je komendą `cd studio && npm run deploy`.
-5. **Automatyczna przebudowa po publikacji:** na hostingu (np. Cloudflare Pages) utwórz „Deploy hook” i dodaj jego adres w Sanity: Manage → API → Webhooks, wyzwalacz: tworzenie, zmiana i usunięcie dokumentu typu `post`. Po kliknięciu „Publikuj” wpis jest online po około minucie.
+5. **Automatyczna przebudowa po publikacji:** deploy hook z Cloudflare podpięty jako webhook w Sanity, opis krok po kroku w [cloudflare.md](cloudflare.md) (krok 2). Po kliknięciu „Publikuj” zmiana jest online po około 2 minutach.
 6. **Zmienne na hostingu:** ustaw `PUBLIC_SANITY_PROJECT_ID` i `PUBLIC_SANITY_DATASET=production` w ustawieniach projektu na hostingu.
 
 ## Jak pisać wpis

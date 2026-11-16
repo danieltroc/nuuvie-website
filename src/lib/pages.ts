@@ -26,4 +26,4 @@ export function pic(image: unknown, width = 1200): string | undefined {
 export const paragraphs = (text?: string) => (text ?? '').split(/\n\s*\n/).map((p) => p.trim()).filter(Boolean);
 
 /** Home URL for a language, and an in-page anchor on it. */
-export const homeHref = (language: Locale, hash = '') => (language === 'en' ? `/en${hash ? `/${hash}` : ''}` : `/${hash}`);
+export const homeHref = (language: Locale, hash = '') => (language === 'en' ? `/en${hash}` : `/${hash}`);

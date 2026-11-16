@@ -1,4 +1,4 @@
-# Cloudflare Pages redirects (https://developers.cloudflare.com/pages/configuration/redirects/)
+# Cloudflare redirects (https://developers.cloudflare.com/workers/static-assets/redirects/)
 
 # Booking link used on the old site
 /spotkanie  https://cal.com/nuuvie/15-minutowa-konsultacja  301
@@ -13,4 +13,4 @@
 
 # Old contact pages: the contact box at the end of the home page
 /kontakt  /#contact  301
-/en/kontakt  /en/#contact  301
+/en/kontakt  /en#contact  301

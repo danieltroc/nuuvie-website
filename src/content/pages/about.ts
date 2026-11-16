@@ -4,12 +4,12 @@
  * and should be reviewed. English is a new translation.
  */
 const BOOK = 'https://cal.com/nuuvie/15-minutowa-konsultacja';
-const CDN = 'https://cdn.prod.website-files.com/68ab2937a45826faf83c976e';
+// Copied from the Webflow CDN (it stops working once Webflow is switched off)
 const IMG = {
-  relation: `${CDN}/69d607cbcb6b50a0baaabf8e_relacja1-1.jpg`,
-  project: `${CDN}/69d607cb9bce39c4be1121d0_dobry-projekt.jpg`,
-  process: `${CDN}/69d607cbdbb4267e339c8b06_PRoces.jpg`,
-  portrait: `${CDN}/69d4d0c2eb01188492ba9327_Daniel-hero.jpg`,
+  relation: '/img/about/relacja.jpg',
+  project: '/img/about/dobry-projekt.jpg',
+  process: '/img/about/proces.jpg',
+  portrait: '/img/about/daniel.jpg',
 };
 
 export const aboutContent = {
