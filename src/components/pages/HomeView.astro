@@ -136,7 +136,7 @@ const alternate = pl ? '/en' : '/';
     <section class="x-wrap x-sec" id="work">
       <header class="x-head x-head--split">
         <h2 data-split="lines">{c.work.title}</h2>
-        <div data-fade><p>{c.work.text}</p></div>
+        <div data-fade><p>{c.work.text}</p><a class="x-link x-head__more" href={`${language === 'en' ? '/en' : ''}/work`}>{language === 'en' ? 'All work →' : 'Wszystkie prace →'}</a></div>
       </header>
       <div class="x-works">
         {projects.slice(0, 3).map((w) => {

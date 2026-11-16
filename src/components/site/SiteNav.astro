@@ -10,8 +10,7 @@ const t = getDict(language);
 const pl = language === 'pl';
 const en = pl ? '' : '/en';
 const links = [
-  { href: homeHref(language, '#work'), label: pl ? 'Prace' : 'Work' },
-  { href: homeHref(language, '#services'), label: pl ? 'Usługi' : 'Services' },
+  { href: `${en}/work`, label: pl ? 'Prace' : 'Work' },
   { href: `${en}/o-nuuvie`, label: pl ? 'O Nuuvie' : 'About' },
   { href: `${en}/strefa-designera`, label: pl ? 'Strefa Designera' : 'Designer Zone' },
   { href: blogPath(language), label: 'Blog' },
@@ -20,6 +19,8 @@ const links = [
 const other: Locale = pl ? 'en' : 'pl';
 ---
 <header class="x-nav">
+  <!-- Progressive blur: strongest at the top, fading out below the bar (see .x-nav__blur) -->
+  <div class="x-nav__blur" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
   <div class="x-wrap x-nav__in">
     <a class="x-brand" href={homeHref(language)} aria-label="Nuuvie Studio"><Mark id="mark-site-nav" /><span>Nuuvie</span></a>
     <nav aria-label="Menu">{links.map((l) => <a href={l.href}>{l.label}</a>)}</nav>

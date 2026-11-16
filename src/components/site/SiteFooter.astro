@@ -17,7 +17,7 @@ const year = new Date().getFullYear();
       <p class="x-foot__tag">{pl ? 'Branding, UX/UI i strony dla firm, które chcą wyglądać tak dobrze, jak działają.' : 'Branding, UX/UI and websites for companies that want to look as good as they work.'}</p>
     </div>
     <div><p>Studio</p><ul>
-      <li><a href={homeHref(language, '#work')}>{pl ? 'Prace' : 'Work'}</a></li>
+      <li><a href={`${pl ? '' : '/en'}/work`}>{pl ? 'Prace' : 'Work'}</a></li>
       <li><a href={homeHref(language, '#services')}>{pl ? 'Usługi' : 'Services'}</a></li>
       <li><a href={`${en}/o-nuuvie`}>{pl ? 'O Nuuvie' : 'About'}</a></li>
       <li><a href={blogPath(language)}>Blog</a></li>

@@ -1,0 +1,83 @@
+---
+// All work (PL "/work", EN "/en/work"): one row per project. On desktop a picture of the project
+// follows the pointer over the list (the blog list's preview, motion.ts: data-blog-list /
+// data-blog-preview / data-post); on phones each row shows its picture inline.
+import '../../styles/next.css';
+import '../../styles/work.css';
+import Base from '../../layouts/Base.astro';
+import SiteNav from '../site/SiteNav.astro';
+import SiteFooter from '../site/SiteFooter.astro';
+import { getDict, type Locale } from '../../i18n';
+import { getProjects, projectPath } from '../../lib/sanity';
+
+interface Props { language: Locale }
+const { language } = Astro.props;
+const pl = language === 'pl';
+const t = getDict(language);
+const projects = await getProjects(language);
+const alternate = pl ? '/en/work' : '/work';
+// The year column only shows once a project has a year in Sanity
+const hasYear = projects.some((p) => p.year);
+const c = pl
+  ? {
+      title: 'Prace',
+      text: 'Marki i produkty, które zaprojektowałem od podstaw: od identyfikacji po aplikacje.',
+      seo: 'Prace – Nuuvie Studio',
+      count: (n: number) => `${n} ${n === 1 ? 'projekt' : n < 5 ? 'projekty' : 'projektów'}`,
+      cols: ['Projekt', 'Zakres', 'Rok'],
+      final: 'Twój projekt może być następny.', finalText: 'Umów bezpłatną, 15-minutową rozmowę.', cta: 'Porozmawiajmy',
+    }
+  : {
+      title: 'Work',
+      text: 'Brands and products I designed from the ground up: from identity to apps.',
+      seo: 'Work – Nuuvie Studio',
+      count: (n: number) => `${n} ${n === 1 ? 'project' : 'projects'}`,
+      cols: ['Project', 'Scope', 'Year'],
+      final: 'Your project could be next.', finalText: 'Book a free 15-minute call.', cta: "Let's talk",
+    };
+const arrow = '<svg viewBox="0 0 12 12" fill="none"><path d="M2 10 10 2M3.5 2H10v6.5" stroke="currentColor" stroke-width="1.5" /></svg>';
+---
+<Base locale={language} alternate={alternate} title={c.seo} description={c.text}>
+  <SiteNav language={language} alternate={alternate} />
+  <main id="top" class="x wk">
+    <section class="x-wrap wk-index">
+      <header class="x-head x-head--split">
+        <h1 data-x-title>{c.title}</h1>
+        <div data-x-in><p>{c.text}</p><p class="wk-count">{c.count(projects.length)}</p></div>
+      </header>
+
+      <div class:list={['wk-cols', !hasYear && 'wk--noyear']} aria-hidden="true" data-x-in><span>{c.cols[0]}</span><span>{c.cols[1]}</span>{hasYear && <span>{c.cols[2]}</span>}</div>
+      <ol class:list={['wk-list', !hasYear && 'wk--noyear']} data-blog-list>
+        {projects.map((p, i) => (
+          <li class="wk-row" data-fade>
+            <a href={projectPath(language, p.slug)} data-post={i}>
+              <span class="wk-row__num">{String(i + 1).padStart(2, '0')}</span>
+              <span class="wk-row__img">{p.image && <img src={p.image} alt="" loading="lazy" />}</span>
+              <span class="wk-row__title"><b>{p.title}</b>{p.excerpt && <em>{p.excerpt}</em>}</span>
+              <span class="wk-row__tags">{p.tags.map((tag) => <i>{tag}</i>)}</span>
+              {hasYear && <span class="wk-row__year">{p.year}</span>}
+              <span class="wk-row__arrow" aria-hidden="true" set:html={arrow} />
+            </a>
+          </li>
+        ))}
+      </ol>
+      <div class="blog__preview" data-blog-preview aria-hidden="true">
+        {projects.map((p) => <img src={p.image} alt="" loading="lazy" />)}
+      </div>
+    </section>
+
+    <section class="x-wrap x-final">
+      <div class="x-final__in">
+        <h2 data-split="lines">{c.final}</h2>
+        <p data-fade>{c.finalText}</p>
+        <div class="x-actions" data-fade>
+          <a class="x-btn" href={t.contact.bookHref}><span class="x-btn__label"><span>{c.cta}</span><span aria-hidden="true">{c.cta}</span></span><span class="x-btn__icon" aria-hidden="true"><Fragment set:html={arrow} /><Fragment set:html={arrow} /></span></a>
+        </div>
+      </div>
+    </section>
+  </main>
+  <SiteFooter language={language} />
+  <script>
+    import '../../scripts/next';
+  </script>
+</Base>

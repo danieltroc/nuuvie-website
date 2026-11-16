@@ -42,6 +42,11 @@ Dla każdego stylu podaj rozmiar (desktop i mobile),
 interlinię, światło międzyliterowe i grubość.
 Wynik oddaj jako zmienne CSS gotowe do wklejenia.`;
 
+// CSS shown in the "Parametry pod web" card, typed in line by line
+const code = [['--font-heading', '"Fraunces"'], ['--font-body', '"Inter"'], ['--h1', '3rem / 1.08'], ['--tracking-h1', '-0.025em'], ['--body', '1rem / 1.6']];
+// The prompt with its placeholders ({NAGŁÓWEK}, {TEKST}) picked out
+const promptParts = prompt.split(/(\{[^}]+\})/);
+
 const includes = [
   '250 fontów dobranych w pary',
   'Parametry każdej pary pod web',
@@ -59,6 +64,7 @@ const nav = [
   <link slot="head" rel="stylesheet" href={fontsUrl} />
 
   <header class="x-nav">
+    <div class="x-nav__blur" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
     <div class="x-wrap x-nav__in">
       <a class="x-brand" href="/" aria-label="Nuuvie Studio"><Mark id="mark-f-nav" /><span>Nuuvie</span></a>
       <nav aria-label="Menu">{nav.map((l) => <a href={l.href}>{l.label}</a>)}</nav>
@@ -72,7 +78,7 @@ const nav = [
     <!-- ───── Hero ───── -->
     <section class="x-hero">
       <div class="x-wrap x-hero__text">
-        <h1 data-x-in>250 fontów. Dobranych w pary.</h1>
+        <h1 data-x-title>250 fontów. Dobranych w pary.</h1>
         <p data-x-in>Gotowe zestawienia z parametrami pod web, przewodnikiem PDF i albumem, który wysyłasz klientowi do wyboru.</p>
         <div class="x-actions" data-x-in>
           <a class="x-btn" href="#kup"><span class="x-btn__label"><span>Kup zestaw</span><span aria-hidden="true">Kup zestaw</span></span><span class="x-btn__icon" aria-hidden="true"><svg viewBox="0 0 12 12" fill="none"><path d="M2 10 10 2M3.5 2H10v6.5" stroke="currentColor" stroke-width="1.5" /></svg><svg viewBox="0 0 12 12" fill="none"><path d="M2 10 10 2M3.5 2H10v6.5" stroke="currentColor" stroke-width="1.5" /></svg></span></a>
@@ -112,38 +118,35 @@ const nav = [
       </header>
       <div class="x-bento f-bento">
         <article class="x-card x-feat" data-fade>
-          <div class="x-feat__gfx" aria-hidden="true">
-            <div class="f-tiles">{tiles.map((f) => <span style={`font-family:'${f}'`} data-f-tile>Aa</span>)}</div>
+          <div class="x-feat__gfx" data-scene="tiles" aria-hidden="true">
+            <div class="f-tiles">{tiles.map((f, i) => <span class:list={[i === 5 && 'is-ink', i === 6 && 'is-accent']} style={`font-family:'${f}'`} data-f-tile data-f-pair={i === 5 || i === 6 ? '' : undefined}>Aa</span>)}</div>
           </div>
           <div class="x-feat__text"><h3>250 fontów w parach</h3><p>Każdy krój ma partnera. Nie zgadujesz, co do czego pasuje.</p></div>
         </article>
         <article class="x-card x-feat" data-fade>
-          <div class="x-feat__gfx" aria-hidden="true">
-            <pre class="f-code"><code><i>--font-heading</i>: "Fraunces";
-<i>--font-body</i>: "Inter";
-<i>--h1</i>: 3rem / 1.08;
-<i>--tracking-h1</i>: -0.025em;
-<i>--body</i>: 1rem / 1.6;</code></pre>
+          <div class="x-feat__gfx" data-scene="code" aria-hidden="true">
+            <pre class="f-code"><code>{code.map(([k, v]) => <span class="f-code__line" data-line><i>{k}</i>: {v};</span>)}</code></pre>
           </div>
           <div class="x-feat__text"><h3>Parametry pod web</h3><p>Rozmiary, interlinie i światła dla każdej pary. Wklejasz i działa.</p></div>
         </article>
         <article class="x-card x-feat" data-fade>
-          <div class="x-feat__gfx" aria-hidden="true">
+          <div class="x-feat__gfx" data-scene="pdf" aria-hidden="true">
             <div class="f-pdf">
-              <div class="f-sheet"><b>Typografia z pary fontów</b><span class="x-sk"></span><span class="x-sk"></span><span class="x-sk"></span><em>PDF</em></div>
+              <div class="f-sheet"><b>Typografia z pary fontów</b><span class="x-sk" data-sk></span><span class="x-sk" data-sk></span><span class="x-sk" data-sk></span><em data-tag>PDF</em></div>
+              <div class="f-typing" data-typing><i></i><i></i><i></i></div>
               <div class="f-bubble" data-f-bubble>Zbuduj skalę typograficzną z tej pary…</div>
             </div>
           </div>
           <div class="x-feat__text"><h3>PDF z zasadami i promptami</h3><p>Najważniejsze reguły i gotowe prompty, które z pary fontów robią całą typografię.</p></div>
         </article>
         <article class="x-card x-feat" data-fade>
-          <div class="x-feat__gfx" aria-hidden="true">
+          <div class="x-feat__gfx" data-scene="album" aria-hidden="true">
             <div class="f-album">
               {pairs.slice(0, 3).map((p, i) => (
                 <div class:list={['f-page', i === 1 && 'is-pick']} data-f-page>
                   <b style={`font-family:'${p.h}';font-weight:${p.hw}`}>Aa</b>
                   <span style={`font-family:'${p.b}'`}>{p.h} + {p.b}</span>
-                  {i === 1 && <em>Wybrane</em>}
+                  {i === 1 && <em data-pick>Wybrane</em>}
                 </div>
               ))}
             </div>
@@ -186,7 +189,7 @@ const nav = [
         </div>
         <div class="x-card f-prompt" data-fade>
           <div class="f-prompt__bar"><span>Przykładowy prompt</span><button class="x-btn x-btn--ghost x-btn--sm" type="button" data-f-copy><span data-f-copy-label>Kopiuj</span></button></div>
-          <pre data-f-prompt>{prompt}</pre>
+          <pre data-f-prompt>{promptParts.map((part) => (/^\{.+\}$/.test(part) ? <mark class="f-ph">{part}</mark> : part))}</pre>
         </div>
       </div>
     </section>
@@ -194,9 +197,9 @@ const nav = [
     <!-- ───── Album ───── -->
     <section class="x-wrap x-sec" id="album">
       <div class="f-split f-split--rev">
-        <div class="x-card f-albumbig" data-fade aria-hidden="true">
+        <div class="x-card f-albumbig" data-fade data-scene="albumbig" aria-hidden="true">
           {pairs.map((p) => (
-            <div class="f-page">
+            <div class="f-page" data-page>
               <b style={`font-family:'${p.h}';font-weight:${p.hw}`}>Aa</b>
               <span style={`font-family:'${p.b}'`}>{p.h} + {p.b}</span>
             </div>

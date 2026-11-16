@@ -27,10 +27,14 @@
 }
 .f-tiles { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.4rem; width: min(80%, 20rem); }
 .f-tiles span { display: grid; place-items: center; aspect-ratio: 1; border-radius: 0.625rem; background: #fff; font-size: clamp(1.125rem, 2vw, 1.5rem); line-height: 1; }
-.f-tiles span:nth-child(6) { background: var(--ink); color: #fff; }
-.f-tiles span:nth-child(7) { background: var(--accent); color: #fff; }
+.f-tiles span.is-ink { background: var(--ink); color: #fff; }
+.f-tiles span.is-accent { background: var(--accent); color: #fff; }
 .f-code { margin: 0; width: min(84%, 22rem); padding: 1rem 1.1rem; border-radius: 0.75rem; background: var(--ink); color: rgb(255 255 255 / 0.86); font: 0.75rem/1.75 var(--font-mono); overflow: hidden; }
 .f-code i { font-style: normal; color: #c4a8ff; }
+.f-code__line { display: block; white-space: pre; }
+/* "Someone is typing" dots where the prompt bubble appears (shown only mid-scene) */
+.f-typing { position: absolute; right: -14%; bottom: 14%; display: none; gap: 0.25rem; padding: 0.6rem 0.7rem; border-radius: 0.75rem 0.75rem 0.25rem 0.75rem; background: var(--accent); }
+.f-typing i { width: 0.35rem; height: 0.35rem; border-radius: 50%; background: rgb(255 255 255 / 0.85); }
 .f-pdf { position: relative; width: min(60%, 13rem); }
 .f-sheet { position: relative; display: grid; gap: 0.5rem; align-content: start; aspect-ratio: 3 / 4; max-height: 13rem; padding: 1rem; border-radius: 0.5rem; background: #fff; box-shadow: 0 14px 28px -18px rgb(10 10 10 / 0.35); }
 .f-sheet b { font-weight: 500; line-height: 1.2; margin-bottom: 0.3rem; }
@@ -73,6 +77,7 @@
 }
 .f-prompt { padding: clamp(1rem, 2vw, 1.5rem); }
 .f-prompt__bar { display: flex; justify-content: space-between; align-items: center; gap: 1rem; margin-bottom: 1rem; font-size: 0.875rem; color: var(--muted); }
+.f-ph { padding: 0.05em 0.35em; border-radius: 0.3em; background: #f3eeff; color: #5b23d6; }
 .f-prompt pre { margin: 0; padding: clamp(1rem, 2vw, 1.5rem); border-radius: 0.75rem; background: #fff; font: 0.8125rem/1.7 var(--font-mono); white-space: pre-wrap; }
 .f-albumbig { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.5rem; padding: clamp(0.75rem, 2vw, 1.5rem); }
 .f-albumbig .f-page { aspect-ratio: 4 / 3; }

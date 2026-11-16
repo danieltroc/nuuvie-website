@@ -52,10 +52,21 @@ html[data-theme='next']:root {
 }
 .x-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.6rem; margin-top: 2rem; }
 .x-link { font-size: 0.9375rem; color: var(--muted); transition: color 200ms ease; }
+.x-head__more { display: inline-block; margin-top: 1rem; }
 @media (hover: hover) and (pointer: fine) { .x-link:hover { color: var(--ink); } }
 
 /* ───── Nav ───── */
-.x-nav { position: fixed; z-index: 50; inset: 0 0 auto 0; height: 3.5rem; background: rgb(255 255 255 / 0.8); -webkit-backdrop-filter: blur(16px) saturate(1.5); backdrop-filter: blur(16px) saturate(1.5); border-bottom: 1px solid var(--line); }
+.x-nav { position: fixed; z-index: 50; inset: 0 0 auto 0; height: 3.5rem; }
+/* Progressive blur behind the bar: five layers, each blurring more but covering less, so the page
+   melts into the bar instead of stopping at a hard edge; a white wash keeps the links readable. */
+.x-nav__blur { position: absolute; z-index: -1; inset: 0 0 auto 0; height: 6.5rem; pointer-events: none; }
+.x-nav__blur i { position: absolute; inset: 0; }
+.x-nav__blur i:nth-child(1) { -webkit-backdrop-filter: blur(1px); backdrop-filter: blur(1px); -webkit-mask-image: linear-gradient(#000 50%, transparent 100%); mask-image: linear-gradient(#000 50%, transparent 100%); }
+.x-nav__blur i:nth-child(2) { -webkit-backdrop-filter: blur(2px); backdrop-filter: blur(2px); -webkit-mask-image: linear-gradient(#000 40%, transparent 85%); mask-image: linear-gradient(#000 40%, transparent 85%); }
+.x-nav__blur i:nth-child(3) { -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px); -webkit-mask-image: linear-gradient(#000 32%, transparent 70%); mask-image: linear-gradient(#000 32%, transparent 70%); }
+.x-nav__blur i:nth-child(4) { -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); -webkit-mask-image: linear-gradient(#000 25%, transparent 58%); mask-image: linear-gradient(#000 25%, transparent 58%); }
+.x-nav__blur i:nth-child(5) { -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px); -webkit-mask-image: linear-gradient(#000 15%, transparent 45%); mask-image: linear-gradient(#000 15%, transparent 45%); }
+.x-nav__blur::after { content: ''; position: absolute; inset: 0; background: linear-gradient(rgb(255 255 255 / 0.82) 0%, rgb(255 255 255 / 0.55) 45%, rgb(255 255 255 / 0) 100%); }
 .x-nav__in { height: 100%; display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
 .x-brand { display: inline-flex; align-items: center; gap: 0.5rem; font-weight: 600; font-size: 1.0625rem; letter-spacing: -0.04em; }
 .x-brand svg { width: 1.25rem; height: 1.25rem; }
