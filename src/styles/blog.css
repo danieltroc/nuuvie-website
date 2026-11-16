@@ -43,7 +43,9 @@
 .b-head .b-meta { margin-top: clamp(1.75rem, 3vw, 2.5rem); }
 .b-author { display: inline-flex; align-items: center; gap: 0.5rem; color: var(--ink); font-weight: 500; }
 .b-author svg { width: 1.125rem; height: 1.125rem; }
-.b-cover { margin-top: clamp(2.5rem, 5vw, 4rem); aspect-ratio: 16 / 9; max-height: 46rem; overflow: hidden; border-radius: calc(var(--radius) * 1.25); background: var(--paper-2); }
+/* Cover: the home page hero window (tilted, straightens as you scroll) */
+.b-stage { margin-top: clamp(2.5rem, 5vw, 4rem); }
+.b-cover { aspect-ratio: 16 / 9; max-height: 46rem; background: var(--paper-2); }
 .b-cover img { width: 100%; height: 100%; object-fit: cover; }
 
 /* ───── Post layout: sticky sidebar + reading column ───── */
@@ -79,8 +81,21 @@
 .b-body li + li { margin-top: 0.4em; }
 .b-body blockquote { margin-block: 2em; padding: clamp(1.25rem, 2.5vw, 2rem); border-radius: var(--radius); background: var(--paper-2); font-size: clamp(1.25rem, 1.05rem + 0.6vw, 1.5rem); line-height: 1.35; letter-spacing: -0.02em; }
 .b-figure { margin-block: 2.5em; }
-.b-figure img { width: 100%; height: auto; border-radius: var(--radius); }
+.b-figure__img { overflow: hidden; border-radius: var(--radius); }
+.b-figure img { display: block; width: 100%; height: auto; }
 .b-figure figcaption { margin-top: 0.6rem; font-size: 0.875rem; color: var(--muted); }
+/* Contents on phones and tablets, folded (the sidebar list takes over from 1000 px) */
+.b-toc-m { padding: 0; font-size: 0.9375rem; line-height: 1.4; }
+.b-toc-m summary { display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding: 1rem 1.25rem; cursor: pointer; list-style: none; font-weight: 500; -webkit-tap-highlight-color: transparent; }
+.b-toc-m summary::-webkit-details-marker { display: none; }
+.b-toc-m summary i { position: relative; flex: none; width: 1.75rem; height: 1.75rem; border-radius: 50%; background: #fff; }
+.b-toc-m summary i::before, .b-toc-m summary i::after { content: ''; position: absolute; left: 50%; top: 50%; width: 0.6rem; height: 1.5px; margin: -0.75px 0 0 -0.3rem; background: var(--ink); transition: transform 300ms var(--ease-out); }
+.b-toc-m summary i::after { transform: rotate(90deg); }
+.b-toc-m[open] summary i::after { transform: rotate(0deg); }
+.b-toc-m ol { display: grid; gap: 0.1rem; padding: 0 0.75rem 0.9rem; list-style: none; }
+.b-body .b-toc-m li + li { margin-top: 0; }
+.b-toc-m a { display: block; padding: 0.45rem 0.5rem; border-radius: 0.5rem; color: var(--muted); text-decoration: none; }
+@media (min-width: 1000px) { .b-toc-m { display: none; } }
 .b-note { padding: 0.9rem 1.1rem; border-radius: 0.75rem; background: #f3eeff; color: #5b34b8; font-size: 0.9375rem; line-height: 1.45; }
 
 /* Author box at the end of a post */

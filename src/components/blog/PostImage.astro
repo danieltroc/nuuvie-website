@@ -6,7 +6,7 @@ const src = imageUrl(node, 1600);
 ---
 {src && (
   <figure class="b-figure">
-    <img src={src} alt={node.alt ?? ''} loading="lazy" />
+    <div class="b-figure__img" data-x-reveal><img src={src} alt={node.alt ?? ''} loading="lazy" /></div>
     {node.caption && <figcaption>{node.caption}</figcaption>}
   </figure>
 )}

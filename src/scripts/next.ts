@@ -225,8 +225,17 @@ function initDraw() {
   });
 }
 
+/* ───── Images with [data-x-reveal]: wipe in from the bottom once (CSS does the motion) ───── */
+function initReveal() {
+  $$('[data-x-reveal]').forEach((el) => {
+    if (reduced) { el.classList.add('is-in'); return; }
+    ScrollTrigger.create({ trigger: el, start: 'top 88%', once: true, onEnter: () => el.classList.add('is-in') });
+  });
+}
+
 initCopy();
 initDraw();
+initReveal();
 // The hero only fades and rises, so it starts at once; a failure must never leave it hidden
 try {
   initHero();

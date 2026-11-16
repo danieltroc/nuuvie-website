@@ -209,7 +209,7 @@ const alternate = pl ? '/en/strefa-designera' : '/strefa-designera';
       <div class="x-card z-about" data-fade>
         <div>
           <h2>{c.about.title}</h2>
-          <figure class="z-photo" data-z-photo><img src="/img/strefa/daniel-desk.jpg" alt={ui.photo} width="904" height="1200" loading="lazy" /></figure>
+          <figure class="z-photo" data-x-reveal><img src="/img/strefa/daniel-desk.jpg" alt={ui.photo} width="904" height="1200" loading="lazy" /></figure>
         </div>
         <div class="z-about__text">{paragraphs(c.about.text).map((p) => <p>{p}</p>)}
           <div class="z-brands">{brands.map((b) => <img src={`/img/logos/${b}.svg`} alt={b} width="150" height="100" loading="lazy" />)}</div>

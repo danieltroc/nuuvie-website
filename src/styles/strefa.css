@@ -139,12 +139,6 @@
 /* The desk photo wipes in from the bottom once, as the card comes into view */
 .z-photo { margin: clamp(1.5rem, 3vw, 2.5rem) 0 0; max-width: 26rem; aspect-ratio: 4 / 3; border-radius: 0.875rem; overflow: hidden; background: #e5e5e5; }
 .z-photo img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 45%; }
-@media (prefers-reduced-motion: no-preference) {
-  .z-photo { transition: clip-path 1000ms var(--ease-out); }
-  .z-photo img { transition: scale 1400ms var(--ease-out); }
-  html.js:not(.motion-off) .z-photo:not(.is-in) { clip-path: inset(100% 0 0 0 round 0.875rem); }
-  html.js:not(.motion-off) .z-photo:not(.is-in) img { scale: 1.12; }
-}
 /* Logos spread across the whole text column */
 .z-brands { display: flex; justify-content: space-between; align-items: center; gap: 0.5rem; margin-top: clamp(1rem, 2vw, 1.5rem); }
 .z-brands img { flex: 0 1 6.5rem; min-width: 0; width: 6.5rem; height: auto; filter: invert(1); opacity: 0.55; }

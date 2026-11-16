@@ -165,9 +165,6 @@ function initWalk() {
 }
 initWalk();
 
-// About card: the desk photo wipes in once (CSS does the motion; reduced motion shows it as is)
-const photo = $('[data-z-photo]');
-if (photo) ScrollTrigger.create({ trigger: photo, start: 'top 85%', once: true, onEnter: () => photo.classList.add('is-in') });
 
 const pins = $$('[data-z-pin]').sort((a, b) => Number(a.dataset.zPin) - Number(b.dataset.zPin));
 takeTurns($('[data-z-review]'), [pins, $$('[data-z-comment]')], 2.4);

@@ -32,10 +32,10 @@ const alternate = translation ? postPath(translation.language, translation.slug)
   <main id="top" class="x b">
     <article data-b-article>
       <header class="x-wrap b-head">
-        <a class="b-back" href={blogPath(language)}>← Blog</a>
-        <h1 data-split="lines">{post.title}</h1>
-        {post.excerpt && <p class="b-lead" data-fade>{post.excerpt}</p>}
-        <p class="b-meta" data-fade>
+        <a class="b-back" href={blogPath(language)} data-x-in>← Blog</a>
+        <h1 data-x-title>{post.title}</h1>
+        {post.excerpt && <p class="b-lead" data-x-in>{post.excerpt}</p>}
+        <p class="b-meta" data-x-in>
           <span class="b-author"><Mark id="mark-b-author" />Daniel Troć</span>
           <time datetime={post.publishedAt}>{formatDate(post.publishedAt, language)}</time>
           <span>{minutes} min {pl ? 'czytania' : 'read'}</span>
@@ -43,7 +43,7 @@ const alternate = translation ? postPath(translation.language, translation.slug)
       </header>
 
       {post.image && (
-        <div class="x-wrap"><div class="b-cover" data-fade><img src={post.image} alt={post.imageAlt ?? ''} width="1600" height="1067" /></div></div>
+        <div class="x-wrap x-stage b-stage" data-x-stage><div class="x-win b-cover" data-x-win><img src={post.image} alt={post.imageAlt ?? ''} width="1600" height="1067" /></div></div>
       )}
 
       <div class="x-wrap b-layout">
@@ -64,6 +64,12 @@ const alternate = translation ? postPath(translation.language, translation.slug)
         </aside>
 
         <div class="b-body">
+          {toc.length > 1 && (
+            <details class="x-card b-toc-m">
+              <summary>{pl ? 'Spis treści' : 'Contents'}<i aria-hidden="true"></i></summary>
+              <ol>{toc.map((h) => <li><a href={`#${h.id}`}>{h.text}</a></li>)}</ol>
+            </details>
+          )}
           {post.sample && <p class="b-note">{pl ? 'Przykładowa treść. Prawdziwy wpis pojawi się po przeniesieniu bloga do Sanity.' : 'Sample content. The real post will appear once the blog is moved to Sanity.'}</p>}
           {post.body?.length ? <PortableText value={post.body as never} components={components} /> : null}
 
@@ -91,6 +97,7 @@ const alternate = translation ? postPath(translation.language, translation.slug)
   </main>
   <SiteFooter language={language} />
   <script>
+    import '../../scripts/next';
     import '../../scripts/blog';
   </script>
 </Base>

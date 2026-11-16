@@ -1,14 +1,22 @@
-/* Case study pages (/work/…). Builds on next.css and blog.css (back link, meta). */
+/* Case study pages (/work/…). Builds on next.css and blog.css (back link, meta, progress bar). */
 
 .w-head { padding-top: clamp(7.5rem, 13vw, 11rem); }
 .w-head h1 { font-size: clamp(2.5rem, 1.2rem + 4.6vw, 5.75rem); line-height: 1.02; letter-spacing: -0.045em; font-weight: 500; max-width: 18ch; text-wrap: balance; }
-.w-facts { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.5rem; margin: clamp(2rem, 4vw, 3rem) 0 0; }
-.w-facts > div { padding: 1rem 1.15rem; }
-.w-facts dt { font-size: 0.8125rem; color: var(--muted); }
-.w-facts dd { margin: 0.3rem 0 0; font-size: 0.9375rem; line-height: 1.35; font-weight: 500; }
-@media (min-width: 900px) { .w-facts { grid-template-columns: repeat(4, 1fr); } }
+/* Facts as columns with thin dividers and mono labels, like the home page figures */
+.w-facts { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem 0; margin: clamp(2rem, 4vw, 3rem) 0 0; }
+.w-facts > div { padding: 0 1.25rem; border-left: 1px solid var(--line); }
+.w-facts > div:nth-child(odd) { padding-left: 0; border-left: 0; }
+.w-facts dt { font: 0.75rem var(--font-mono); letter-spacing: 0.04em; text-transform: uppercase; color: #a3a3a3; }
+.w-facts dd { margin: 0.45rem 0 0; font-size: 1rem; line-height: 1.4; font-weight: 500; max-width: 24ch; }
+@media (min-width: 900px) {
+  .w-facts { grid-template-columns: repeat(4, 1fr); }
+  .w-facts > div:nth-child(odd) { padding-left: 1.25rem; border-left: 1px solid var(--line); }
+  .w-facts > div:first-child { padding-left: 0; border-left: 0; }
+}
 
-.w-cover { margin-top: 0.75rem; aspect-ratio: 16 / 9; overflow: hidden; border-radius: calc(var(--radius) * 1.25); background: #111; }
+/* Cover: the home page hero window (tilted, straightens as you scroll) */
+.w-stage { margin-top: clamp(2.5rem, 5vw, 4rem); }
+.w-cover { aspect-ratio: 16 / 9; background: #111; }
 .w-cover img { width: 100%; height: 100%; object-fit: cover; }
 
 .w-content { display: grid; gap: 0.75rem; padding-top: 0.75rem; }
@@ -23,6 +31,8 @@
 @media (min-width: 900px) {
   .w-text { grid-template-columns: 5fr 7fr; align-items: start; }
   .w-text__body { padding-top: 2.4rem; }
+  /* the heading stays beside its text while a long text scrolls past */
+  .w-text__head { position: sticky; top: 7rem; }
 }
 
 /* Image rows */

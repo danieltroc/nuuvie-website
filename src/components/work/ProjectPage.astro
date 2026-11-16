@@ -1,5 +1,7 @@
 ---
-// Case study page (/work/…, /en/work/…), in the site's closed-box style.
+// Case study page (/work/…, /en/work/…), in the site's closed-box style. Same motion language as the
+// home page: the title and facts arrive on load, the cover is the hero window that straightens as
+// you scroll, text headings stay pinned beside their text, images wipe in, a bar shows progress.
 import '../../styles/next.css';
 import '../../styles/blog.css';
 import '../../styles/work.css';
@@ -22,24 +24,25 @@ const home = pl ? '/#work' : '/#work';
 const alternate = translation ? projectPath(translation.language, translation.slug) : undefined;
 ---
 <Base locale={language} alternate={alternate} title={`${project.seoTitle ?? `${project.title} – case study`} – Nuuvie`} description={project.seoDescription ?? project.excerpt}>
+  <div class="b-progress" aria-hidden="true"><i data-b-progress></i></div>
   <SiteNav language={language} alternate={alternate} />
   <main id="top" class="x w">
     <header class="x-wrap w-head">
-      <a class="b-back" href={home}>← {pl ? 'Prace' : 'Work'}</a>
-      <h1 data-split="lines">{project.headline}</h1>
-      <dl class="w-facts" data-fade>
-        <div class="x-card"><dt>{pl ? 'Klient' : 'Client'}</dt><dd>{project.title}</dd></div>
-        {project.kicker && <div class="x-card"><dt>{pl ? 'Branża' : 'Industry'}</dt><dd>{project.kicker}</dd></div>}
-        {project.tags.length > 0 && <div class="x-card"><dt>{pl ? 'Zakres' : 'Scope'}</dt><dd>{project.tags.join(', ')}</dd></div>}
-        {project.year && <div class="x-card"><dt>{pl ? 'Rok' : 'Year'}</dt><dd>{project.year}</dd></div>}
+      <a class="b-back" href={home} data-x-in>← {pl ? 'Prace' : 'Work'}</a>
+      <h1 data-x-title>{project.headline}</h1>
+      <dl class="w-facts" data-x-in>
+        <div><dt>{pl ? 'Klient' : 'Client'}</dt><dd>{project.title}</dd></div>
+        {project.kicker && <div><dt>{pl ? 'Branża' : 'Industry'}</dt><dd>{project.kicker}</dd></div>}
+        {project.tags.length > 0 && <div><dt>{pl ? 'Zakres' : 'Scope'}</dt><dd>{project.tags.join(', ')}</dd></div>}
+        {project.year && <div><dt>{pl ? 'Rok' : 'Year'}</dt><dd>{project.year}</dd></div>}
       </dl>
     </header>
 
     {project.image && (
-      <div class="x-wrap"><div class="w-cover" data-fade><img src={project.image} alt={project.imageAlt ?? ''} width="2000" height="1125" /></div></div>
+      <div class="x-wrap x-stage w-stage" data-x-stage><div class="x-win w-cover" data-x-win><img src={project.image} alt={project.imageAlt ?? ''} width="2000" height="1125" /></div></div>
     )}
 
-    <div class="x-wrap w-content">
+    <div class="x-wrap w-content" data-b-article>
       {project.content.map((block) =>
         block._type === 'projectText' ? (
           <section class="w-text">
@@ -52,7 +55,7 @@ const alternate = translation ? projectPath(translation.language, translation.sl
         ) : (
           <div class:list={['w-images', `w-images--${block.layout}`, block.images.length % 2 === 1 && 'is-odd']}>
             {block.images.map((img) => (
-              <figure class="w-img" data-fade><img src={img.url} alt={img.alt} width={img.width} height={img.height} loading="lazy" /></figure>
+              <figure class="w-img" data-x-reveal><img src={img.url} alt={img.alt} width={img.width} height={img.height} loading="lazy" /></figure>
             ))}
           </div>
         ),
@@ -85,4 +88,8 @@ const alternate = translation ? projectPath(translation.language, translation.sl
     </section>
   </main>
   <SiteFooter language={language} />
+  <script>
+    import '../../scripts/next';
+    import '../../scripts/blog';
+  </script>
 </Base>

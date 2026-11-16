@@ -23,8 +23,8 @@ const alternate = blogPath(pl ? 'en' : 'pl');
   <main id="top" class="x b">
     <section class="x-wrap b-index">
       <header class="x-head x-head--split">
-        <h1 data-split="lines">Blog</h1>
-        <div data-fade><p>{description}</p></div>
+        <h1 data-x-title>Blog</h1>
+        <div data-x-in><p>{description}</p></div>
       </header>
 
       {featured && <BlogCard post={featured} language={language} featured />}
@@ -47,4 +47,7 @@ const alternate = blogPath(pl ? 'en' : 'pl');
     </section>
   </main>
   <SiteFooter language={language} />
+  <script>
+    import '../../scripts/next';
+  </script>
 </Base>
