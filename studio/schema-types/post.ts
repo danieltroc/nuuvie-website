@@ -1,13 +1,5 @@
-import { defineArrayMember, defineField, defineType, type SlugValidationContext } from 'sanity'
-
-/** Slugs only have to be unique within one language: PL and EN posts may share a slug. */
-async function isUniqueInLanguage(slug: string, context: SlugValidationContext) {
-  const { document, getClient } = context
-  const id = document?._id.replace(/^drafts\./, '')
-  const params = { draft: `drafts.${id}`, published: id, slug, language: document?.language }
-  const query = `!defined(*[_type == "post" && !(_id in [$draft, $published]) && slug.current == $slug && language == $language][0]._id)`
-  return getClient({ apiVersion: '2025-01-01' }).fetch(query, params)
-}
+import { defineArrayMember, defineField, defineType } from 'sanity'
+import { isUniqueInLanguage } from './slug'
 
 export const postType = defineType({
   name: 'post',

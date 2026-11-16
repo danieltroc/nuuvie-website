@@ -1,5 +1,6 @@
 /**
- * Blog data. Posts come from Sanity (project 89d58rpp) when PUBLIC_SANITY_PROJECT_ID is set and
+ * Content from Sanity (project 89d58rpp): blog posts, case studies and legal pages. Used when
+ * PUBLIC_SANITY_PROJECT_ID is set and
  * at least one post exists in that language; until then the
  * site falls back to the sample posts in src/i18n so every page still builds and renders.
  * Data is fetched at build time only (static site), so publishing in Sanity triggers a rebuild.
@@ -136,4 +137,120 @@ export function getPosts(language: Locale): Promise<Post[]> {
     );
   }
   return cache.get(language)!;
+}
+
+/* ───────────── Case studies (/work/…) ───────────── */
+
+export type ProjectImage = { url: string; alt: string; width: number; height: number };
+export type ProjectBlock =
+  | { _type: 'projectText'; _key: string; label?: string; heading?: string; body?: unknown[] }
+  | { _type: 'projectImages'; _key: string; layout: 'full' | 'grid'; images: ProjectImage[] };
+export type Project = {
+  title: string;
+  slug: string;
+  language: Locale;
+  kicker?: string;
+  headline: string;
+  excerpt?: string;
+  tags: string[];
+  year?: number;
+  image?: string;
+  imageAlt?: string;
+  content: ProjectBlock[];
+  seoTitle?: string;
+  seoDescription?: string;
+  translations: Translation[];
+};
+
+export const projectPath = (language: Locale, slug: string) => `${language === 'en' ? '/en' : ''}/work/${slug}`;
+
+const PROJECTS_QUERY = defineQuery(`*[_type == "project" && language == $language && defined(slug.current)] | order(order asc, title asc){
+  title, "slug": slug.current, language, kicker, headline, excerpt, "tags": coalesce(tags, []), year,
+  coverImage, "imageAlt": coverImage.alt,
+  content[]{
+    ...,
+    _type == "projectImages" => { images[]{ asset, crop, hotspot, alt, "width": asset->metadata.dimensions.width, "height": asset->metadata.dimensions.height } }
+  },
+  "seoTitle": seo.title, "seoDescription": seo.description,
+  "translations": *[_type == "translation.metadata" && references(^._id)][0].translations[].value->{ language, "slug": slug.current }
+}`);
+
+type RawImage = { asset?: unknown; alt?: string; width?: number; height?: number };
+type RawProject = Omit<Project, 'image' | 'content' | 'translations'> & {
+  coverImage?: unknown;
+  content?: (ProjectBlock | (Omit<Extract<ProjectBlock, { _type: 'projectImages' }>, 'images'> & { images?: RawImage[] }))[];
+  translations?: (Translation | null)[] | null;
+};
+
+const fromSanityProject = (p: RawProject): Project => ({
+  ...p,
+  image: imageUrl(p.coverImage, 2000),
+  content: (p.content ?? []).map((b) =>
+    b._type === 'projectImages'
+      ? {
+          ...b,
+          images: ((b as { images?: RawImage[] }).images ?? []).map((img) => ({
+            url: imageUrl(img, b.layout === 'grid' ? 1200 : 2000) ?? '',
+            alt: img.alt ?? '',
+            width: img.width ?? 1600,
+            height: img.height ?? 1000,
+          })),
+        }
+      : (b as ProjectBlock),
+  ),
+  translations: (p.translations ?? []).filter((x): x is Translation => Boolean(x && x.slug && x.language !== p.language)),
+});
+
+/** Fallback before Sanity has case studies: the three projects from src/i18n, without body content. */
+function sampleProjects(language: Locale): Project[] {
+  return getDict(language).work.items.map((w) => {
+    const slug = w.href.split('/').pop() ?? w.name.toLowerCase();
+    return {
+      title: w.name, slug, language, kicker: w.kicker, headline: w.name, excerpt: w.desc, tags: w.tags,
+      image: w.img, imageAlt: '', content: [], translations: [{ language: language === 'pl' ? 'en' : 'pl', slug }],
+    };
+  });
+}
+
+const projectCache = new Map<Locale, Promise<Project[]>>();
+
+/** All case studies in a language, in their home-page order. */
+export function getProjects(language: Locale): Promise<Project[]> {
+  if (!projectCache.has(language)) {
+    projectCache.set(
+      language,
+      client
+        ? client.fetch<RawProject[]>(PROJECTS_QUERY, { language }).then((rows) => (rows.length ? rows.map(fromSanityProject) : sampleProjects(language)))
+        : Promise.resolve(sampleProjects(language)),
+    );
+  }
+  return projectCache.get(language)!;
+}
+
+/* ───────────── Legal pages (/legal/…) ───────────── */
+
+export type LegalPage = { title: string; slug: string; language: Locale; updatedAt: string; body: unknown[]; translations: Translation[] };
+
+export const legalPath = (language: Locale, slug: string) => `${language === 'en' ? '/en' : ''}/legal/${slug}`;
+
+const LEGAL_QUERY = defineQuery(`*[_type == "legalPage" && language == $language && defined(slug.current)] | order(title asc){
+  title, "slug": slug.current, language, updatedAt, "body": coalesce(body, []),
+  "translations": *[_type == "translation.metadata" && references(^._id)][0].translations[].value->{ language, "slug": slug.current }
+}`);
+
+const legalCache = new Map<Locale, Promise<LegalPage[]>>();
+
+/** Legal pages in a language (empty until Sanity is connected). */
+export function getLegalPages(language: Locale): Promise<LegalPage[]> {
+  if (!legalCache.has(language)) {
+    legalCache.set(
+      language,
+      client
+        ? client.fetch<(LegalPage & { translations?: (Translation | null)[] | null })[]>(LEGAL_QUERY, { language }).then((rows) =>
+            rows.map((p) => ({ ...p, translations: (p.translations ?? []).filter((x): x is Translation => Boolean(x && x.slug && x.language !== p.language)) })),
+          )
+        : Promise.resolve([]),
+    );
+  }
+  return legalCache.get(language)!;
 }

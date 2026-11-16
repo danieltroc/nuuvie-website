@@ -93,3 +93,8 @@
 .b-authorbox .x-btn { margin-top: 1rem; }
 
 .b-cta { margin-top: clamp(4rem, 8vw, 7rem); }
+
+/* Legal pages reuse the post layout with denser text */
+.b-body--legal { font-size: 1rem; line-height: 1.65; }
+.b-body--legal h2 { font-size: clamp(1.25rem, 1.05rem + 0.7vw, 1.625rem); }
+.b-body--legal ol { list-style: decimal; }

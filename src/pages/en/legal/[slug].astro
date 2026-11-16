@@ -1,0 +1,11 @@
+---
+import LegalPageView from '../../../components/legal/LegalPageView.astro';
+import { getLegalPages } from '../../../lib/sanity';
+
+export async function getStaticPaths() {
+  const pages = await getLegalPages('en');
+  return pages.map((page) => ({ params: { slug: page.slug }, props: { page } }));
+}
+const { page } = Astro.props;
+---
+<LegalPageView page={page} />

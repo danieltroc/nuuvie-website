@@ -1,0 +1,11 @@
+---
+import ProjectPage from '../../components/work/ProjectPage.astro';
+import { getProjects } from '../../lib/sanity';
+
+export async function getStaticPaths() {
+  const projects = await getProjects('pl');
+  return projects.map((project) => ({ params: { slug: project.slug }, props: { project } }));
+}
+const { project } = Astro.props;
+---
+<ProjectPage project={project} />

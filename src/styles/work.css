@@ -1,0 +1,48 @@
+/* Case study pages (/work/…). Builds on next.css and blog.css (back link, meta). */
+
+.w-head { padding-top: clamp(7.5rem, 13vw, 11rem); }
+.w-head h1 { font-size: clamp(2.5rem, 1.2rem + 4.6vw, 5.75rem); line-height: 1.02; letter-spacing: -0.045em; font-weight: 500; max-width: 18ch; text-wrap: balance; }
+.w-facts { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.5rem; margin: clamp(2rem, 4vw, 3rem) 0 0; }
+.w-facts > div { padding: 1rem 1.15rem; }
+.w-facts dt { font-size: 0.8125rem; color: var(--muted); }
+.w-facts dd { margin: 0.3rem 0 0; font-size: 0.9375rem; line-height: 1.35; font-weight: 500; }
+@media (min-width: 900px) { .w-facts { grid-template-columns: repeat(4, 1fr); } }
+
+.w-cover { margin-top: 0.75rem; aspect-ratio: 16 / 9; overflow: hidden; border-radius: calc(var(--radius) * 1.25); background: #111; }
+.w-cover img { width: 100%; height: 100%; object-fit: cover; }
+
+.w-content { display: grid; gap: 0.75rem; padding-top: 0.75rem; }
+
+/* Text section: title left, text right (same split as section heads elsewhere) */
+.w-text { display: grid; gap: 1.25rem var(--gutter); padding-block: clamp(4rem, 9vw, 8rem); }
+.w-label { font-size: 0.9375rem; color: var(--muted); margin-bottom: 1rem; }
+.w-text h2 { font-size: clamp(1.875rem, 1.1rem + 2.8vw, 3.5rem); line-height: 1.06; letter-spacing: -0.04em; font-weight: 500; max-width: 14ch; text-wrap: balance; }
+.w-text__body { font-size: clamp(1.0625rem, 1rem + 0.3vw, 1.25rem); line-height: 1.65; color: var(--muted); max-width: 40rem; }
+.w-text__body > * + * { margin-top: 1em; }
+.w-text__body a { color: var(--ink); text-decoration: underline; text-underline-offset: 0.2em; }
+@media (min-width: 900px) {
+  .w-text { grid-template-columns: 5fr 7fr; align-items: start; }
+  .w-text__body { padding-top: 2.4rem; }
+}
+
+/* Image rows */
+.w-images { display: grid; gap: 0.75rem; }
+.w-img { margin: 0; overflow: hidden; border-radius: var(--radius); background: var(--paper-2); }
+.w-img img { width: 100%; height: auto; display: block; }
+@media (min-width: 700px) {
+  .w-images--grid { grid-template-columns: 1fr 1fr; }
+  .w-images--grid.is-odd .w-img:first-child { grid-column: 1 / -1; }
+}
+
+/* Next project: one closed box, text left, picture right */
+.w-next { display: grid; transition: transform var(--dur-press) var(--ease-out); }
+.w-next:active { transform: scale(0.99); }
+.w-next__text { display: flex; flex-direction: column; gap: 0.75rem; padding: clamp(1.5rem, 3.5vw, 3rem); }
+.w-next__text p { font-size: 0.9375rem; color: var(--muted); }
+.w-next__text h2 { font-size: clamp(2rem, 1.2rem + 2.8vw, 3.75rem); line-height: 1; letter-spacing: -0.045em; font-weight: 500; }
+.w-next__text > span:not(.x-more) { color: var(--muted); max-width: 30ch; }
+.w-next .x-more { margin-top: auto; padding-top: 1rem; }
+.w-next__img { aspect-ratio: 16 / 10; overflow: hidden; background: #111; }
+.w-next__img img { width: 100%; height: 100%; object-fit: cover; transition: transform 900ms var(--ease-out); }
+@media (hover: hover) and (pointer: fine) { .w-next:hover img { transform: scale(1.03); } .w-next:hover .x-more { color: var(--ink); } }
+@media (min-width: 900px) { .w-next { grid-template-columns: 5fr 7fr; min-height: 24rem; } .w-next__img { aspect-ratio: auto; } }

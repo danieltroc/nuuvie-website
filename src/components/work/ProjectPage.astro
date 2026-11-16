@@ -1,0 +1,86 @@
+---
+// Case study page (/work/…, /en/work/…), in the site's closed-box style.
+import '../../styles/next.css';
+import '../../styles/blog.css';
+import '../../styles/work.css';
+import { PortableText } from 'astro-portabletext';
+import Base from '../../layouts/Base.astro';
+import SiteNav from '../site/SiteNav.astro';
+import SiteFooter from '../site/SiteFooter.astro';
+import { getDict } from '../../i18n';
+import { getProjects, projectPath, type Project } from '../../lib/sanity';
+interface Props { project: Project }
+const { project } = Astro.props;
+const language = project.language;
+const pl = language === 'pl';
+const t = getDict(language);
+const translation = project.translations[0];
+const all = await getProjects(language);
+const next = all[(all.findIndex((p) => p.slug === project.slug) + 1) % all.length];
+const home = pl ? '/#work' : '/#work';
+---
+<Base locale={language} title={`${project.seoTitle ?? `${project.title} – case study`} – Nuuvie`} description={project.seoDescription ?? project.excerpt}>
+  <SiteNav language={language} alternate={translation ? projectPath(translation.language, translation.slug) : undefined} />
+  <main id="top" class="x w">
+    <header class="x-wrap w-head">
+      <a class="b-back" href={home}>← {pl ? 'Prace' : 'Work'}</a>
+      <h1 data-split="lines">{project.headline}</h1>
+      <dl class="w-facts" data-fade>
+        <div class="x-card"><dt>{pl ? 'Klient' : 'Client'}</dt><dd>{project.title}</dd></div>
+        {project.kicker && <div class="x-card"><dt>{pl ? 'Branża' : 'Industry'}</dt><dd>{project.kicker}</dd></div>}
+        {project.tags.length > 0 && <div class="x-card"><dt>{pl ? 'Zakres' : 'Scope'}</dt><dd>{project.tags.join(', ')}</dd></div>}
+        {project.year && <div class="x-card"><dt>{pl ? 'Rok' : 'Year'}</dt><dd>{project.year}</dd></div>}
+      </dl>
+    </header>
+
+    {project.image && (
+      <div class="x-wrap"><div class="w-cover" data-fade><img src={project.image} alt={project.imageAlt ?? ''} width="2000" height="1125" /></div></div>
+    )}
+
+    <div class="x-wrap w-content">
+      {project.content.map((block) =>
+        block._type === 'projectText' ? (
+          <section class="w-text">
+            <div class="w-text__head">
+              {block.label && <p class="w-label" data-fade>{block.label}</p>}
+              {block.heading && <h2 data-split="lines">{block.heading}</h2>}
+            </div>
+            <div class="w-text__body" data-fade>{block.body && <PortableText value={block.body as never} />}</div>
+          </section>
+        ) : (
+          <div class:list={['w-images', `w-images--${block.layout}`, block.images.length % 2 === 1 && 'is-odd']}>
+            {block.images.map((img) => (
+              <figure class="w-img" data-fade><img src={img.url} alt={img.alt} width={img.width} height={img.height} loading="lazy" /></figure>
+            ))}
+          </div>
+        ),
+      )}
+    </div>
+
+    {next && next.slug !== project.slug && (
+      <section class="x-wrap x-sec">
+        <a class="x-card w-next" href={projectPath(language, next.slug)} data-fade>
+          <div class="w-next__text">
+            <p>{pl ? 'Następny projekt' : 'Next project'}</p>
+            <h2>{next.title}</h2>
+            {next.excerpt && <span>{next.excerpt}</span>}
+            <span class="x-more">{pl ? 'Zobacz projekt' : 'View project'} →</span>
+          </div>
+          <div class="w-next__img">{next.image && <img src={next.image} alt="" loading="lazy" />}</div>
+        </a>
+      </section>
+    )}
+
+    <section class="x-wrap x-final">
+      <div class="x-final__in">
+        <h2 data-split="lines">{pl ? 'Twój projekt może być następny.' : 'Your project could be next.'}</h2>
+        <p data-fade>{pl ? 'Umów bezpłatną, 15-minutową rozmowę.' : 'Book a free 15-minute call.'}</p>
+        <div class="x-actions" data-fade>
+          <a class="x-btn" href={t.contact.bookHref}>{pl ? 'Porozmawiajmy' : "Let's talk"}</a>
+          <a class="x-btn x-btn--ghost" href={`mailto:${t.contact.email}`}>{t.contact.email}</a>
+        </div>
+      </div>
+    </section>
+  </main>
+  <SiteFooter language={language} />
+</Base>

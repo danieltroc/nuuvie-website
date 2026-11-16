@@ -6,11 +6,12 @@ import '../styles/next.css';
 import Base from '../layouts/Base.astro';
 import Mark from '../components/Mark.astro';
 import BlogList from '../components/blog/BlogList.astro';
-import { getPosts } from '../lib/sanity';
+import { getPosts, getProjects, projectPath } from '../lib/sanity';
 import { getDict, socials, clientLogos } from '../i18n';
 
 const t = getDict('pl');
 const posts = await getPosts('pl');
+const projects = await getProjects('pl');
 const LIVE = 'https://www.nuuvie.com';
 const year = new Date().getFullYear();
 const markPath = 'M60.419 90.627C60.419 107.311 46.894 120.836 30.21 120.836C13.526 120.836 0.0002 107.311 0 90.627V30.21C0 13.526 13.526 0 30.21 0H60.419V90.627ZM90.633 0C107.317 0 120.842 13.526 120.842 30.21C120.842 46.868 107.359 60.376 90.711 60.418H120.842V90.627C120.842 107.311 107.317 120.836 90.633 120.836C73.949 120.836 60.424 107.311 60.424 90.627V60.418H90.555C73.907 60.376 60.424 46.868 60.424 30.21C60.424 13.526 73.949 0 90.633 0Z';
@@ -138,10 +139,10 @@ const issues = [
         <div data-fade><p>Marki i produkty, które zaprojektowałem od podstaw: od identyfikacji po aplikacje.</p></div>
       </header>
       <div class="x-cols">
-        {t.work.items.map((w, i) => (
-          <a class="x-col" href={w.href} data-fade>
-            <div class="x-project__img"><img src={w.img} alt="" width="2400" height="1350" loading={i === 0 ? 'eager' : 'lazy'} /></div>
-            <h3>{w.name}. <span>{w.desc}</span></h3>
+        {projects.slice(0, 3).map((w, i) => (
+          <a class="x-col" href={projectPath('pl', w.slug)} data-fade>
+            <div class="x-project__img">{w.image && <img src={w.image} alt={w.imageAlt ?? ''} width="2400" height="1350" loading={i === 0 ? 'eager' : 'lazy'} />}</div>
+            <h3>{w.title}. <span>{w.excerpt}</span></h3>
             <span class="x-more">Zobacz projekt →</span>
           </a>
         ))}

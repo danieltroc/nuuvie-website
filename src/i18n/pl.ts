@@ -195,8 +195,8 @@ export const pl = {
     legalLabel: 'Informacje',
     designerZone: { label: 'Strefa Designera', href: `${LIVE}/strefa-designera` },
     legal: [
-      { label: 'Regulamin', href: `${LIVE}/legal/regulamin` },
-      { label: 'Polityka prywatności', href: `${LIVE}/legal/polityka-prywatnosci` },
+      { label: 'Regulamin', href: '/legal/regulamin' },
+      { label: 'Polityka prywatności', href: '/legal/polityka-prywatnosci' },
     ],
     rights: 'Wszelkie prawa zastrzeżone.',
     top: 'Do góry',

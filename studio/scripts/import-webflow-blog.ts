@@ -45,7 +45,8 @@ type Scraped = {
 
 // Block type of the post body, compiled from the real Studio schema
 const compiled = createSchema({ name: 'nuuvie', types: schemaTypes })
-const bodyType = compiled.get('post').fields.find((f: { name: string }) => f.name === 'body').type
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const bodyType = (compiled.get('post') as any).fields.find((f: { name: string }) => f.name === 'body').type
 
 const clean = (s: string) => s.replace(/[​-‍﻿]/g, '').replace(/\s+/g, ' ').trim()
 
@@ -174,7 +175,7 @@ async function main() {
       return existing
     }
     const body = await Promise.all(
-      toBlocks(p.bodyHtml).map(async (b: Record<string, unknown>) => {
+      (toBlocks(p.bodyHtml) as unknown as Record<string, unknown>[]).map(async (b) => {
         if (b._type !== 'image' || !b._pendingUrl) return b
         const { _pendingUrl, ...rest } = b
         const ref = await upload(String(_pendingUrl), decodeURIComponent(String(_pendingUrl).split('/').pop() ?? 'image'))

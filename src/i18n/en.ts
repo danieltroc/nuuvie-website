@@ -155,8 +155,9 @@ export const en: Dict = {
     legalLabel: 'Info',
     designerZone: { ...pl.footer.designerZone, label: 'Designer Zone' },
     legal: [
-      { ...pl.footer.legal[0], label: 'Terms' },
-      { ...pl.footer.legal[1], label: 'Privacy policy' },
+      { href: '/en/legal/terms-of-service', label: 'Terms' },
+      // English privacy policy not translated yet: links to the Polish one
+      { href: '/legal/polityka-prywatnosci', label: 'Privacy policy (PL)' },
     ],
     rights: 'All rights reserved.',
     top: 'Back to top',

@@ -11,6 +11,9 @@ Dopóki projekt Sanity nie jest podłączony, strona pokazuje przykładowe wpisy
 | `studio/` | Sanity Studio, czyli edytor. Osobny projekt z własnym `package.json`. |
 | `studio/schema-types/post.ts` | Model wpisu: tytuł, adres, data, zajawka, okładka z opisem, treść, SEO. |
 | `studio/sanity.config.ts` | Konfiguracja: listy „Blog (PL)” i „Blog (EN)”, łączenie tłumaczeń. |
+| `studio/schema-types/project.ts` | Case study: klient, nagłówek, zakres, okładka, sekcje tekstu i rzędy zdjęć (cała szerokość lub siatka). |
+| `studio/schema-types/legal-page.ts` | Strony prawne: regulamin, polityka prywatności. |
+| `src/pages/work/[slug].astro`, `src/pages/legal/[slug].astro` | Case studies `/work/…` i strony prawne `/legal/…` (+ wersje `/en/…`). |
 | `src/lib/sanity.ts` | Pobieranie wpisów przez stronę (z zapasem na przykładowe wpisy). |
 | `src/pages/blog.astro`, `src/pages/blog-posts/[slug].astro` | Lista i wpis po polsku: `/blog`, `/blog-posts/…` |
 | `src/pages/en/blog.astro`, `src/pages/en/blog-posts/[slug].astro` | To samo po angielsku: `/en/blog`, `/en/blog-posts/…` |
@@ -41,3 +44,12 @@ Adresy są takie same jak w Webflow, więc Google nie straci istniejących wpis�
 ## Przeniesienie obecnych wpisów z Webflow
 
 Następny krok: eksport kolekcji bloga z Webflow (CMS → kolekcja → Export CSV) i skrypt, który wgra 12 wpisów z obrazkami do Sanity. Do wgrania potrzebny będzie token API z uprawnieniem „Editor” (Manage → API → Tokens); token trzymamy tylko w pliku `.env`, nigdy w repozytorium.
+
+## Case studies i strony prawne
+
+Zaimportowane skryptem `studio/scripts/import-webflow-pages.ts` (16.11.2026): 3 case studies PL i EN, regulamin, polityka prywatności (PL) i Terms of Service (EN).
+
+- **Angielskie case studies** to nowe tłumaczenia: w Webflow strony `/en/work/…` miały polski tekst. Warto je przejrzeć.
+- **Opisy zdjęć (alt)** w case studies są ogólne („Tedee – realizacja Nuuvie, zdjęcie 3”), bo w Webflow były puste. Lepiej opisać, co widać.
+- **Angielska polityka prywatności** w Webflow była po polsku, więc nie została zaimportowana; `/en/legal/polityka-prywatnosci` przekierowuje na polską wersję.
+- **Polityka prywatności wymienia Webflow i Google Analytics.** Po przejściu na nowy hosting i Umami trzeba ją zaktualizować.
