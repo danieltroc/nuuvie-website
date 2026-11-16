@@ -9,13 +9,20 @@ interface Props {
   description?: string;
   /** Keep a page out of search engines (drafts, test pages). */
   noindex?: boolean;
+  /** Path of the same page in the other language, if it exists (adds hreflang links). */
+  alternate?: string;
 }
-const { locale, theme = 'next', title, description, noindex = false } = Astro.props;
+const { locale, theme = 'next', title, description, noindex = false, alternate } = Astro.props;
 const t = getDict(locale);
 const site = Astro.site ?? new URL('https://www.nuuvie.com');
 // One canonical address per page, without a trailing slash (same as the old Webflow site)
 const path = Astro.url.pathname.replace(/\/$/, '') || '/';
 const canonical = new URL(path, site);
+// Tells search engines which address to show for Polish and English searchers.
+// Polish is x-default: the version for everyone else.
+const alternates = alternate
+  ? { [locale]: canonical.href, [locale === 'pl' ? 'en' : 'pl']: new URL(alternate.replace(/\/$/, '') || '/', site).href }
+  : null;
 ---
 <!doctype html>
 <html lang={locale} class="no-js" data-theme={theme}>
@@ -27,6 +34,13 @@ const canonical = new URL(path, site);
     <meta name="theme-color" content="#ffffff" />
     {noindex && <meta name="robots" content="noindex" />}
     <link rel="canonical" href={canonical} />
+    {alternates && !noindex && (
+      <>
+        <link rel="alternate" hreflang="pl" href={alternates.pl} />
+        <link rel="alternate" hreflang="en" href={alternates.en} />
+        <link rel="alternate" hreflang="x-default" href={alternates.pl} />
+      </>
+    )}
     <meta property="og:type" content="website" />
     <meta property="og:url" content={canonical} />
     <meta property="og:title" content={title ?? t.meta.title} />

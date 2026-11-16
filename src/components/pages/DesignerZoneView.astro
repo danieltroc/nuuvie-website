@@ -41,9 +41,11 @@ const ui = pl
       asks: ['What is the job market like?', 'How do I find clients?', 'Figma or Webflow?'], answer: 'Let me show you.',
     };
 const getKeys = ['portfolio', 'plan', 'feedback', 'qa'];
+// The same page in the other language (language switch + hreflang)
+const alternate = pl ? '/en/strefa-designera' : '/strefa-designera';
 ---
-<Base locale={language} title={c.seo?.title} description={c.seo?.description}>
-  <SiteNav language={language} alternate={pl ? '/en/strefa-designera' : '/strefa-designera'} />
+<Base locale={language} alternate={alternate} title={c.seo?.title} description={c.seo?.description}>
+  <SiteNav language={language} alternate={alternate} />
 
   <main id="top" class="x z">
     <!-- ───── Hero ───── -->

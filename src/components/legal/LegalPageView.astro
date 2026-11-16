@@ -16,9 +16,11 @@ const language = page.language;
 const pl = language === 'pl';
 const translation = page.translations[0];
 const toc = headingsOf(page.body);
+// The same page in the other language (language switch + hreflang)
+const alternate = translation ? legalPath(translation.language, translation.slug) : undefined;
 ---
-<Base locale={language} title={`${page.title} – Nuuvie`} description={`${page.title} – Nuuvie Studio`}>
-  <SiteNav language={language} alternate={translation ? legalPath(translation.language, translation.slug) : undefined} />
+<Base locale={language} alternate={alternate} title={`${page.title} – Nuuvie`} description={`${page.title} – Nuuvie Studio`}>
+  <SiteNav language={language} alternate={alternate} />
   <main id="top" class="x b">
     <article data-b-article>
       <header class="x-wrap b-head">

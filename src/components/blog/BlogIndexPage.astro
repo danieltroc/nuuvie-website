@@ -15,9 +15,11 @@ const [featured, ...rest] = await getPosts(language);
 const description = pl
   ? 'Piszę o designie: branding, UX/UI, strony internetowe i to, jak marka buduje zaufanie.'
   : 'Writing about design: branding, UX/UI, websites and how a brand builds trust.';
+// The same page in the other language (language switch + hreflang)
+const alternate = blogPath(pl ? 'en' : 'pl');
 ---
-<Base locale={language} title="Blog – Nuuvie Studio" description={description}>
-  <SiteNav language={language} alternate={blogPath(pl ? 'en' : 'pl')} />
+<Base locale={language} alternate={alternate} title="Blog – Nuuvie Studio" description={description}>
+  <SiteNav language={language} alternate={alternate} />
   <main id="top" class="x b">
     <section class="x-wrap b-index">
       <header class="x-head x-head--split">

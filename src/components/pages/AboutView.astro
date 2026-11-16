@@ -15,9 +15,11 @@ const pl = language === 'pl';
 const t = getDict(language);
 const c = await getPage('aboutPage', language, aboutContent[language]);
 const portrait = pic(c.story?.portrait, 1200);
+// The same page in the other language (language switch + hreflang)
+const alternate = pl ? '/en/o-nuuvie' : '/o-nuuvie';
 ---
-<Base locale={language} title={c.seo?.title} description={c.seo?.description}>
-  <SiteNav language={language} alternate={pl ? '/en/o-nuuvie' : '/o-nuuvie'} />
+<Base locale={language} alternate={alternate} title={c.seo?.title} description={c.seo?.description}>
+  <SiteNav language={language} alternate={alternate} />
 
   <main id="top" class="x a">
     <!-- ───── Hero ───── -->

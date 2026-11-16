@@ -49,9 +49,11 @@ const figPaths = [
   [0, 1, 2, 3, 4, 5, 6, 7, 8].map((i) => fin(160 - i * 11, 160 + i * 5.5, 140 - i * 14)),
 ];
 const serviceKeys = ['brand', 'ux', 'graphic', 'audit', 'team'];
+// The same page in the other language (language switch + hreflang)
+const alternate = pl ? '/en' : '/';
 ---
-<Base locale={language} title={c.seo?.title} description={c.seo?.description}>
-  <SiteNav language={language} alternate={pl ? '/en' : '/'} />
+<Base locale={language} alternate={alternate} title={c.seo?.title} description={c.seo?.description}>
+  <SiteNav language={language} alternate={alternate} />
 
   <main id="top" class="x">
     <!-- ───── Hero ───── -->

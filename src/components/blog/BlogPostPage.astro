@@ -23,10 +23,12 @@ const minutes = readingMinutes(post.body);
 const more = (await getPosts(language)).filter((p) => p.slug !== post.slug).slice(0, 3);
 const url = new URL(postPath(language, post.slug), Astro.site ?? 'https://www.nuuvie.com').href;
 const components = { type: { image: PostImage }, block: { h2: PostHeading, h3: PostHeading } };
+// The same page in the other language (language switch + hreflang)
+const alternate = translation ? postPath(translation.language, translation.slug) : undefined;
 ---
-<Base locale={language} title={`${post.seoTitle ?? post.title} – Nuuvie`} description={post.seoDescription ?? post.excerpt}>
+<Base locale={language} alternate={alternate} title={`${post.seoTitle ?? post.title} – Nuuvie`} description={post.seoDescription ?? post.excerpt}>
   <div class="b-progress" aria-hidden="true"><i data-b-progress></i></div>
-  <SiteNav language={language} alternate={translation ? postPath(translation.language, translation.slug) : undefined} />
+  <SiteNav language={language} alternate={alternate} />
   <main id="top" class="x b">
     <article data-b-article>
       <header class="x-wrap b-head">

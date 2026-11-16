@@ -18,9 +18,11 @@ const translation = project.translations[0];
 const all = await getProjects(language);
 const next = all[(all.findIndex((p) => p.slug === project.slug) + 1) % all.length];
 const home = pl ? '/#work' : '/#work';
+// The same page in the other language (language switch + hreflang)
+const alternate = translation ? projectPath(translation.language, translation.slug) : undefined;
 ---
-<Base locale={language} title={`${project.seoTitle ?? `${project.title} – case study`} – Nuuvie`} description={project.seoDescription ?? project.excerpt}>
-  <SiteNav language={language} alternate={translation ? projectPath(translation.language, translation.slug) : undefined} />
+<Base locale={language} alternate={alternate} title={`${project.seoTitle ?? `${project.title} – case study`} – Nuuvie`} description={project.seoDescription ?? project.excerpt}>
+  <SiteNav language={language} alternate={alternate} />
   <main id="top" class="x w">
     <header class="x-wrap w-head">
       <a class="b-back" href={home}>← {pl ? 'Prace' : 'Work'}</a>

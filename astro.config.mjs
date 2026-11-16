@@ -13,9 +13,7 @@ export default defineConfig({
     routing: { prefixDefaultLocale: false },
   },
   integrations: [
-    sitemap({
-      i18n: { defaultLocale: 'pl', locales: { pl: 'pl-PL', en: 'en-GB' } },
-      filter: (page) => !page.includes('/404'),
-    }),
+    // Language pairs are declared on each page (hreflang links in Base.astro), not here
+    sitemap({ filter: (page) => !page.includes('/404') }),
   ],
 });
