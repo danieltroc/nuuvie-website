@@ -1,0 +1,26 @@
+---
+// A pixel-art sprite from a text map: one character per pixel, "." is empty, every other
+// character is a key in `colors`. Same-colour runs in a row become one rect (fewer nodes).
+interface Props {
+  rows: string[];
+  colors: Record<string, string>;
+  class?: string;
+  [attr: `data-${string}`]: string | number | boolean | undefined;
+}
+const { rows, colors, class: className, ...rest } = Astro.props;
+const width = Math.max(...rows.map((r) => r.length));
+const runs: { x: number; y: number; w: number; c: string }[] = [];
+rows.forEach((row, y) => {
+  let x = 0;
+  while (x < row.length) {
+    const ch = row[x];
+    let w = 1;
+    while (row[x + w] === ch) w++;
+    if (ch !== '.' && colors[ch]) runs.push({ x, y, w, c: colors[ch] });
+    x += w;
+  }
+});
+---
+<svg class={className} viewBox={`0 0 ${width} ${rows.length}`} shape-rendering="crispEdges" aria-hidden="true" {...rest}>
+  {runs.map((r) => <rect x={r.x} y={r.y} width={r.w} height="1" fill={r.c} />)}
+</svg>

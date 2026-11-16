@@ -75,17 +75,17 @@ const figKinds = ['years', 'countries', 'projects'] as const;
       <div class="a-why">
         {(c.why.items ?? []).map((w, i) => (
           <article class="x-card" data-fade>
-            <div class="a-g" data-scene={whyScenes[i]} aria-hidden="true">
+            <div class="x-scene" data-scene={whyScenes[i]} aria-hidden="true">
               {whyScenes[i] === 'chat' && (
-                <div class="a-panel a-chat">
-                  <div class="a-b" data-b>{ui.chat[0]}</div>
-                  <div class="a-b a-b--me a-b--typing" data-typing><i></i><i></i><i></i></div>
-                  <div class="a-b a-b--me" data-b><b class="x-ava">D</b><span>{ui.chat[1]}</span></div>
-                  <div class="a-b" data-b>{ui.chat[2]}</div>
+                <div class="x-panel a-chat">
+                  <div class="x-b" data-b>{ui.chat[0]}</div>
+                  <div class="x-b x-b--me x-b--typing" data-typing><i></i><i></i><i></i></div>
+                  <div class="x-b x-b--me" data-b><b class="x-ava">D</b><span>{ui.chat[1]}</span></div>
+                  <div class="x-b" data-b>{ui.chat[2]}</div>
                 </div>
               )}
               {whyScenes[i] === 'snap' && (
-                <div class="a-panel a-snap">
+                <div class="x-panel a-snap">
                   <div class="a-snap__grid" data-grid>{[0, 1, 2, 3, 4, 5].map(() => <i></i>)}</div>
                   <span class="x-sk x-sk--nav" data-snap></span>
                   <span class="x-sk x-sk--h" data-snap></span>
@@ -95,7 +95,7 @@ const figKinds = ['years', 'countries', 'projects'] as const;
                 </div>
               )}
               {whyScenes[i] === 'kanban' && (
-                <div class="a-panel a-kb">
+                <div class="x-panel a-kb">
                   <p class="a-kb__count"><b data-count="2540">2540</b> {ui.projects}</p>
                   <div class="a-kb__board">
                     {ui.cols.map((col) => <div class="a-kb__col"><em>{col}</em><div class="a-kb__list" data-col></div></div>)}
@@ -149,7 +149,7 @@ const figKinds = ['years', 'countries', 'projects'] as const;
         <h2 data-split="lines">{c.process.title}</h2>
         <div data-fade><p>{c.process.text}</p></div>
       </header>
-      <ol class="x-timeline" data-a-timeline>{(c.process.steps ?? []).map((s, i) => <li data-fade style={`--i:${i}`}><i></i><h3>{s.title}</h3><p>{s.body}</p></li>)}</ol>
+      <ol class="x-timeline" data-x-draw>{(c.process.steps ?? []).map((s, i) => <li data-fade style={`--i:${i}`}><i></i><h3>{s.title}</h3><p>{s.body}</p></li>)}</ol>
     </section>
 
     <!-- ───── Principles: each with a scene that shows what it means ───── -->
@@ -158,9 +158,9 @@ const figKinds = ['years', 'countries', 'projects'] as const;
       <div class="a-principles">
         {(c.principles.items ?? []).map((p, i) => (
           <article class="x-card" data-fade>
-            <div class="a-g" data-scene={principleScenes[i]} aria-hidden="true">
+            <div class="x-scene" data-scene={principleScenes[i]} aria-hidden="true">
               {principleScenes[i] === 'target' && (
-                <div class="a-panel a-goal">
+                <div class="x-panel a-goal">
                   <p class="a-goal__head"><b>{ui.goal[0]}</b><span data-val>100%</span></p>
                   <div class="a-goal__row"><span>{ui.goal[1]}</span><i><b data-bar></b></i></div>
                   <p class="a-goal__label" data-form>{ui.goal[2]}</p>
@@ -170,7 +170,7 @@ const figKinds = ['years', 'countries', 'projects'] as const;
                 </div>
               )}
               {principleScenes[i] === 'simple' && (
-                <div class="a-panel a-simple">
+                <div class="x-panel a-simple">
                   <span class="x-sk x-sk--h"></span>
                   <span class="x-sk x-sk--h2"></span>
                   <span class="a-simple__line"></span>

@@ -217,7 +217,16 @@ function initCopy() {
   });
 }
 
+/* ───── Timelines with [data-x-draw]: CSS draws the line once .is-drawn is added ───── */
+function initDraw() {
+  $$('[data-x-draw]').forEach((line) => {
+    if (reduced) { line.classList.add('is-drawn'); return; }
+    ScrollTrigger.create({ trigger: line, start: 'top 75%', once: true, onEnter: () => line.classList.add('is-drawn') });
+  });
+}
+
 initCopy();
+initDraw();
 // The hero only fades and rises, so it starts at once; a failure must never leave it hidden
 try {
   initHero();
@@ -253,6 +262,12 @@ function initFigures() {
       tl.from($$('[data-fig-cell]', svg), { opacity: 0, scale: 0.5, transformOrigin: '50% 50%', duration: 0.35, ease: 'power2.out', stagger: 0.004 })
         .from($$('[data-fig-you]', svg), { opacity: 0, scale: 0.5, transformOrigin: '50% 50%', duration: 0.6, ease: OUT }, '-=0.15')
         .from($$('[data-fig-label]', svg), { opacity: 0, duration: 0.5, ease: 'power2.out' }, '-=0.3');
+    } else if (kind === 'line') {
+      // Generic line figure (Strefa Designera): blocks grow, lines draw, points land, labels last
+      tl.from($$('[data-fig-bar]', svg), { scaleX: 0, transformOrigin: '0% 50%', duration: 0.7, ease: OUT, stagger: 0.15 })
+        .fromTo($$('[data-fig-line]', svg), { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 1.1, ease: 'power2.inOut', stagger: 0.06 }, 0)
+        .from($$('[data-fig-dot]', svg), { opacity: 0, scale: 0.4, transformOrigin: '50% 50%', duration: 0.45, ease: OUT, stagger: 0.05 }, 0.45)
+        .from($$('[data-fig-label]', svg), { opacity: 0, duration: 0.5, ease: 'power2.out', stagger: 0.06 }, 0.6);
     }
   });
 }

@@ -1,0 +1,82 @@
+---
+// "Easy to get lost in design": a pixel designer stands on top of the question cards. Point at a
+// question and he walks over to it; a different icon pops up in his speech bubble and that card
+// lights up. Motion lives in scripts/strefa.ts (initWalk); without it he stands at the first card.
+import PixelArt from './PixelArt.astro';
+
+interface Props { questions: string[] }
+const { questions } = Astro.props;
+
+// Two colours only: black pixels, a purple shirt (the eye is a gap in the head)
+const k = '#0a0a0a';
+const p = '#864af9';
+const body = { h: k, s: k, g: k, k, b: k, p, d: p };
+const head = [
+  '....hhhh....',
+  '...hhhhhh...',
+  '...hhhhhhh..',
+  '...hssssss..',
+  '...hssss.s..',
+  '...sssssss..',
+  '....sssss...',
+  '.....ss.....',
+];
+const frames: Record<string, string[]> = {
+  stand: [...head,
+    '...pppppp...',
+    '..dppppppd..',
+    '..dppppppd..',
+    '..spppppps..',
+    '...kkkkkk...',
+    '...kk..kk...',
+    '...kk..kk...',
+    '..bbb..bbb..',
+  ],
+  a: [...head,
+    '...pppppp...',
+    '..pppppppd..',
+    '.dpppppppds.',
+    '.s.pppppp...',
+    '...kkkkkk...',
+    '..kk...kk...',
+    '.kk.....kk..',
+    '.bb.....bbb.',
+  ],
+  b: [...head,
+    '...pppppp...',
+    '..dppppppd..',
+    '..dppppppd..',
+    '...sppppps..',
+    '....kkkk....',
+    '....kkkk....',
+    '....kk.k....',
+    '....bbbbb...',
+  ],
+};
+
+// Same two colours: k black · a purple
+const ink = { k, a: p };
+const icons = [
+  // Is my portfolio any good? — a question mark
+  ['..kkkk..', '.kk..kk.', '.....kk.', '....kk..', '...kk...', '...kk...', '........', '...aa...'],
+  // What goes into it? — a picture
+  ['kkkkkkkk', 'k......k', 'k.kk...k', 'k.kk.a.k', 'k...aaak', 'k.aaaaak', 'kaaaaaak', 'kkkkkkkk'],
+  // Which skills matter? — a lightning bolt
+  ['....aaa.', '...aaa..', '..aaa...', '.aaaaaa.', '...aaa..', '..aaa...', '.aa.....', 'a.......'],
+  // How do I land the first job? — a briefcase
+  ['..kkkk..', '..k..k..', 'kkkkkkkk', 'kaaaaaak', 'kaaaaaak', 'kkkkkkkk', 'kaaaaaak', 'kkkkkkkk'],
+];
+---
+<div class="z-walk" data-z-walk>
+  <div class="z-walk__track" aria-hidden="true">
+    <div class="z-walker" data-walker>
+      <div class="z-bubble" data-bubble>
+        {icons.map((rows, i) => <PixelArt rows={rows} colors={ink} class:list={['z-bubble__icon', i === 0 && 'is-on']} data-icon={i} />)}
+      </div>
+      <div class="z-walker__body" data-body>
+        {Object.entries(frames).map(([name, rows]) => <PixelArt rows={rows} colors={body} class:list={['z-walker__frame', name === 'stand' && 'is-on']} data-frame={name} />)}
+      </div>
+    </div>
+  </div>
+  <div class="z-questions">{questions.map((q) => <p class="x-card" data-fade data-q>{q}</p>)}</div>
+</div>

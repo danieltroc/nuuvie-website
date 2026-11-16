@@ -6,6 +6,8 @@ import '../../styles/strefa.css';
 import Base from '../../layouts/Base.astro';
 import SiteNav from '../site/SiteNav.astro';
 import SiteFooter from '../site/SiteFooter.astro';
+import FormFigure from '../strefa/FormFigure.astro';
+import QuestionWalk from '../strefa/QuestionWalk.astro';
 import { getPage, paragraphs } from '../../lib/pages';
 import { getProjects } from '../../lib/sanity';
 import { designerZoneContent } from '../../content/pages/designer-zone';
@@ -20,27 +22,37 @@ const intro = c.links?.introHref ?? designerZoneContent.pl.links.introHref;
 const email = c.links?.email ?? 'hej@nuuvie.com';
 const projects = await getProjects(language);
 const thumbs = [...(projects.map((p) => p.image).filter(Boolean) as string[]), ...getDict('pl').blog.posts.slice(3, 6).map((p) => p.img)].slice(0, 6);
-const brands = ['maersk', 'jabra', 'polpharma', 'leroymerlin', 'tedee'];
+const brands = ['maersk', 'jabra', 'polpharma', 'tedee'];
 
 // Labels inside the decorative UI scenes
 const ui = pl
   ? {
       review: 'Portfolio review', you: 'Ty', comments: 'Komentarze',
       notes: [{ at: 0, text: 'Ten case daj na początek.' }, { at: 4, text: 'Pokaż proces, nie tylko efekt.' }, { at: 2, text: 'Mocniejsza hierarchia nagłówków.' }],
-      keep: 'Zostaw', fix: 'Popraw',
-      plan: ['Jakie umiejętności rozwijać', 'W jakiej kolejności', 'Jakie projekty do portfolio', 'Jakie narzędzia mają znaczenie'],
-      areas: ['UX/UI', 'Webdesign', 'Branding', 'Layouty', 'Typografia', 'Hierarchia informacji', 'Prezentacja projektu'],
-      asks: ['Jak wygląda rynek pracy?', 'Jak zdobywać klientów?', 'Figma czy Webflow?'], answer: 'Zaraz Ci pokażę.',
+      portfolio: 'Twoje portfolio', cases: '3 projekty', tags: ['Na początek', 'Zostaw', 'Popraw'],
+      planTitle: 'Plan rozwoju',
+      plan: ['Umiejętności do rozwinięcia', 'Kolejność nauki', 'Projekty do portfolio', 'Narzędzia, które mają znaczenie'],
+      feedback: 'Feedback', areasNote: 'obszarów',
+      areas: ['UX/UI', 'Webdesign', 'Branding', 'Layouty', 'Typografia', 'Hierarchia', 'Prezentacja'],
+      asks: ['Figma czy Webflow?', 'Jak zdobywać pierwszych klientów?'], answer: 'Pokażę Ci na Twoim przykładzie.',
+      fig: { session: ['PORTFOLIO', 'FEEDBACK', 'PLAN'], week: 'TYDZ.', goal: 'TWÓJ CEL', skills: ['WEBDESIGN', 'WEBFLOW', 'UX/UI'] },
+      photo: 'Daniel Troć przy pracy w studiu',
     }
   : {
       review: 'Portfolio review', you: 'You', comments: 'Comments',
       notes: [{ at: 0, text: 'Put this case first.' }, { at: 4, text: 'Show the process, not just the result.' }, { at: 2, text: 'Stronger heading hierarchy.' }],
-      keep: 'Keep', fix: 'Improve',
-      plan: ['Which skills to develop', 'In what order', 'Which projects for the portfolio', 'Which tools matter'],
-      areas: ['UX/UI', 'Web design', 'Branding', 'Layouts', 'Typography', 'Information hierarchy', 'Presentation'],
-      asks: ['What is the job market like?', 'How do I find clients?', 'Figma or Webflow?'], answer: 'Let me show you.',
+      portfolio: 'Your portfolio', cases: '3 projects', tags: ['Lead with it', 'Keep', 'Improve'],
+      planTitle: 'Growth plan',
+      plan: ['Skills to develop', 'What to learn first', 'Projects for the portfolio', 'Tools that matter'],
+      feedback: 'Feedback', areasNote: 'areas',
+      areas: ['UX/UI', 'Web design', 'Branding', 'Layouts', 'Typography', 'Hierarchy', 'Presentation'],
+      asks: ['Figma or Webflow?', 'How do I find my first clients?'], answer: 'I’ll show you on your own work.',
+      fig: { session: ['PORTFOLIO', 'FEEDBACK', 'PLAN'], week: 'WEEK', goal: 'YOUR GOAL', skills: ['WEB DESIGN', 'WEBFLOW', 'UX/UI'] },
+      photo: 'Daniel Troć at work in the studio',
     };
-const getKeys = ['portfolio', 'plan', 'feedback', 'qa'];
+const getKeys = ['portfolio', 'plan', 'areas', 'chat'];
+const formKinds = ['session', 'solo', 'program', 'group'] as const;
+const tick = '<svg viewBox="0 0 12 12" fill="none"><path d="m3 6.2 2 2L9 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" /></svg>';
 // The same page in the other language (language switch + hreflang)
 const alternate = pl ? '/en/strefa-designera' : '/strefa-designera';
 ---
@@ -86,7 +98,7 @@ const alternate = pl ? '/en/strefa-designera' : '/strefa-designera';
     <!-- ───── The problem ───── -->
     <section class="x-wrap x-sec">
       <header class="x-head"><h2 data-split="lines">{c.problem.title}</h2></header>
-      <div class="z-questions">{(c.problem.questions ?? []).map((q) => <p class="x-card" data-fade>{q}</p>)}</div>
+      <QuestionWalk questions={c.problem.questions ?? []} />
     </section>
 
     <!-- ───── What you get ───── -->
@@ -98,13 +110,37 @@ const alternate = pl ? '/en/strefa-designera' : '/strefa-designera';
       <div class="x-bento z-bento">
         {(c.gets.items ?? []).slice(0, 4).map((g, i) => (
           <article class="x-card x-feat" data-fade>
-            <div class="x-feat__gfx" aria-hidden="true">
+            <div class="x-feat__gfx" data-scene={getKeys[i]} aria-hidden="true">
               {getKeys[i] === 'portfolio' && (
-                <div class="z-g-port">{thumbs.slice(0, 3).map((src, n) => <span><img src={src} alt="" loading="lazy" /><em class:list={[n === 1 && 'is-fix']}>{n === 1 ? ui.fix : ui.keep}</em></span>)}</div>
+                <div class="x-panel z-port">
+                  <p class="z-head"><b>{ui.portfolio}</b><em>{ui.cases}</em></p>
+                  <div class="z-port__row">
+                    {thumbs.slice(0, 3).map((src, n) => (
+                      <span class="z-port__card" data-card><img src={src} alt="" loading="lazy" /><em class={`z-tag z-tag--${n}`} data-tag>{ui.tags[n]}</em></span>
+                    ))}
+                  </div>
+                </div>
               )}
-              {getKeys[i] === 'plan' && <ol class="z-g-plan">{ui.plan.map((s, n) => <li data-z-plan={n}><i>{n + 1}</i>{s}</li>)}</ol>}
-              {getKeys[i] === 'feedback' && <div class="z-g-chips">{ui.areas.map((a) => <span data-z-chip>{a}</span>)}</div>}
-              {getKeys[i] === 'qa' && <div class="z-g-chat">{ui.asks.map((a) => <p data-z-ask>{a}</p>)}<p class="is-me" data-z-ask>{ui.answer}</p></div>}
+              {getKeys[i] === 'plan' && (
+                <div class="x-panel z-plan">
+                  <p class="z-head"><b>{ui.planTitle}</b><em><span data-done>{ui.plan.length}</span>/{ui.plan.length}</em></p>
+                  <span class="z-plan__bar"><i data-bar></i></span>
+                  <ol>{ui.plan.map((step) => <li data-step><i data-check set:html={tick} />{step}</li>)}</ol>
+                </div>
+              )}
+              {getKeys[i] === 'areas' && (
+                <div class="x-panel z-areas">
+                  <p class="z-head"><b>{ui.feedback}</b><em><span data-n>{ui.areas.length}</span> {ui.areasNote}</em></p>
+                  <div class="z-areas__chips">{ui.areas.map((a) => <span data-chip><i set:html={tick} />{a}</span>)}</div>
+                </div>
+              )}
+              {getKeys[i] === 'chat' && (
+                <div class="x-panel z-chat">
+                  {ui.asks.map((a) => <div class="x-b" data-b>{a}</div>)}
+                  <div class="x-b x-b--me x-b--typing" data-typing><i></i><i></i><i></i></div>
+                  <div class="x-b x-b--me" data-b><b class="x-ava">D</b><span>{ui.answer}</span></div>
+                </div>
+              )}
             </div>
             <div class="x-feat__text"><h3>{g.title}</h3><p>{g.body}</p></div>
           </article>
@@ -130,8 +166,24 @@ const alternate = pl ? '/en/strefa-designera' : '/strefa-designera';
     <!-- ───── Opinions ───── -->
     <section class="x-wrap x-sec">
       <header class="x-head"><h2 data-split="lines">{c.opinions.title}</h2></header>
-      <div class="z-opinions">
-        {(c.opinions.items ?? []).map((o) => <figure data-fade><blockquote>{o.text}</blockquote><figcaption>{o.name}</figcaption></figure>)}
+      <div class="z-dms">
+        {(c.opinions.items ?? []).map((o, i) => (
+          <figure class="x-card z-dm" data-fade>
+            <div class="z-dm__screen" data-scene="dm">
+              <div class="z-dm__bar">
+                <svg class="z-dm__back" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M7.5 2.5 4 6l3.5 3.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" /></svg>
+                <span class={`z-dm__ava z-dm__ava--${i % 3}`} aria-hidden="true"></span>
+                <figcaption class="z-dm__who"><b>{o.name}</b><em>Instagram</em></figcaption>
+                <svg class="z-dm__icons" viewBox="0 0 40 16" fill="none" aria-hidden="true"><path d="M3.2 2.5h2.3l1.1 2.8-1.4.9a6.5 6.5 0 0 0 3.1 3.1l.9-1.4 2.8 1.1v2.3a1.2 1.2 0 0 1-1.3 1.2A10 10 0 0 1 2 3.8a1.2 1.2 0 0 1 1.2-1.3Z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round" /><rect x="22" y="3.5" width="10" height="9" rx="2" stroke="currentColor" stroke-width="1.2" /><path d="m32 7 4-2.2v6.4L32 9" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round" /></svg>
+              </div>
+              <div class="z-dm__row">
+                <span class={`z-dm__ava z-dm__ava--sm z-dm__ava--${i % 3}`} aria-hidden="true"></span>
+                <div class="z-dm__typing" data-typing aria-hidden="true"><i></i><i></i><i></i></div>
+                <blockquote class="z-dm__msg" data-msg>{o.text}<span class="z-dm__heart" data-heart aria-hidden="true">❤️</span></blockquote>
+              </div>
+            </div>
+          </figure>
+        ))}
       </div>
     </section>
 
@@ -141,7 +193,15 @@ const alternate = pl ? '/en/strefa-designera' : '/strefa-designera';
         <h2 data-split="lines">{c.forms.title}</h2>
         <div data-fade><p>{c.forms.text}</p></div>
       </header>
-      <ol class="x-timeline">{(c.forms.items ?? []).map((f) => <li data-fade><i></i><h3>{f.title}</h3><p>{f.body}</p></li>)}</ol>
+      <div class="x-figs z-forms">
+        {(c.forms.items ?? []).slice(0, 4).map((f, i) => (
+          <div class="x-fig" data-fade>
+            <FormFigure kind={formKinds[i]} labels={ui.fig} />
+            <h3>{f.title}</h3>
+            <p>{f.body}</p>
+          </div>
+        ))}
+      </div>
     </section>
 
     <!-- ───── About ───── -->
@@ -149,9 +209,11 @@ const alternate = pl ? '/en/strefa-designera' : '/strefa-designera';
       <div class="x-card z-about" data-fade>
         <div>
           <h2>{c.about.title}</h2>
+          <figure class="z-photo" data-z-photo><img src="/img/strefa/daniel-desk.jpg" alt={ui.photo} width="904" height="1200" loading="lazy" /></figure>
+        </div>
+        <div class="z-about__text">{paragraphs(c.about.text).map((p) => <p>{p}</p>)}
           <div class="z-brands">{brands.map((b) => <img src={`/img/logos/${b}.svg`} alt={b} width="150" height="100" loading="lazy" />)}</div>
         </div>
-        <div class="z-about__text">{paragraphs(c.about.text).map((p) => <p>{p}</p>)}</div>
       </div>
     </section>
 

@@ -8,13 +8,13 @@
  */
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { initScenes, fontsReady, type Scene } from './scenes';
 
 gsap.registerPlugin(ScrollTrigger);
 
 const $ = <T extends Element = HTMLElement>(s: string, r: ParentNode = document) => r.querySelector<T>(s);
 const $$ = <T extends Element = HTMLElement>(s: string, r: ParentNode = document) => Array.from(r.querySelectorAll<T>(s));
 const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
 const OUT = 'expo.out';
 const DRAW = 'power2.inOut';
 
@@ -48,8 +48,6 @@ function initSketch() {
 }
 
 /* ───── Scenes ───── */
-type Scene = (el: HTMLElement) => gsap.core.Timeline;
-
 const scenes: Record<string, Scene> = {
   // 1:1 — a question, Daniel typing, a straight answer
   chat(el) {
@@ -138,40 +136,6 @@ const scenes: Record<string, Scene> = {
   },
 };
 
-function initScenes() {
-  $$('[data-scene]').forEach((el) => {
-    const make = scenes[el.dataset.scene ?? ''];
-    if (!make) return;
-    // The kanban card has no CSS position of its own: put it in the last column even without motion
-    if (reduced) {
-      if (el.dataset.scene === 'kanban') make(el).progress(1).kill();
-      return;
-    }
-    const tl = make(el).pause(0); // shows the start of the scene until it is on screen
-    // Replays rewind quickly to the start instead of jumping there, then play again
-    const play = () => {
-      if (tl.isActive()) return;
-      if (tl.progress() === 0) { tl.invalidate().play(0); return; }
-      tl.eventCallback('onReverseComplete', () => {
-        tl.eventCallback('onReverseComplete', null);
-        tl.timeScale(1).invalidate().play(0);
-      });
-      tl.timeScale(4).reverse();
-    };
-    ScrollTrigger.create({ trigger: el, start: 'top 80%', once: true, onEnter: play });
-    const card = el.closest('.x-card');
-    if (finePointer && card) card.addEventListener('mouseenter', play);
-  });
-}
-
-/* ───── Process line: draws from step to step once on screen (CSS does the drawing) ───── */
-function initTimeline() {
-  const line = $('[data-a-timeline]');
-  if (!line) return;
-  if (reduced) { line.classList.add('is-drawn'); return; }
-  ScrollTrigger.create({ trigger: line, start: 'top 75%', once: true, onEnter: () => line.classList.add('is-drawn') });
-}
-
 /* ───── Story video: plays only while on screen; with reduced motion the poster stays ───── */
 function initVideo() {
   const video = $<HTMLVideoElement>('[data-a-video]');
@@ -183,10 +147,9 @@ function initVideo() {
 }
 
 initSketch();
-initTimeline();
 initVideo();
-// Scenes measure text layout, so they wait for the fonts (at most 1.5 s)
-Promise.race([document.fonts.ready, new Promise((r) => setTimeout(r, 1500))]).then(() => {
-  initScenes();
+// The kanban card has no CSS position of its own: with reduced motion it still jumps to the end
+fontsReady().then(() => {
+  initScenes(scenes, ['kanban']);
   ScrollTrigger.refresh();
 });
