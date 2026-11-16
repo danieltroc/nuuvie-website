@@ -1,11 +1,15 @@
 ---
-// About (PL "/o-nuuvie", EN "/en/o-nuuvie"). Text and images from Sanity (aboutPage-pl / -en).
+// About (PL "/o-nuuvie", EN "/en/o-nuuvie"). Text from Sanity (aboutPage-pl / -en); the scenes and the
+// hero strip are drawn here and animated by scripts/about.ts (figures by scripts/next.ts).
 import '../../styles/next.css';
 import '../../styles/about.css';
 import Base from '../../layouts/Base.astro';
 import SiteNav from '../site/SiteNav.astro';
 import SiteFooter from '../site/SiteFooter.astro';
-import { getPage, paragraphs, pic } from '../../lib/pages';
+import AboutSketch from '../about/AboutSketch.astro';
+import HomeFigure from './HomeFigure.astro';
+import { getPage, paragraphs } from '../../lib/pages';
+import { markPath } from '../../lib/mark';
 import { aboutContent } from '../../content/pages/about';
 import { getDict, clientLogos, type Locale } from '../../i18n';
 
@@ -14,38 +18,92 @@ const { language } = Astro.props;
 const pl = language === 'pl';
 const t = getDict(language);
 const c = await getPage('aboutPage', language, aboutContent[language]);
-const portrait = pic(c.story?.portrait, 1200);
 // The same page in the other language (language switch + hreflang)
 const alternate = pl ? '/en/o-nuuvie' : '/o-nuuvie';
+
+// Labels inside the drawings (decoration, so they live with the drawings)
+const ui = pl
+  ? {
+      sketch: ['Szkic', 'Siatka', 'Znak', 'Brandbook', 'Wizytówka', 'Strona'],
+      chat: ['Ile potrwa projekt logo?', 'Około 3 tygodni. Plan wyślę jeszcze dziś.', 'Super, działamy.'],
+      cols: ['Do zrobienia', 'W toku', 'Gotowe'], tasks: ['Logo', 'Ulotka', 'Brandbook'], projects: 'projektów',
+      goal: ['Cel', 'Więcej zapytań', 'Forma'],
+      mails: ['RE: RE: FW: Spotkanie w sprawie spotkania', 'FW: Akceptacja wstępna (v3)', 'RE: Pytanie do zespołu', 'RE: Ustalenia po ustaleniach'],
+      message: 'Robimy to. Start w poniedziałek.',
+      simple: 'Kup teraz', noise: ['Nowość', 'Promocja', '-20%', 'Zapisz się'],
+      fig: { perCell: '= 10 projektów', yours: 'Twój' },
+    }
+  : {
+      sketch: ['Sketch', 'Grid', 'Mark', 'Brandbook', 'Card', 'Website'],
+      chat: ['How long will the logo take?', 'About 3 weeks. I’ll send the plan today.', 'Great, let’s go.'],
+      cols: ['To do', 'In progress', 'Done'], tasks: ['Logo', 'Flyer', 'Brandbook'], projects: 'projects',
+      goal: ['Goal', 'More enquiries', 'Form'],
+      mails: ['RE: RE: FW: Meeting about the meeting', 'FW: Initial approval (v3)', 'RE: Question for the team', 'RE: Follow-up on the follow-up'],
+      message: 'Let’s do it. We start Monday.',
+      simple: 'Buy now', noise: ['New', 'Sale', '-20%', 'Sign up'],
+      fig: { perCell: '= 10 projects', yours: 'Yours' },
+    };
+const whyScenes = ['chat', 'snap', 'kanban'];
+const principleScenes = ['target', 'simple', 'consistent', 'quiet'];
+const figKinds = ['years', 'countries', 'projects'] as const;
 ---
 <Base locale={language} alternate={alternate} title={c.seo?.title} description={c.seo?.description}>
   <SiteNav language={language} alternate={alternate} />
 
   <main id="top" class="x a">
-    <!-- ───── Hero ───── -->
-    <section class="x-wrap a-hero">
-      <header class="x-head x-head--split">
-        <h1 data-split="lines">{c.hero.title}</h1>
-        <div data-fade>
-          <p>{c.hero.text}</p>
-          <div class="x-actions a-actions">
-            {c.hero.primary?.label && <a class="x-btn" href={c.hero.primary.href}><span class="x-btn__label"><span>{c.hero.primary.label}</span><span aria-hidden="true">{c.hero.primary.label}</span></span><span class="x-btn__icon" aria-hidden="true"><svg viewBox="0 0 12 12" fill="none"><path d="M2 10 10 2M3.5 2H10v6.5" stroke="currentColor" stroke-width="1.5" /></svg><svg viewBox="0 0 12 12" fill="none"><path d="M2 10 10 2M3.5 2H10v6.5" stroke="currentColor" stroke-width="1.5" /></svg></span></a>}
-            {c.hero.secondary?.label && <a class="x-btn x-btn--ghost" href={c.hero.secondary.href}><span class="x-btn__label"><span>{c.hero.secondary.label}</span><span aria-hidden="true">{c.hero.secondary.label}</span></span></a>}
-          </div>
+    <!-- ───── Hero: short headline, then the "sketch to brand" strip ───── -->
+    <section class="x-hero a-hero">
+      <div class="x-wrap x-hero__text">
+        <h1 data-x-title>{c.hero.title}</h1>
+        <p data-x-in>{c.hero.text}</p>
+        <div class="x-actions" data-x-in>
+          {c.hero.primary?.label && <a class="x-btn" href={c.hero.primary.href}><span class="x-btn__label"><span>{c.hero.primary.label}</span><span aria-hidden="true">{c.hero.primary.label}</span></span><span class="x-btn__icon" aria-hidden="true"><svg viewBox="0 0 12 12" fill="none"><path d="M2 10 10 2M3.5 2H10v6.5" stroke="currentColor" stroke-width="1.5" /></svg><svg viewBox="0 0 12 12" fill="none"><path d="M2 10 10 2M3.5 2H10v6.5" stroke="currentColor" stroke-width="1.5" /></svg></span></a>}
+          {c.hero.secondary?.label && <a class="x-btn x-btn--ghost" href={c.hero.secondary.href}><span class="x-btn__label"><span>{c.hero.secondary.label}</span><span aria-hidden="true">{c.hero.secondary.label}</span></span></a>}
         </div>
-      </header>
-      <dl class="a-facts" data-fade>
-        {(c.facts ?? []).map((f) => <div class="x-card"><dt>{f.label}</dt><dd>{f.value}</dd></div>)}
-      </dl>
+      </div>
+      <div class="x-wrap"><AboutSketch labels={ui.sketch} /></div>
+      <div class="x-wrap">
+        <dl class="a-facts" data-fade>
+          {(c.facts ?? []).map((f) => <div class="x-card"><dt>{f.label}</dt><dd>{f.value}</dd></div>)}
+        </dl>
+      </div>
     </section>
 
-    <!-- ───── Why Nuuvie ───── -->
+    <!-- ───── Why Nuuvie: each reason as a small working scene ───── -->
     <section class="x-wrap x-sec">
       <header class="x-head"><h2 data-split="lines">{c.why.title}</h2></header>
       <div class="a-why">
-        {(c.why.items ?? []).map((w) => (
+        {(c.why.items ?? []).map((w, i) => (
           <article class="x-card" data-fade>
-            <div class="a-why__img">{pic(w.image, 600) && <img src={pic(w.image, 600)} alt={(w.image as { alt?: string } | undefined)?.alt ?? ''} loading="lazy" />}</div>
+            <div class="a-g" data-scene={whyScenes[i]} aria-hidden="true">
+              {whyScenes[i] === 'chat' && (
+                <div class="a-panel a-chat">
+                  <div class="a-b" data-b>{ui.chat[0]}</div>
+                  <div class="a-b a-b--me a-b--typing" data-typing><i></i><i></i><i></i></div>
+                  <div class="a-b a-b--me" data-b><b class="x-ava">D</b><span>{ui.chat[1]}</span></div>
+                  <div class="a-b" data-b>{ui.chat[2]}</div>
+                </div>
+              )}
+              {whyScenes[i] === 'snap' && (
+                <div class="a-panel a-snap">
+                  <div class="a-snap__grid" data-grid>{[0, 1, 2, 3, 4, 5].map(() => <i></i>)}</div>
+                  <span class="x-sk x-sk--nav" data-snap></span>
+                  <span class="x-sk x-sk--h" data-snap></span>
+                  <span class="x-sk x-sk--h2" data-snap></span>
+                  <span class="x-sk x-sk--btn" data-snap></span>
+                  <div class="a-snap__cards"><span data-snap></span><span data-snap></span><span data-snap></span></div>
+                </div>
+              )}
+              {whyScenes[i] === 'kanban' && (
+                <div class="a-panel a-kb">
+                  <p class="a-kb__count"><b data-count="2540">2540</b> {ui.projects}</p>
+                  <div class="a-kb__board">
+                    {ui.cols.map((col) => <div class="a-kb__col"><em>{col}</em><div class="a-kb__list" data-col></div></div>)}
+                    {ui.tasks.map((task) => <span class="a-kb__task" data-task><i></i>{task}</span>)}
+                  </div>
+                </div>
+              )}
+            </div>
             <h3>{w.title}</h3>
             <p>{w.body}</p>
           </article>
@@ -53,39 +111,91 @@ const alternate = pl ? '/en/o-nuuvie' : '/o-nuuvie';
       </div>
     </section>
 
-    <!-- ───── Story ───── -->
+    <!-- ───── Story: looped video, then the clients underneath ───── -->
     <section class="x-wrap x-sec">
-      <div class:list={['x-card', 'a-story', !portrait && 'a-story--text']} data-fade>
-        {portrait && <div class="a-story__img"><img src={portrait} alt={(c.story.portrait as { alt?: string } | undefined)?.alt ?? ''} loading="lazy" /></div>}
+      <div class="x-card a-story" data-fade>
+        <div class="a-story__img">
+          <video class="a-story__video" muted loop playsinline preload="metadata" poster="/video/daniel-poster.jpg" data-a-video aria-label={pl ? 'Daniel Troć w swoim studiu' : 'Daniel Troć in his studio'}>
+            <source src="/video/daniel.webm" type="video/webm" />
+            <source src="/video/daniel.mp4" type="video/mp4" />
+          </video>
+        </div>
         <div class="a-story__text">
           <h2>{c.story.title}</h2>
           {paragraphs(c.story.text).map((p) => <p>{p}</p>)}
-          <div class="a-logos">{clientLogos.slice(0, 8).map((l) => <img src={`/img/logos/${l}.svg`} alt={l} width="150" height="100" loading="lazy" />)}</div>
         </div>
+      </div>
+      <div class="x-logos a-clients" data-fade>
+        {clientLogos.map((l) => <img src={`/img/logos/${l}.svg`} alt={l} width="150" height="100" loading="lazy" />)}
       </div>
     </section>
 
-    <!-- ───── Numbers ───── -->
-    <section class="x-wrap x-stats">
-      {(c.stats ?? []).map((s) => <div data-fade><b>{s.value}</b><p>{s.text}</p></div>)}
+    <!-- ───── Numbers: the same figures as on the home page ───── -->
+    <section class="x-wrap x-sec a-figs">
+      <div class="x-figs">
+        {(c.stats ?? []).slice(0, 3).map((s, i) => (
+          <div class="x-fig" data-fade>
+            <HomeFigure kind={figKinds[i]} labels={ui.fig} />
+            <h3>{s.value}</h3>
+            <p>{s.text}</p>
+          </div>
+        ))}
+      </div>
     </section>
 
-    <!-- ───── Process ───── -->
+    <!-- ───── Process: the line draws from step to step ───── -->
     <section class="x-wrap x-sec">
       <header class="x-head x-head--split">
         <h2 data-split="lines">{c.process.title}</h2>
         <div data-fade><p>{c.process.text}</p></div>
       </header>
-      <ol class="x-timeline">{(c.process.steps ?? []).map((s) => <li data-fade><i></i><h3>{s.title}</h3><p>{s.body}</p></li>)}</ol>
+      <ol class="x-timeline" data-a-timeline>{(c.process.steps ?? []).map((s, i) => <li data-fade style={`--i:${i}`}><i></i><h3>{s.title}</h3><p>{s.body}</p></li>)}</ol>
     </section>
 
-    <!-- ───── Principles ───── -->
+    <!-- ───── Principles: each with a scene that shows what it means ───── -->
     <section class="x-wrap x-sec">
       <header class="x-head"><h2 data-split="lines">{c.principles.title}</h2></header>
       <div class="a-principles">
         {(c.principles.items ?? []).map((p, i) => (
           <article class="x-card" data-fade>
-            <span>0{i + 1}</span>
+            <div class="a-g" data-scene={principleScenes[i]} aria-hidden="true">
+              {principleScenes[i] === 'target' && (
+                <div class="a-panel a-goal">
+                  <p class="a-goal__head"><b>{ui.goal[0]}</b><span data-val>100%</span></p>
+                  <div class="a-goal__row"><span>{ui.goal[1]}</span><i><b data-bar></b></i></div>
+                  <p class="a-goal__label" data-form>{ui.goal[2]}</p>
+                  <span class="x-sk x-sk--h" data-form></span>
+                  <span class="x-sk x-sk--h2" data-form></span>
+                  <span class="x-sk x-sk--btn" data-form></span>
+                </div>
+              )}
+              {principleScenes[i] === 'simple' && (
+                <div class="a-panel a-simple">
+                  <span class="x-sk x-sk--h"></span>
+                  <span class="x-sk x-sk--h2"></span>
+                  <span class="a-simple__line"></span>
+                  <span class="a-simple__one">{ui.simple}</span>
+                  <span class="a-simple__banner" data-noise>{ui.noise[1]} {ui.noise[2]}</span>
+                  <div class="a-simple__chips" data-noise><span>{ui.noise[0]}</span><span>+3</span></div>
+                  <span class="a-simple__popup" data-noise>{ui.noise[3]}</span>
+                  <span class="a-simple__badge" data-noise></span>
+                </div>
+              )}
+              {principleScenes[i] === 'consistent' && (
+                <div class="a-tiles">
+                  <span class="a-tile a-tile--card" data-tile><svg viewBox="0 0 121 121" data-mark><path d={markPath} /></svg></span>
+                  <span class="a-tile a-tile--phone" data-tile><svg viewBox="0 0 121 121" data-mark><path d={markPath} /></svg></span>
+                  <span class="a-tile a-tile--board" data-tile><svg viewBox="0 0 121 121" data-mark><path d={markPath} /></svg></span>
+                </div>
+              )}
+              {principleScenes[i] === 'quiet' && (
+                <div class="a-quiet">
+                  {ui.mails.map((m) => <div class="x-g-issue a-quiet__mail" data-mail><i class="x-st"></i><span>{m}</span></div>)}
+                  <div class="a-quiet__note" data-msg><b class="x-ava">D</b><span>{ui.message}</span></div>
+                </div>
+              )}
+            </div>
+            <span class="a-principles__num">0{i + 1}</span>
             <h3>{p.title}</h3>
             <p>{p.body}</p>
           </article>
@@ -93,9 +203,9 @@ const alternate = pl ? '/en/o-nuuvie' : '/o-nuuvie';
       </div>
     </section>
 
-    <!-- ───── Quote ───── -->
+    <!-- ───── Quote: words light up as you read ───── -->
     <section class="x-wrap x-sec a-quote">
-      <blockquote data-fade>„{c.quote.text}”</blockquote>
+      <blockquote data-scrub-words>„{c.quote.text}”</blockquote>
       <p data-fade>{c.quote.author}</p>
     </section>
 
@@ -115,5 +225,6 @@ const alternate = pl ? '/en/o-nuuvie' : '/o-nuuvie';
   <SiteFooter language={language} />
   <script>
     import '../../scripts/next';
+    import '../../scripts/about';
   </script>
 </Base>

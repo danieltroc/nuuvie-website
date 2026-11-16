@@ -19,8 +19,8 @@ export const aboutContent = {
       description: 'Nuuvie to studio, w którym design bierze odpowiedzialność za biznes. 15 lat doświadczenia w UX/UI i brandingu, współpraca 1:1.',
     },
     hero: {
-      title: 'Nuuvie to studio, w którym design bierze odpowiedzialność za biznes.',
-      text: 'W Nuuvie łączę doświadczenie w tworzeniu rozbudowanych systemów z elastycznością małego studia. Dostarczam przemyślane projekty, które pracują na sukces Twojej firmy.',
+      title: 'Design, który odpowiada za wynik.',
+      text: 'Nuuvie to studio, w którym łączę doświadczenie z rozbudowanych systemów z elastycznością małego zespołu. Dostarczam przemyślane projekty, które pracują na sukces Twojej firmy.',
       primary: { label: 'Porozmawiajmy', href: BOOK },
       secondary: { label: 'Zobacz ofertę dla marek', href: '/#services' },
     },
@@ -34,7 +34,7 @@ export const aboutContent = {
       title: 'Dlaczego Nuuvie?',
       items: [
         { title: 'Relacja 1:1', body: 'Od pierwszej rozmowy do finalnego projektu współpracujesz bezpośrednio ze mną. To gwarancja spójności i braku szumów komunikacyjnych.', image: { _upload: IMG.relation, alt: 'Ilustracja: dwa dymki rozmowy' } },
-        { title: 'Dobry projekt', body: 'Dobry projekt to najkrótsza droga do zdobycia zaufania Klienta. Tworzę interfejsy i marki, które eliminują przypadkowość i niespójność. Projektuję tak, aby każde kliknięcie utwierdzało Twojego użytkownika w przekonaniu, że trafił pod właściwy adres.', image: { _upload: IMG.project, alt: 'Ilustracja: dobry projekt' } },
+        { title: 'Dobry projekt', body: 'Dobry projekt to najkrótsza droga do zaufania. Tworzę interfejsy i marki bez przypadkowości, w których każde kliknięcie upewnia użytkownika, że trafił we właściwe miejsce.', image: { _upload: IMG.project, alt: 'Ilustracja: dobry projekt' } },
         { title: 'Sprawdzony proces', body: 'Korzystam z procesów wypracowanych przy ponad 2500 projektach dla klientów z 11 krajów.', image: { _upload: IMG.process, alt: 'Ilustracja: proces projektowy' } },
       ],
     },
@@ -78,8 +78,8 @@ export const aboutContent = {
       description: 'Nuuvie is a studio where design takes responsibility for business. 15 years of experience in UX/UI and branding, working 1:1.',
     },
     hero: {
-      title: 'Nuuvie is a studio where design takes responsibility for business.',
-      text: 'At Nuuvie I combine experience in building complex systems with the flexibility of a small studio. I deliver considered work that drives your company’s success.',
+      title: 'Design that answers for results.',
+      text: 'Nuuvie is a studio where I combine experience from complex systems with the flexibility of a small team. I deliver considered work that drives your company’s success.',
       primary: { label: "Let's talk", href: BOOK },
       secondary: { label: 'See services for brands', href: '/en#services' },
     },
@@ -93,7 +93,7 @@ export const aboutContent = {
       title: 'Why Nuuvie?',
       items: [
         { title: '1:1 relationship', body: 'From the first call to the final design you work directly with me. That means consistency and no communication noise.', image: { _upload: IMG.relation, alt: 'Illustration: two speech bubbles' } },
-        { title: 'Good design', body: 'Good design is the shortest path to earning a client’s trust. I create interfaces and brands that remove randomness and inconsistency, so every click reassures your users they have come to the right place.', image: { _upload: IMG.project, alt: 'Illustration: good design' } },
+        { title: 'Good design', body: 'Good design is the shortest path to trust. I create interfaces and brands without randomness, where every click reassures users they’ve come to the right place.', image: { _upload: IMG.project, alt: 'Illustration: good design' } },
         { title: 'Proven process', body: 'I use processes refined over more than 2,500 projects for clients in 11 countries.', image: { _upload: IMG.process, alt: 'Illustration: the design process' } },
       ],
     },

@@ -27,6 +27,7 @@ const year = new Date().getFullYear();
       <li><a href="/fonty">{pl ? 'Zestaw fontów' : 'Font set'}</a></li>
     </ul></div>
     <div><p>{pl ? 'Kontakt' : 'Contact'}</p><ul>
+      <li><a href={`${en}/kontakt`}>{pl ? 'Formularz kontaktowy' : 'Contact form'}</a></li>
       <li><a href={`mailto:${t.contact.email}`}>{t.contact.email}</a></li>
       <li><a href={t.contact.bookHref}>{pl ? 'Umów rozmowę' : 'Book a call'}</a></li>
       {socials.map((s) => <li><a href={s.href} target="_blank" rel="noopener">{s.label}</a></li>)}

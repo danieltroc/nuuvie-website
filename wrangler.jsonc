@@ -1,15 +1,27 @@
-// Cloudflare Workers config: the site is static files only (no server code).
+// Cloudflare Workers config. The site is static files (dist/), served by Cloudflare directly.
+// The only server code is worker/index.ts, and it runs only for /api/* (the contact form).
 // Cloudflare builds it from GitHub with `npm run build`, then runs `npx wrangler deploy`.
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "nuuvie-website",
   "compatibility_date": "2026-11-16",
+  "main": "worker/index.ts",
   "assets": {
     "directory": "./dist",
+    "binding": "ASSETS",
+    // Only the contact API reaches the Worker; every other request is a free static-file hit
+    "run_worker_first": ["/api/*"],
     // /blog serves dist/blog/index.html; /blog/ redirects to /blog (same addresses as Webflow)
     "html_handling": "drop-trailing-slash",
     // Unknown addresses get dist/404.html with status 404
     "not_found_handling": "404-page"
+  },
+  // Contact form: at most 3 submissions per minute from one IP
+  "ratelimits": [{ "name": "CONTACT_LIMIT", "namespace_id": "1001", "simple": { "limit": 3, "period": 60 } }],
+  // Non-secret settings. Secrets (TURNSTILE_SECRET, RESEND_API_KEY) are set in the Cloudflare dashboard.
+  "vars": {
+    "CONTACT_TO": "hej@nuuvie.com",
+    "CONTACT_FROM": "Nuuvie <formularz@nuuvie.com>"
   },
   // Keep the free *.workers.dev address for checking the site before DNS points here.
   // Every page has a canonical link to www.nuuvie.com, so search engines index only that.

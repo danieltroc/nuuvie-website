@@ -1,0 +1,79 @@
+---
+// About hero strip "Od szkicu do marki": one long line drawing from a rough sketch, through the grid
+// and the finished mark, to the mark at work on a card, an app and a website. Grey line work like the
+// home-page figures; purple only in the last stage. Drawn stage by stage by scripts/about.ts.
+import { markPath } from '../../lib/mark';
+interface Props { labels: string[] }
+const { labels } = Astro.props;
+const centers = [95, 290, 485, 680, 862, 1065];
+const M = 30;
+---
+<div class="a-sketch" data-a-sketch aria-hidden="true">
+  <svg viewBox="0 0 1200 250" fill="none">
+    <line class="a-sk-base" x1="20" y1="214.5" x2="1180" y2="214.5" pathLength="1" data-sk-line />
+
+    <!-- 1 · rough sketch -->
+    <g data-stage>
+      <path class="a-sk-pencil" d="M70 62C58 64 52 78 54 100C55 128 56 150 74 158C92 164 102 150 100 128L99 60C92 58 80 58 70 62" pathLength="1" data-sk-line />
+      <path class="a-sk-pencil" d="M128 64C112 62 104 76 108 90C112 104 132 106 138 92C144 78 140 64 126 63" pathLength="1" data-sk-line />
+      <path class="a-sk-pencil" d="M102 110C118 108 136 108 140 112C142 130 140 150 126 158C110 164 102 150 103 134" pathLength="1" data-sk-line />
+      <path class="a-sk-pencil a-sk-pencil--light" d="M58 176C80 171 104 179 136 172" pathLength="1" data-sk-line />
+    </g>
+
+    <!-- 2 · grid and construction circles -->
+    <g data-stage>
+      {[0, 1, 2, 3, 4].map((k) => <line class="a-sk-grid" x1={230 + k * M} y1="40" x2={230 + k * M} y2="180" pathLength="1" data-sk-line />)}
+      {[0, 1, 2, 3, 4].map((k) => <line class="a-sk-grid" x1="220" y1={50 + k * M} x2="360" y2={50 + k * M} pathLength="1" data-sk-line />)}
+      {[[260, 80], [320, 80], [260, 140], [320, 140]].map(([cx, cy]) => <circle class="a-sk-line" cx={cx} cy={cy} r={M} pathLength="1" data-sk-line />)}
+    </g>
+
+    <!-- 3 · the mark -->
+    <g data-stage>
+      <path class="a-sk-ink" d={markPath} transform="translate(425 50) scale(0.993)" data-sk-fill />
+    </g>
+
+    <!-- 4 · brandbook: an open spread, the mark on the left, colours and type on the right -->
+    <g data-stage>
+      <rect class="a-sk-line a-sk-paper" x="595" y="58" width="85" height="104" rx="3" pathLength="1" data-sk-line />
+      <rect class="a-sk-line a-sk-paper" x="680" y="58" width="85" height="104" rx="3" pathLength="1" data-sk-line />
+      <path class="a-sk-ink" d={markPath} transform="translate(616 78) scale(0.36)" data-sk-fill />
+      <rect class="a-sk-bar a-sk-bar--light" x="611" y="136" width="44" height="4" rx="2" data-sk-fill />
+      <circle class="a-sk-ink" cx="698" cy="78" r="7" data-sk-fill />
+      <circle class="a-sk-bar" cx="716" cy="78" r="7" data-sk-fill />
+      <circle class="a-sk-bar--light" cx="734" cy="78" r="7" data-sk-fill />
+      <circle class="a-sk-line" cx="752" cy="78" r="7" pathLength="1" data-sk-line />
+      <text class="a-sk-type" x="692" y="122" data-sk-fill>Aa</text>
+      <rect class="a-sk-bar a-sk-bar--light" x="692" y="134" width="58" height="4" rx="2" data-sk-fill />
+      <rect class="a-sk-bar a-sk-bar--light" x="692" y="144" width="40" height="4" rx="2" data-sk-fill />
+    </g>
+
+    <!-- 5 · business card -->
+    <g data-stage>
+      <rect class="a-sk-line a-sk-paper" x="792" y="66" width="140" height="88" rx="6" pathLength="1" data-sk-line />
+      <path class="a-sk-ink" d={markPath} transform="translate(806 80) scale(0.18)" data-sk-fill />
+      <rect class="a-sk-bar" x="806" y="124" width="64" height="5" rx="2.5" data-sk-fill />
+      <rect class="a-sk-bar a-sk-bar--light" x="806" y="135" width="44" height="5" rx="2.5" data-sk-fill />
+    </g>
+
+    <!-- 6 · website (the only purple) -->
+    <g data-stage>
+      <rect class="a-sk-line a-sk-paper" x="960" y="40" width="210" height="150" rx="8" pathLength="1" data-sk-line />
+      <line class="a-sk-line" x1="960" y1="58" x2="1170" y2="58" pathLength="1" data-sk-line />
+      {[970, 978, 986].map((x) => <circle class="a-sk-bar--light" cx={x} cy="49" r="2" data-sk-fill />)}
+      <path class="a-sk-ink" d={markPath} transform="translate(972 68) scale(0.12)" data-sk-fill />
+      <rect class="a-sk-bar a-sk-bar--light" x="1104" y="72" width="54" height="4" rx="2" data-sk-fill />
+      <rect class="a-sk-bar" x="972" y="96" width="104" height="9" rx="4.5" data-sk-fill />
+      <rect class="a-sk-bar" x="972" y="110" width="78" height="9" rx="4.5" data-sk-fill />
+      <rect class="a-sk-bar a-sk-bar--light" x="972" y="128" width="88" height="4" rx="2" data-sk-fill />
+      <rect class="a-sk-accent" x="972" y="146" width="52" height="16" rx="8" data-sk-fill />
+      <rect class="a-sk-accent-soft" x="1090" y="92" width="68" height="72" rx="6" data-sk-fill />
+    </g>
+
+    {centers.map((x, i) => (
+      <g data-sk-step>
+        <circle class:list={['a-sk-dot', i === centers.length - 1 && 'is-accent']} cx={x} cy="214.5" r="3.5" />
+        <text class:list={['a-sk-label', i === centers.length - 1 && 'is-accent']} x={x} y="238" text-anchor="middle">{labels[i]}</text>
+      </g>
+    ))}
+  </svg>
+</div>

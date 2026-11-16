@@ -12,6 +12,8 @@ export default defineConfig({
     locales: ['pl', 'en'],
     routing: { prefixDefaultLocale: false },
   },
+  // `astro dev` has no Worker: send /api (the contact form) to `npm run preview:cf` on port 8787
+  vite: { server: { proxy: { '/api': 'http://localhost:8787' } } },
   integrations: [
     // Language pairs are declared on each page (hreflang links in Base.astro), not here
     sitemap({ filter: (page) => !page.includes('/404') }),

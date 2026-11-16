@@ -393,7 +393,7 @@ html[data-theme='next']:root { --paper-2: #f5f5f5; }
 .x-statement { font-size: clamp(1.75rem, 1rem + 2.8vw, 3.5rem); line-height: 1.1; letter-spacing: -0.035em; font-weight: 500; max-width: 30ch; text-wrap: pretty; }
 .x-statement span { color: #9a9a9a; }
 .x-figs { display: grid; gap: 3rem 0; margin-top: clamp(3rem, 7vw, 6rem); }
-.x-fig small { display: block; font: 0.6875rem var(--font-mono); letter-spacing: 0.08em; color: #a3a3a3; }
+
 .x-fig svg { display: block; width: min(100%, 19rem); height: auto; margin: 1.5rem auto 2rem; overflow: visible; }
 /* Figures: grey line drawing, one purple accent each */
 .x-figure__bar { fill: #fff; stroke: rgb(10 10 10 / 0.35); stroke-width: 1; }

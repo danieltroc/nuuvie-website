@@ -124,7 +124,6 @@ const alternate = pl ? '/en' : '/';
       <div class="x-figs">
         {(c.figures ?? []).slice(0, 3).map((f, i) => (
           <div class="x-fig" data-fade>
-            <small>FIG 0.{i + 1}</small>
             <HomeFigure kind={figKinds[i]} labels={figLabels} />
             <h3>{f.title}</h3>
             <p>{f.text}</p>
