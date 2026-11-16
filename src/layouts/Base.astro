@@ -1,4 +1,7 @@
 ---
+// Fonts (SIL Open Font License), self-hosted: Bricolage Grotesque with its optical-size axis, Inter
+import '@fontsource-variable/bricolage-grotesque/opsz.css';
+import '@fontsource-variable/inter';
 import '../styles/global.css';
 import { type Locale, getDict } from '../i18n';
 interface Props {
@@ -48,8 +51,13 @@ const alternates = alternate
     <meta property="og:locale" content={locale === 'pl' ? 'pl_PL' : 'en_GB'} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <slot name="head" />
-    <link rel="preload" href="/fonts/BDOGrotesk-VF.ttf" as="font" type="font/ttf" crossorigin />
-    <script is:inline>document.documentElement.classList.replace('no-js', 'js');</script>
+    <script is:inline>
+      document.documentElement.classList.replace('no-js', 'js');
+      // Failsafe: if motion.ts has not started within 3 s (blocked or failed), show all content
+      setTimeout(() => {
+        if (!document.documentElement.classList.contains('motion-ready')) document.documentElement.classList.add('motion-off');
+      }, 3000);
+    </script>
   </head>
   <body>
     <slot />

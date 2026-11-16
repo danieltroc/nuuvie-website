@@ -1,13 +1,7 @@
 /* Nuuvie design tokens — the whole system lives here.
    Change a value in this file and it changes everywhere. */
 
-@font-face {
-  font-family: 'BDO Grotesk';
-  src: url('/fonts/BDOGrotesk-VF.ttf') format('truetype');
-  font-weight: 300 900;
-  font-style: normal;
-  font-display: swap;
-}
+/* Bricolage Grotesque (headlines) and Inter (text) are self-hosted from npm, see Base.astro */
 @font-face {
   font-family: 'Roboto Mono';
   src: url('/fonts/RobotoMono-VF.woff2') format('woff2');
@@ -32,7 +26,10 @@
   --grad: linear-gradient(90deg, #864af9 0%, #f0386b 70%, #882e47 100%);
 
   /* Type */
-  --font-sans: 'BDO Grotesk', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --font-sans: 'Inter Variable', Inter, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --font-head: 'Bricolage Grotesque Variable', 'Bricolage Grotesque', var(--font-sans);
+  --head-weight: 600;
+  --head-track: -0.04em;
   --font-mono: 'Roboto Mono', ui-monospace, 'SF Mono', Menlo, monospace;
 
   --fs-mono: 0.75rem;

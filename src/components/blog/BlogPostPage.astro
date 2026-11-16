@@ -58,7 +58,7 @@ const alternate = translation ? postPath(translation.language, translation.slug)
             <div class="b-share">
               <p>{pl ? 'Udostępnij' : 'Share'}</p>
               <button type="button" class="x-btn x-btn--ghost x-btn--sm" data-b-copy={url}><span data-b-copy-label>{pl ? 'Kopiuj link' : 'Copy link'}</span></button>
-              <a class="x-btn x-btn--ghost x-btn--sm" href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`} target="_blank" rel="noopener">LinkedIn</a>
+              <a class="x-btn x-btn--ghost x-btn--sm" href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`} target="_blank" rel="noopener"><span class="x-btn__label"><span>LinkedIn</span><span aria-hidden="true">LinkedIn</span></span></a>
             </div>
           </div>
         </aside>
@@ -72,7 +72,7 @@ const alternate = translation ? postPath(translation.language, translation.slug)
             <div>
               <p><b>Daniel Troć</b>{pl ? ' · założyciel Nuuvie' : ' · founder of Nuuvie'}</p>
               <p>{pl ? 'Od 15 lat projektuję marki i produkty cyfrowe. Jeśli chcesz porozmawiać o swoim projekcie, umów krótką rozmowę.' : 'I have designed brands and digital products for 15 years. If you want to talk about your project, book a short call.'}</p>
-              <a class="x-btn x-btn--sm" href={t.contact.bookHref}>{pl ? 'Umów rozmowę' : 'Book a call'}</a>
+              <a class="x-btn x-btn--sm" href={t.contact.bookHref}><span class="x-btn__label"><span>{pl ? 'Umów rozmowę' : 'Book a call'}</span><span aria-hidden="true">{pl ? 'Umów rozmowę' : 'Book a call'}</span></span><span class="x-btn__icon" aria-hidden="true"><svg viewBox="0 0 12 12" fill="none"><path d="M2 10 10 2M3.5 2H10v6.5" stroke="currentColor" stroke-width="1.5" /></svg><svg viewBox="0 0 12 12" fill="none"><path d="M2 10 10 2M3.5 2H10v6.5" stroke="currentColor" stroke-width="1.5" /></svg></span></a>
             </div>
           </div>
         </div>

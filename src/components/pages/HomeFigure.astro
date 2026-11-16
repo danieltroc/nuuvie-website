@@ -1,0 +1,75 @@
+---
+// The three statement figures on the home page, each drawing what its number means:
+//  years     — 15 years as a timeline, with projects per year growing (2011–2026)
+//  countries — a line globe with 11 points and arcs from Poland
+//  projects  — 2540+ projects as a grid of cells (1 cell = 10 projects); the empty purple one is yours
+// Animated once on scroll by initFigures() in scripts/next.ts.
+interface Props {
+  kind: 'years' | 'countries' | 'projects';
+  /** Small labels inside the figure (localised). */
+  labels: { perCell: string; yours: string };
+}
+const { kind, labels } = Astro.props;
+
+// years: one bar per year, heights only roughly growing (it is a picture, not a chart)
+const heights = [14, 18, 22, 20, 28, 34, 38, 36, 46, 52, 58, 56, 66, 74, 82, 94];
+const yearX = (i: number) => 21 + i * 18;
+
+// countries: globe centred at 160,100, radius 80
+const lat = (dy: number) => Math.sqrt(80 * 80 - dy * dy);
+const home = { x: 166, y: 66 };
+const near = [[154, 62], [176, 60], [158, 76], [172, 76], [148, 72], [183, 70]];
+const far = [[92, 72], [104, 92], [216, 90], [198, 128]];
+const arc = ([x, y]: number[]) => `M${home.x} ${home.y}Q${(home.x + x) / 2} ${Math.min(home.y, y) - 34} ${x} ${y}`;
+
+// projects: 26 × 10 cells, filled column by column; 254 cells ≈ 2540 projects, then yours
+const cols = 26, rows = 10, step = 11.6, size = 9, x0 = 10.5, y0 = 22;
+const shades = ['#ececec', '#e1e1e1', '#d5d5d5', '#c8c8c8', '#bcbcbc', '#e6e6e6', '#cfcfcf'];
+const cells = Array.from({ length: cols * rows }, (_, i) => {
+  const col = Math.floor(i / rows), row = i % rows;
+  return { i, x: x0 + col * step, y: y0 + row * step, fill: shades[(i * 37 + col * 11) % shades.length] };
+});
+const FILLED = 254;
+---
+{kind === 'years' && (
+  <svg class="x-figure" viewBox="0 0 320 200" aria-hidden="true" data-fig="years">
+    {heights.map((h, i) => (
+      <rect class:list={['x-figure__bar', i === heights.length - 1 && 'is-accent']} x={yearX(i)} y={150 - h} width="10" height={h} rx="2" data-fig-bar />
+    ))}
+    <line class="x-figure__axis" x1="14" y1="150.5" x2="306" y2="150.5" />
+    {heights.map((_, i) => <line class="x-figure__tick" x1={yearX(i) + 5} y1="151" x2={yearX(i) + 5} y2={i % 5 === 0 ? 158 : 155} />)}
+    {[0, 5, 10, 15].map((i) => <text class:list={['x-figure__label', i === 15 && 'is-accent']} x={yearX(i) + 5} y="172" text-anchor="middle" data-fig-label>{2011 + i}</text>)}
+  </svg>
+)}
+
+{kind === 'countries' && (
+  <svg class="x-figure" viewBox="0 0 320 200" aria-hidden="true" data-fig="countries">
+    <circle class="x-figure__line" cx="160" cy="100" r="80" pathLength="1" data-fig-line />
+    {[69.3, 40].map((rx) => <ellipse class="x-figure__line" cx="160" cy="100" rx={rx} ry="80" pathLength="1" data-fig-line />)}
+    <line class="x-figure__line" x1="160" y1="20" x2="160" y2="180" pathLength="1" data-fig-line />
+    {[0, -27.4, 27.4, -53.5, 53.5].map((dy) => (
+      <line class="x-figure__line" x1={160 - lat(dy)} y1={100 + dy} x2={160 + lat(dy)} y2={100 + dy} pathLength="1" data-fig-line />
+    ))}
+    {far.map((p) => <path class="x-figure__arc" d={arc(p)} pathLength="1" data-fig-arc />)}
+    <circle class="x-figure__ring" cx={home.x} cy={home.y} r="8" data-fig-dot />
+    {[[home.x, home.y], ...near, ...far].map(([x, y], i) => <circle class="x-figure__dot" cx={x} cy={y} r={i === 0 ? 4 : 3} data-fig-dot />)}
+  </svg>
+)}
+
+{kind === 'projects' && (
+  <svg class="x-figure" viewBox="0 0 320 200" aria-hidden="true" data-fig="projects">
+    {cells.map((c) =>
+      c.i < FILLED ? (
+        <rect x={c.x} y={c.y} width={size} height={size} rx="1.5" fill={c.fill} data-fig-cell />
+      ) : c.i === FILLED ? (
+        <rect class="x-figure__you" x={c.x} y={c.y} width={size} height={size} rx="1.5" data-fig-you />
+      ) : (
+        <rect class="x-figure__empty" x={c.x} y={c.y} width={size} height={size} rx="1.5" data-fig-cell />
+      ),
+    )}
+    <rect x="10.5" y="160" width="7" height="7" rx="1.2" fill="#c8c8c8" data-fig-label />
+    <text class="x-figure__label" x="22" y="166.5" data-fig-label>{labels.perCell}</text>
+    <rect class="x-figure__you" x={309.5 - 7 - 4 - labels.yours.length * 5.6} y="160" width="7" height="7" rx="1.2" data-fig-label />
+    <text class="x-figure__label is-accent" x="309.5" y="166.5" text-anchor="end" data-fig-label>{labels.yours}</text>
+  </svg>
+)}

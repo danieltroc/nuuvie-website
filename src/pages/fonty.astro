@@ -63,7 +63,7 @@ const nav = [
       <a class="x-brand" href="/" aria-label="Nuuvie Studio"><Mark id="mark-f-nav" /><span>Nuuvie</span></a>
       <nav aria-label="Menu">{nav.map((l) => <a href={l.href}>{l.label}</a>)}</nav>
       <div class="x-nav__right">
-        <a class="x-btn x-btn--sm" href="#kup">Kup zestaw</a>
+        <a class="x-btn x-btn--sm" href="#kup"><span class="x-btn__label"><span>Kup zestaw</span><span aria-hidden="true">Kup zestaw</span></span><span class="x-btn__icon" aria-hidden="true"><svg viewBox="0 0 12 12" fill="none"><path d="M2 10 10 2M3.5 2H10v6.5" stroke="currentColor" stroke-width="1.5" /></svg><svg viewBox="0 0 12 12" fill="none"><path d="M2 10 10 2M3.5 2H10v6.5" stroke="currentColor" stroke-width="1.5" /></svg></span></a>
       </div>
     </div>
   </header>
@@ -75,8 +75,8 @@ const nav = [
         <h1 data-x-in>250 fontów. Dobranych w pary.</h1>
         <p data-x-in>Gotowe zestawienia z parametrami pod web, przewodnikiem PDF i albumem, który wysyłasz klientowi do wyboru.</p>
         <div class="x-actions" data-x-in>
-          <a class="x-btn" href="#kup">Kup zestaw</a>
-          <a class="x-btn x-btn--ghost" href="#demo">Zobacz, jak to działa</a>
+          <a class="x-btn" href="#kup"><span class="x-btn__label"><span>Kup zestaw</span><span aria-hidden="true">Kup zestaw</span></span><span class="x-btn__icon" aria-hidden="true"><svg viewBox="0 0 12 12" fill="none"><path d="M2 10 10 2M3.5 2H10v6.5" stroke="currentColor" stroke-width="1.5" /></svg><svg viewBox="0 0 12 12" fill="none"><path d="M2 10 10 2M3.5 2H10v6.5" stroke="currentColor" stroke-width="1.5" /></svg></span></a>
+          <a class="x-btn x-btn--ghost" href="#demo"><span class="x-btn__label"><span>Zobacz, jak to działa</span><span aria-hidden="true">Zobacz, jak to działa</span></span></a>
         </div>
       </div>
 
@@ -216,7 +216,7 @@ const nav = [
         <ul data-fade>{includes.map((i) => <li>{i}</li>)}</ul>
         <p class="f-buy__price" data-fade>Cena wkrótce</p>
         <div class="x-actions" data-fade>
-          <a class="x-btn" href={BUY}>Zapytaj o zestaw</a>
+          <a class="x-btn" href={BUY}><span class="x-btn__label"><span>Zapytaj o zestaw</span><span aria-hidden="true">Zapytaj o zestaw</span></span><span class="x-btn__icon" aria-hidden="true"><svg viewBox="0 0 12 12" fill="none"><path d="M2 10 10 2M3.5 2H10v6.5" stroke="currentColor" stroke-width="1.5" /></svg><svg viewBox="0 0 12 12" fill="none"><path d="M2 10 10 2M3.5 2H10v6.5" stroke="currentColor" stroke-width="1.5" /></svg></span></a>
         </div>
       </div>
     </section>

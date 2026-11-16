@@ -51,11 +51,11 @@ const alternate = pl ? '/en/strefa-designera' : '/strefa-designera';
     <!-- ───── Hero ───── -->
     <section class="x-hero">
       <div class="x-wrap x-hero__text">
-        <h1 data-x-in>{c.hero.title}</h1>
+        <h1 data-x-in>{c.hero.title.replace(/(\d)-(\p{L})/gu, '$1\u2011$2').replace(/(^|\s)([aiouwzAIOUWZ]) /g, '$1$2\u00a0') /* no break at "15-letnim"; one-letter words move to the next line */}</h1>
         <p data-x-in>{c.hero.text}</p>
         <div class="x-actions" data-x-in>
-          <a class="x-btn" href={buy}>{c.hero.buyLabel}</a>
-          <a class="x-btn x-btn--ghost" href={intro}>{c.hero.introLabel}</a>
+          <a class="x-btn" href={buy}><span class="x-btn__label"><span>{c.hero.buyLabel}</span><span aria-hidden="true">{c.hero.buyLabel}</span></span><span class="x-btn__icon" aria-hidden="true"><svg viewBox="0 0 12 12" fill="none"><path d="M2 10 10 2M3.5 2H10v6.5" stroke="currentColor" stroke-width="1.5" /></svg><svg viewBox="0 0 12 12" fill="none"><path d="M2 10 10 2M3.5 2H10v6.5" stroke="currentColor" stroke-width="1.5" /></svg></span></a>
+          <a class="x-btn x-btn--ghost" href={intro}><span class="x-btn__label"><span>{c.hero.introLabel}</span><span aria-hidden="true">{c.hero.introLabel}</span></span></a>
         </div>
         <ul class="z-facts" data-x-in>{(c.hero.facts ?? []).map((f) => <li>{f}</li>)}</ul>
       </div>
@@ -118,7 +118,7 @@ const alternate = pl ? '/en/strefa-designera' : '/strefa-designera';
         <article class="x-card z-box" data-fade>
           <h3>{c.intro.title}</h3>
           <p>{c.intro.text}</p>
-          <a class="x-btn" href={intro}>{c.intro.ctaLabel}</a>
+          <a class="x-btn" href={intro}><span class="x-btn__label"><span>{c.intro.ctaLabel}</span><span aria-hidden="true">{c.intro.ctaLabel}</span></span><span class="x-btn__icon" aria-hidden="true"><svg viewBox="0 0 12 12" fill="none"><path d="M2 10 10 2M3.5 2H10v6.5" stroke="currentColor" stroke-width="1.5" /></svg><svg viewBox="0 0 12 12" fill="none"><path d="M2 10 10 2M3.5 2H10v6.5" stroke="currentColor" stroke-width="1.5" /></svg></span></a>
         </article>
         <article class="x-card z-box z-box--dark" data-fade>
           <h3>{c.notFor.title}</h3>
@@ -168,7 +168,7 @@ const alternate = pl ? '/en/strefa-designera' : '/strefa-designera';
             <h3>{plan.title}</h3>
             <p>{plan.text}</p>
             <p class="z-price__val"><b>{plan.price}</b>{plan.oldPrice && <s>{plan.oldPrice}</s>}</p>
-            <a class="x-btn" href={plan.ctaHref}>{plan.ctaLabel}</a>
+            <a class="x-btn" href={plan.ctaHref}><span class="x-btn__label"><span>{plan.ctaLabel}</span><span aria-hidden="true">{plan.ctaLabel}</span></span><span class="x-btn__icon" aria-hidden="true"><svg viewBox="0 0 12 12" fill="none"><path d="M2 10 10 2M3.5 2H10v6.5" stroke="currentColor" stroke-width="1.5" /></svg><svg viewBox="0 0 12 12" fill="none"><path d="M2 10 10 2M3.5 2H10v6.5" stroke="currentColor" stroke-width="1.5" /></svg></span></a>
           </article>
         ))}
       </div>
@@ -197,8 +197,8 @@ const alternate = pl ? '/en/strefa-designera' : '/strefa-designera';
         <h2 data-split="lines">{c.final.title}</h2>
         <p data-fade>{c.final.text}</p>
         <div class="x-actions" data-fade>
-          <a class="x-btn" href={buy}>{c.pricing.plans?.[0]?.ctaLabel ?? c.hero.buyLabel}</a>
-          <a class="x-btn x-btn--ghost" href={intro}>{c.hero.introLabel}</a>
+          <a class="x-btn" href={buy}><span class="x-btn__label"><span>{c.pricing.plans?.[0]?.ctaLabel ?? c.hero.buyLabel}</span><span aria-hidden="true">{c.pricing.plans?.[0]?.ctaLabel ?? c.hero.buyLabel}</span></span><span class="x-btn__icon" aria-hidden="true"><svg viewBox="0 0 12 12" fill="none"><path d="M2 10 10 2M3.5 2H10v6.5" stroke="currentColor" stroke-width="1.5" /></svg><svg viewBox="0 0 12 12" fill="none"><path d="M2 10 10 2M3.5 2H10v6.5" stroke="currentColor" stroke-width="1.5" /></svg></span></a>
+          <a class="x-btn x-btn--ghost" href={intro}><span class="x-btn__label"><span>{c.hero.introLabel}</span><span aria-hidden="true">{c.hero.introLabel}</span></span></a>
         </div>
       </div>
     </section>

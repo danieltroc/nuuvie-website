@@ -101,3 +101,25 @@ html.is-locked, html.is-locked body { overflow: hidden; }
   .blog__preview img.is-active { opacity: 1; }
 }
 
+/* ───── Motion: start hidden so nothing flashes before the scripts run ─────
+   motion.ts and next.ts reveal these. Only with JS on and motion allowed; if the scripts never
+   start, Base.astro adds .motion-off after 3 s and everything shows. */
+@media (prefers-reduced-motion: no-preference) {
+  html.js:not(.motion-off) :is([data-fade], [data-x-in], [data-x-stage], [data-x-title]) { opacity: 0; }
+}
+
+/* Reduced motion: hover feedback stays (colour, opacity), movement goes */
+@media (prefers-reduced-motion: reduce) {
+  .x-col:hover img,
+  .x-project:hover img,
+  .b-card:hover img,
+  .w-next:hover img,
+  .post a:hover h3 { transform: none !important; }
+}
+
+/* ───── Type: Bricolage Grotesque for headlines and large statements, Inter for everything else ───── */
+:root :is(h1, h2, h3, .x-statement, .x-stats b, blockquote) { font-family: var(--font-head); }
+:root :is(h1, h2, .x-statement) { font-weight: var(--head-weight); letter-spacing: var(--head-track); }
+/* Bricolage has tall ascenders, so headlines need tighter leading than the old font */
+:root :is(h1, h2) { line-height: 0.96; }
+:root .x-statement { line-height: 1.06; }

@@ -30,8 +30,27 @@ function initScroll() {
 }
 
 /* ───── Reveals ───── */
-function initReveals() {
-  // Headlines: lines rise out of a mask
+// Soft rise + fade, batched so neighbours stagger. Needs no font metrics, so it starts at once.
+function initFades() {
+  gsap.set('[data-fade]', { opacity: 0, y: 24 });
+  ScrollTrigger.batch('[data-fade]', {
+    start: 'top 92%',
+    once: true,
+    onEnter: (batch) => gsap.to(batch, { opacity: 1, y: 0, duration: 1, ease: OUT, stagger: 0.07, overwrite: true }),
+  });
+}
+
+// Headlines: lines rise out of a mask (line breaks need the final font)
+function initSplits() {
+  // Statements: words light up one by one as the reader scrolls through them
+  $$('[data-scrub-words]').forEach((el) => {
+    const split = SplitText.create(el, { type: 'words' });
+    gsap.fromTo(split.words, { opacity: 0.14 }, {
+      opacity: 1, ease: 'none', stagger: 0.08,
+      scrollTrigger: { trigger: el, start: 'top 82%', end: 'bottom 55%', scrub: 0.4 },
+    });
+  });
+
   $$('[data-split="lines"]').forEach((el) => {
     SplitText.create(el, {
       type: 'lines',
@@ -45,19 +64,11 @@ function initReveals() {
         }),
     });
   });
-
-  // Everything else: soft rise + fade, batched so neighbours stagger
-  gsap.set('[data-fade]', { opacity: 0, y: 24 });
-  ScrollTrigger.batch('[data-fade]', {
-    start: 'top 92%',
-    once: true,
-    onEnter: (batch) => gsap.to(batch, { opacity: 1, y: 0, duration: 1, ease: OUT, stagger: 0.07, overwrite: true }),
-  });
 }
 
 /* ───── Blog list: image preview follows the pointer (desktop only) ───── */
 function initBlogPreview() {
-  if (!finePointer) return;
+  if (!finePointer || reduced) return;
   const list = $('[data-blog-list]');
   const preview = $('[data-blog-preview]');
   if (!list || !preview) return;
@@ -88,15 +99,18 @@ function initBlogPreview() {
 
 /* ───── Boot ───── */
 async function boot() {
+  document.documentElement.classList.add('motion-ready');
   initScroll();
+  if (!reduced) initFades();
   // Line splitting needs final font metrics
   await Promise.race([document.fonts.ready, new Promise((r) => setTimeout(r, 1500))]);
-  if (!reduced) initReveals();
+  if (!reduced) initSplits();
   initBlogPreview();
   ScrollTrigger.refresh();
 }
 
 boot().catch((err) => {
   console.error('[motion]', err);
+  document.documentElement.classList.add('motion-off');
   gsap.set('[data-fade]', { clearProps: 'all' });
 });

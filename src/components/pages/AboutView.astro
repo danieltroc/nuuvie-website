@@ -29,8 +29,8 @@ const alternate = pl ? '/en/o-nuuvie' : '/o-nuuvie';
         <div data-fade>
           <p>{c.hero.text}</p>
           <div class="x-actions a-actions">
-            {c.hero.primary?.label && <a class="x-btn" href={c.hero.primary.href}>{c.hero.primary.label}</a>}
-            {c.hero.secondary?.label && <a class="x-btn x-btn--ghost" href={c.hero.secondary.href}>{c.hero.secondary.label}</a>}
+            {c.hero.primary?.label && <a class="x-btn" href={c.hero.primary.href}><span class="x-btn__label"><span>{c.hero.primary.label}</span><span aria-hidden="true">{c.hero.primary.label}</span></span><span class="x-btn__icon" aria-hidden="true"><svg viewBox="0 0 12 12" fill="none"><path d="M2 10 10 2M3.5 2H10v6.5" stroke="currentColor" stroke-width="1.5" /></svg><svg viewBox="0 0 12 12" fill="none"><path d="M2 10 10 2M3.5 2H10v6.5" stroke="currentColor" stroke-width="1.5" /></svg></span></a>}
+            {c.hero.secondary?.label && <a class="x-btn x-btn--ghost" href={c.hero.secondary.href}><span class="x-btn__label"><span>{c.hero.secondary.label}</span><span aria-hidden="true">{c.hero.secondary.label}</span></span></a>}
           </div>
         </div>
       </header>
@@ -105,7 +105,7 @@ const alternate = pl ? '/en/o-nuuvie' : '/o-nuuvie';
         <h2 data-split="lines">{c.final.title}</h2>
         <p data-fade>{c.final.text}</p>
         <div class="x-actions" data-fade>
-          <a class="x-btn" href={t.contact.bookHref}>{c.final.ctaLabel}</a>
+          <a class="x-btn" href={t.contact.bookHref}><span class="x-btn__label"><span>{c.final.ctaLabel}</span><span aria-hidden="true">{c.final.ctaLabel}</span></span><span class="x-btn__icon" aria-hidden="true"><svg viewBox="0 0 12 12" fill="none"><path d="M2 10 10 2M3.5 2H10v6.5" stroke="currentColor" stroke-width="1.5" /></svg><svg viewBox="0 0 12 12" fill="none"><path d="M2 10 10 2M3.5 2H10v6.5" stroke="currentColor" stroke-width="1.5" /></svg></span></a>
           <button class="x-btn x-btn--ghost" type="button" data-x-copy={t.contact.email}><span data-x-copy-label>{t.contact.email}</span></button>
         </div>
       </div>
