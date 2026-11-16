@@ -2,7 +2,7 @@ import { defineConfig } from 'sanity'
 import { structureTool, type StructureBuilder } from 'sanity/structure'
 import { visionTool } from '@sanity/vision'
 import { documentInternationalization } from '@sanity/document-internationalization'
-import { schemaTypes, LOCALIZED_TYPES } from './schema-types'
+import { schemaTypes, LOCALIZED_TYPES, PAGE_TYPES } from './schema-types'
 import { LANGUAGES } from './locales'
 
 /** Sidebar sections; each one is split into a list per language. */
@@ -45,7 +45,30 @@ export default defineConfig({
 
   plugins: [
     structureTool({
-      structure: (S) => S.list().title('Treści').items(SECTIONS.map((s) => section(S, s))),
+      structure: (S) =>
+        S.list()
+          .title('Treści')
+          .items([
+            // Fixed pages: one document per language, opened directly (no list, no duplicates)
+            S.listItem()
+              .title('Strony')
+              .child(
+                S.list()
+                  .title('Strony')
+                  .items(
+                    PAGE_TYPES.flatMap(({ type, title }) =>
+                      LANGUAGES.map((lang) =>
+                        S.listItem()
+                          .title(`${title} (${lang.id.toUpperCase()})`)
+                          .id(`${type}-${lang.id}`)
+                          .child(S.document().schemaType(type).documentId(`${type}-${lang.id}`).title(`${title} (${lang.id.toUpperCase()})`)),
+                      ),
+                    ),
+                  ),
+              ),
+            S.divider(),
+            ...SECTIONS.map((s) => section(S, s)),
+          ]),
     }),
     documentInternationalization({
       supportedLanguages: LANGUAGES,
@@ -58,7 +81,8 @@ export default defineConfig({
     types: schemaTypes,
     // One "new document" template per type and language, so every document knows its language
     templates: (prev) => [
-      ...prev.filter((t) => !(LOCALIZED_TYPES as readonly string[]).includes(t.schemaType)),
+      // Fixed pages are never created from the "new document" menu
+      ...prev.filter((t) => ![...LOCALIZED_TYPES, ...PAGE_TYPES.map((p) => p.type)].includes(t.schemaType as never)),
       ...LOCALIZED_TYPES.flatMap((type) =>
         LANGUAGES.map((lang) => ({
           id: `${type}-${lang.id}`,

@@ -1,0 +1,117 @@
+---
+// About (PL "/o-nuuvie", EN "/en/o-nuuvie"). Text and images from Sanity (aboutPage-pl / -en).
+import '../../styles/next.css';
+import '../../styles/about.css';
+import Base from '../../layouts/Base.astro';
+import SiteNav from '../site/SiteNav.astro';
+import SiteFooter from '../site/SiteFooter.astro';
+import { getPage, paragraphs, pic } from '../../lib/pages';
+import { aboutContent } from '../../content/pages/about';
+import { getDict, clientLogos, type Locale } from '../../i18n';
+
+interface Props { language: Locale }
+const { language } = Astro.props;
+const pl = language === 'pl';
+const t = getDict(language);
+const c = await getPage('aboutPage', language, aboutContent[language]);
+const portrait = pic(c.story?.portrait, 1200);
+---
+<Base locale={language} title={c.seo?.title} description={c.seo?.description}>
+  <SiteNav language={language} alternate={pl ? '/en/o-nuuvie' : '/o-nuuvie'} />
+
+  <main id="top" class="x a">
+    <!-- ───── Hero ───── -->
+    <section class="x-wrap a-hero">
+      <header class="x-head x-head--split">
+        <h1 data-split="lines">{c.hero.title}</h1>
+        <div data-fade>
+          <p>{c.hero.text}</p>
+          <div class="x-actions a-actions">
+            {c.hero.primary?.label && <a class="x-btn" href={c.hero.primary.href}>{c.hero.primary.label}</a>}
+            {c.hero.secondary?.label && <a class="x-btn x-btn--ghost" href={c.hero.secondary.href}>{c.hero.secondary.label}</a>}
+          </div>
+        </div>
+      </header>
+      <dl class="a-facts" data-fade>
+        {(c.facts ?? []).map((f) => <div class="x-card"><dt>{f.label}</dt><dd>{f.value}</dd></div>)}
+      </dl>
+    </section>
+
+    <!-- ───── Why Nuuvie ───── -->
+    <section class="x-wrap x-sec">
+      <header class="x-head"><h2 data-split="lines">{c.why.title}</h2></header>
+      <div class="a-why">
+        {(c.why.items ?? []).map((w) => (
+          <article class="x-card" data-fade>
+            <div class="a-why__img">{pic(w.image, 600) && <img src={pic(w.image, 600)} alt={(w.image as { alt?: string } | undefined)?.alt ?? ''} loading="lazy" />}</div>
+            <h3>{w.title}</h3>
+            <p>{w.body}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <!-- ───── Story ───── -->
+    <section class="x-wrap x-sec">
+      <div class:list={['x-card', 'a-story', !portrait && 'a-story--text']} data-fade>
+        {portrait && <div class="a-story__img"><img src={portrait} alt={(c.story.portrait as { alt?: string } | undefined)?.alt ?? ''} loading="lazy" /></div>}
+        <div class="a-story__text">
+          <h2>{c.story.title}</h2>
+          {paragraphs(c.story.text).map((p) => <p>{p}</p>)}
+          <div class="a-logos">{clientLogos.slice(0, 8).map((l) => <img src={`/img/logos/${l}.svg`} alt={l} width="150" height="100" loading="lazy" />)}</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ───── Numbers ───── -->
+    <section class="x-wrap x-stats">
+      {(c.stats ?? []).map((s) => <div data-fade><b>{s.value}</b><p>{s.text}</p></div>)}
+    </section>
+
+    <!-- ───── Process ───── -->
+    <section class="x-wrap x-sec">
+      <header class="x-head x-head--split">
+        <h2 data-split="lines">{c.process.title}</h2>
+        <div data-fade><p>{c.process.text}</p></div>
+      </header>
+      <ol class="x-timeline">{(c.process.steps ?? []).map((s) => <li data-fade><i></i><h3>{s.title}</h3><p>{s.body}</p></li>)}</ol>
+    </section>
+
+    <!-- ───── Principles ───── -->
+    <section class="x-wrap x-sec">
+      <header class="x-head"><h2 data-split="lines">{c.principles.title}</h2></header>
+      <div class="a-principles">
+        {(c.principles.items ?? []).map((p, i) => (
+          <article class="x-card" data-fade>
+            <span>0{i + 1}</span>
+            <h3>{p.title}</h3>
+            <p>{p.body}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <!-- ───── Quote ───── -->
+    <section class="x-wrap x-sec a-quote">
+      <blockquote data-fade>„{c.quote.text}”</blockquote>
+      <p data-fade>{c.quote.author}</p>
+    </section>
+
+    <!-- ───── Final ───── -->
+    <section class="x-wrap x-final" id="contact">
+      <div class="x-final__in">
+        <h2 data-split="lines">{c.final.title}</h2>
+        <p data-fade>{c.final.text}</p>
+        <div class="x-actions" data-fade>
+          <a class="x-btn" href={t.contact.bookHref}>{c.final.ctaLabel}</a>
+          <button class="x-btn x-btn--ghost" type="button" data-x-copy={t.contact.email}><span data-x-copy-label>{t.contact.email}</span></button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <SiteFooter language={language} />
+  <script>
+    import '../../scripts/next';
+  </script>
+</Base>

@@ -128,7 +128,7 @@ function initCopy() {
     btn.addEventListener('click', async () => {
       try {
         await navigator.clipboard.writeText(value);
-        if (label) label.textContent = 'Skopiowano';
+        if (label) label.textContent = document.documentElement.lang === 'pl' ? 'Skopiowano' : 'Copied';
       } catch {
         window.location.href = `mailto:${value}`;
         return;

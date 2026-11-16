@@ -19,6 +19,9 @@ const client: SanityClient | null = sanityEnabled
   ? createClient({ projectId, dataset, apiVersion: '2025-01-01', useCdn: false, perspective: 'published' })
   : null;
 
+/** Sanity client (null when the project ID is not configured). */
+export const sanityClient = client;
+
 const imageBuilder = client ? createImageUrlBuilder(client) : null;
 
 /** URL for a Sanity image (cropped to the hotspot when width and height are given). */

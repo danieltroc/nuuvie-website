@@ -1,26 +1,29 @@
 ---
-// Top bar used by the blog pages. `alternate` is the same page in the other language, when it exists.
+// Top bar for every page. `alternate` is the same page in the other language (defaults to that language's home).
 import Mark from '../Mark.astro';
 import { getDict, type Locale } from '../../i18n';
 import { blogPath } from '../../lib/sanity';
+import { homeHref } from '../../lib/pages';
 interface Props { language: Locale; alternate?: string }
 const { language, alternate } = Astro.props;
 const t = getDict(language);
 const pl = language === 'pl';
+const en = pl ? '' : '/en';
 const links = [
-  { href: '/#work', label: pl ? 'Prace' : 'Work' },
-  { href: '/#services', label: pl ? 'Usługi' : 'Services' },
-  { href: '/strefa-designera', label: pl ? 'Strefa Designera' : 'Designer Zone' },
+  { href: homeHref(language, '#work'), label: pl ? 'Prace' : 'Work' },
+  { href: homeHref(language, '#services'), label: pl ? 'Usługi' : 'Services' },
+  { href: `${en}/o-nuuvie`, label: pl ? 'O Nuuvie' : 'About' },
+  { href: `${en}/strefa-designera`, label: pl ? 'Strefa Designera' : 'Designer Zone' },
   { href: blogPath(language), label: 'Blog' },
 ];
 const other: Locale = pl ? 'en' : 'pl';
 ---
 <header class="x-nav">
   <div class="x-wrap x-nav__in">
-    <a class="x-brand" href="/" aria-label="Nuuvie Studio"><Mark id="mark-site-nav" /><span>Nuuvie</span></a>
+    <a class="x-brand" href={homeHref(language)} aria-label="Nuuvie Studio"><Mark id="mark-site-nav" /><span>Nuuvie</span></a>
     <nav aria-label="Menu">{links.map((l) => <a href={l.href}>{l.label}</a>)}</nav>
     <div class="x-nav__right">
-      <a class="x-nav__link" href={alternate ?? blogPath(other)} hreflang={other} lang={other}>{other.toUpperCase()}</a>
+      <a class="x-nav__link" href={alternate ?? homeHref(other)} hreflang={other} lang={other}>{other.toUpperCase()}</a>
       <a class="x-btn x-btn--sm" href={t.contact.bookHref}>{pl ? 'Porozmawiajmy' : "Let's talk"}</a>
     </div>
   </div>

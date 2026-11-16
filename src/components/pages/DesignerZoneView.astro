@@ -1,0 +1,210 @@
+---
+// Designer Zone (PL "/strefa-designera", EN "/en/strefa-designera"). Text from Sanity
+// (designerZonePage-pl / -en); the small UI scenes are drawn here and animated by scripts/strefa.ts.
+import '../../styles/next.css';
+import '../../styles/strefa.css';
+import Base from '../../layouts/Base.astro';
+import SiteNav from '../site/SiteNav.astro';
+import SiteFooter from '../site/SiteFooter.astro';
+import { getPage, paragraphs } from '../../lib/pages';
+import { getProjects } from '../../lib/sanity';
+import { designerZoneContent } from '../../content/pages/designer-zone';
+import { getDict, type Locale } from '../../i18n';
+
+interface Props { language: Locale }
+const { language } = Astro.props;
+const pl = language === 'pl';
+const c = await getPage('designerZonePage', language, designerZoneContent[language]);
+const buy = c.links?.buyHref ?? designerZoneContent.pl.links.buyHref;
+const intro = c.links?.introHref ?? designerZoneContent.pl.links.introHref;
+const email = c.links?.email ?? 'hej@nuuvie.com';
+const projects = await getProjects(language);
+const thumbs = [...(projects.map((p) => p.image).filter(Boolean) as string[]), ...getDict('pl').blog.posts.slice(3, 6).map((p) => p.img)].slice(0, 6);
+const brands = ['maersk', 'jabra', 'polpharma', 'leroymerlin', 'tedee'];
+
+// Labels inside the decorative UI scenes
+const ui = pl
+  ? {
+      review: 'Portfolio review', you: 'Ty', comments: 'Komentarze',
+      notes: [{ at: 0, text: 'Ten case daj na początek.' }, { at: 4, text: 'Pokaż proces, nie tylko efekt.' }, { at: 2, text: 'Mocniejsza hierarchia nagłówków.' }],
+      keep: 'Zostaw', fix: 'Popraw',
+      plan: ['Jakie umiejętności rozwijać', 'W jakiej kolejności', 'Jakie projekty do portfolio', 'Jakie narzędzia mają znaczenie'],
+      areas: ['UX/UI', 'Webdesign', 'Branding', 'Layouty', 'Typografia', 'Hierarchia informacji', 'Prezentacja projektu'],
+      asks: ['Jak wygląda rynek pracy?', 'Jak zdobywać klientów?', 'Figma czy Webflow?'], answer: 'Zaraz Ci pokażę.',
+    }
+  : {
+      review: 'Portfolio review', you: 'You', comments: 'Comments',
+      notes: [{ at: 0, text: 'Put this case first.' }, { at: 4, text: 'Show the process, not just the result.' }, { at: 2, text: 'Stronger heading hierarchy.' }],
+      keep: 'Keep', fix: 'Improve',
+      plan: ['Which skills to develop', 'In what order', 'Which projects for the portfolio', 'Which tools matter'],
+      areas: ['UX/UI', 'Web design', 'Branding', 'Layouts', 'Typography', 'Information hierarchy', 'Presentation'],
+      asks: ['What is the job market like?', 'How do I find clients?', 'Figma or Webflow?'], answer: 'Let me show you.',
+    };
+const getKeys = ['portfolio', 'plan', 'feedback', 'qa'];
+---
+<Base locale={language} title={c.seo?.title} description={c.seo?.description}>
+  <SiteNav language={language} alternate={pl ? '/en/strefa-designera' : '/strefa-designera'} />
+
+  <main id="top" class="x z">
+    <!-- ───── Hero ───── -->
+    <section class="x-hero">
+      <div class="x-wrap x-hero__text">
+        <h1 data-x-in>{c.hero.title}</h1>
+        <p data-x-in>{c.hero.text}</p>
+        <div class="x-actions" data-x-in>
+          <a class="x-btn" href={buy}>{c.hero.buyLabel}</a>
+          <a class="x-btn x-btn--ghost" href={intro}>{c.hero.introLabel}</a>
+        </div>
+        <ul class="z-facts" data-x-in>{(c.hero.facts ?? []).map((f) => <li>{f}</li>)}</ul>
+      </div>
+
+      <div class="x-wrap x-stage" data-x-stage>
+        <div class="x-win" data-x-win aria-hidden="true">
+          <div class="x-win__bar">
+            <span class="x-dots"><i></i><i></i><i></i></span>
+            <span class="x-win__title">{ui.review}</span>
+            <span class="x-win__share"><b class="x-ava">D</b><b class="x-ava z-ava--you">{ui.you}</b></span>
+          </div>
+          <div class="z-review" data-z-review>
+            <div class="z-board">
+              {thumbs.map((src, i) => {
+                const n = ui.notes.findIndex((note) => note.at === i);
+                return <span class="z-thumb"><img src={src} alt="" loading="eager" />{n > -1 && <i class="z-pin" data-z-pin={n}>{n + 1}</i>}</span>;
+              })}
+            </div>
+            <aside class="z-comments">
+              <p>{ui.comments}</p>
+              {ui.notes.map((note, i) => <div class="z-comment" data-z-comment={i}><i>{i + 1}</i><span><b>Daniel</b>{note.text}</span></div>)}
+            </aside>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ───── The problem ───── -->
+    <section class="x-wrap x-sec">
+      <header class="x-head"><h2 data-split="lines">{c.problem.title}</h2></header>
+      <div class="z-questions">{(c.problem.questions ?? []).map((q) => <p class="x-card" data-fade>{q}</p>)}</div>
+    </section>
+
+    <!-- ───── What you get ───── -->
+    <section class="x-wrap x-sec" id="co-otrzymasz">
+      <header class="x-head">
+        <h2 data-split="lines">{c.gets.title}</h2>
+        <p data-fade>{c.gets.text}</p>
+      </header>
+      <div class="x-bento z-bento">
+        {(c.gets.items ?? []).slice(0, 4).map((g, i) => (
+          <article class="x-card x-feat" data-fade>
+            <div class="x-feat__gfx" aria-hidden="true">
+              {getKeys[i] === 'portfolio' && (
+                <div class="z-g-port">{thumbs.slice(0, 3).map((src, n) => <span><img src={src} alt="" loading="lazy" /><em class:list={[n === 1 && 'is-fix']}>{n === 1 ? ui.fix : ui.keep}</em></span>)}</div>
+              )}
+              {getKeys[i] === 'plan' && <ol class="z-g-plan">{ui.plan.map((s, n) => <li data-z-plan={n}><i>{n + 1}</i>{s}</li>)}</ol>}
+              {getKeys[i] === 'feedback' && <div class="z-g-chips">{ui.areas.map((a) => <span data-z-chip>{a}</span>)}</div>}
+              {getKeys[i] === 'qa' && <div class="z-g-chat">{ui.asks.map((a) => <p data-z-ask>{a}</p>)}<p class="is-me" data-z-ask>{ui.answer}</p></div>}
+            </div>
+            <div class="x-feat__text"><h3>{g.title}</h3><p>{g.body}</p></div>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <!-- ───── Free intro + who it is not for ───── -->
+    <section class="x-wrap x-sec">
+      <div class="z-pair">
+        <article class="x-card z-box" data-fade>
+          <h3>{c.intro.title}</h3>
+          <p>{c.intro.text}</p>
+          <a class="x-btn" href={intro}>{c.intro.ctaLabel}</a>
+        </article>
+        <article class="x-card z-box z-box--dark" data-fade>
+          <h3>{c.notFor.title}</h3>
+          <p>{c.notFor.text}</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- ───── Opinions ───── -->
+    <section class="x-wrap x-sec">
+      <header class="x-head"><h2 data-split="lines">{c.opinions.title}</h2></header>
+      <div class="z-opinions">
+        {(c.opinions.items ?? []).map((o) => <figure data-fade><blockquote>{o.text}</blockquote><figcaption>{o.name}</figcaption></figure>)}
+      </div>
+    </section>
+
+    <!-- ───── Ways to work together ───── -->
+    <section class="x-wrap x-sec" id="formy">
+      <header class="x-head x-head--split">
+        <h2 data-split="lines">{c.forms.title}</h2>
+        <div data-fade><p>{c.forms.text}</p></div>
+      </header>
+      <ol class="x-timeline">{(c.forms.items ?? []).map((f) => <li data-fade><i></i><h3>{f.title}</h3><p>{f.body}</p></li>)}</ol>
+    </section>
+
+    <!-- ───── About ───── -->
+    <section class="x-wrap x-sec">
+      <div class="x-card z-about" data-fade>
+        <div>
+          <h2>{c.about.title}</h2>
+          <div class="z-brands">{brands.map((b) => <img src={`/img/logos/${b}.svg`} alt={b} width="150" height="100" loading="lazy" />)}</div>
+        </div>
+        <div class="z-about__text">{paragraphs(c.about.text).map((p) => <p>{p}</p>)}</div>
+      </div>
+    </section>
+
+    <!-- ───── Pricing ───── -->
+    <section class="x-wrap x-sec" id="cennik">
+      <header class="x-head">
+        <h2 data-split="lines">{c.pricing.title}</h2>
+        <p data-fade>{c.pricing.text}</p>
+      </header>
+      <div class="z-pair z-pair--even">
+        {(c.pricing.plans ?? []).map((plan, i) => (
+          <article class:list={['x-card', 'z-price', i === 0 && 'z-box--dark']} data-fade>
+            <p class="z-price__for">{plan.audience}</p>
+            <h3>{plan.title}</h3>
+            <p>{plan.text}</p>
+            <p class="z-price__val"><b>{plan.price}</b>{plan.oldPrice && <s>{plan.oldPrice}</s>}</p>
+            <a class="x-btn" href={plan.ctaHref}>{plan.ctaLabel}</a>
+          </article>
+        ))}
+      </div>
+      <p class="z-alt" data-fade>
+        {c.pricing.note}{' '}
+        <a href={`mailto:${email}?subject=Mentoring%20%2F%20Konsultacja`}>{email}</a> · <a href="https://www.instagram.com/nuuvie.studio" target="_blank" rel="noopener">Instagram</a>
+      </p>
+    </section>
+
+    <!-- ───── FAQ ───── -->
+    <section class="x-wrap x-sec" id="faq">
+      <header class="x-head"><h2 data-split="lines">{c.faq.title}</h2></header>
+      <div class="z-faq">
+        {(c.faq.items ?? []).map((f) => (
+          <details class="x-card" data-fade>
+            <summary>{f.question}<i aria-hidden="true"></i></summary>
+            <p>{f.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <!-- ───── Final ───── -->
+    <section class="x-wrap x-final">
+      <div class="x-final__in">
+        <h2 data-split="lines">{c.final.title}</h2>
+        <p data-fade>{c.final.text}</p>
+        <div class="x-actions" data-fade>
+          <a class="x-btn" href={buy}>{c.pricing.plans?.[0]?.ctaLabel ?? c.hero.buyLabel}</a>
+          <a class="x-btn x-btn--ghost" href={intro}>{c.hero.introLabel}</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <SiteFooter language={language} />
+  <script>
+    import '../../scripts/next';
+    import '../../scripts/strefa';
+  </script>
+</Base>
