@@ -1,0 +1,294 @@
+---
+// DEV ONLY: four ideas for the closing call to action, to pick one before rolling it out to every
+// page (today's version is the dark box with a headline, one button and the e-mail). Polish only.
+// Registered for `astro dev` in astro.config.mjs (dev-only-pages), never built for production.
+import '../styles/next.css';
+import Base from '../layouts/Base.astro';
+import SiteNav from '../components/site/SiteNav.astro';
+import { getDict } from '../i18n';
+
+const t = getDict('pl');
+const CAL = 'https://cal.com/nuuvie/15-minutowa-konsultacja';
+const arrow = '<svg viewBox="0 0 12 12" fill="none"><path d="M2 10 10 2M3.5 2H10v6.5" stroke="currentColor" stroke-width="1.5" /></svg>';
+
+// A: quick replies and Daniel's answer to each
+const replies = [
+  { q: 'Nowa marka', a: 'Nowa marka to mój ulubiony start. Opowiesz mi w 15 minut, czym się zajmujesz, a ja powiem, od czego zacząć.', topic: 'Logo i branding' },
+  { q: 'Strona lub aplikacja', a: 'Super. Pokaż mi, co masz dziś, a w 15 minut powiem, co bym zmienił w pierwszej kolejności.', topic: 'Strona lub aplikacja' },
+  { q: 'Audyt UX', a: 'Audyt to dobry pierwszy krok. Wyślij link, a na rozmowie pokażę Ci 3 rzeczy, które warto poprawić od razu.', topic: 'Strategia i audyt' },
+  { q: 'Po prostu pogadać', a: 'Jasne, bez zobowiązań. Umów 15 minut albo napisz kilka słów, odpowiem w ciągu 24 godzin.', topic: '' },
+];
+// C: mini brief
+const needs = ['Logo i branding', 'Strona lub aplikacja', 'Grafika', 'Strategia i audyt'];
+const whens = ['Jak najszybciej', 'W ciągu 1–3 miesięcy', 'Jeszcze nie wiem'];
+---
+<Base locale="pl" title="CTA – warianty (lokalnie)" description="Podgląd wariantów CTA" noindex>
+  <SiteNav language="pl" />
+  <main id="top" class="x cta-lab">
+    <section class="x-wrap cta-intro">
+      <h1>Warianty CTA</h1>
+      <p>Cztery pomysły na sekcję kończącą stronę. Każdy da się klikać. Strona jest tylko lokalnie.</p>
+    </section>
+
+    <!-- ───── A: Conversation ───── -->
+    <section class="x-wrap cta-block">
+      <p class="cta-tag">Wariant A · Rozmowa</p>
+      <div class="cta-a" data-cta-a>
+        <div class="cta-a__text">
+          <h2>Porozmawiajmy o Twoim projekcie.</h2>
+          <p>Wybierz, z czym przychodzisz. Odpowiem od razu, a resztę ustalimy na krótkiej rozmowie.</p>
+        </div>
+        <div class="cta-a__chat">
+          <div class="cta-a__bar"><b class="x-ava">D</b><span><b>Daniel</b><em>zwykle odpowiada w 24 h</em></span></div>
+          <div class="cta-a__thread" data-thread>
+            <div class="x-b">Cześć! Z czym przychodzisz?</div>
+          </div>
+          <div class="cta-a__replies" data-replies>
+            {replies.map((r, i) => <button type="button" data-reply={i}>{r.q}</button>)}
+          </div>
+          <div class="cta-a__actions" data-actions hidden>
+            <a class="x-btn" href={CAL} target="_blank" rel="noopener"><span class="x-btn__label"><span>Umów 15 minut</span><span aria-hidden="true">Umów 15 minut</span></span><span class="x-btn__icon" aria-hidden="true"><Fragment set:html={arrow} /><Fragment set:html={arrow} /></span></a>
+            <a class="x-btn x-btn--ghost" href="/kontakt" data-write><span class="x-btn__label"><span>Napisz wiadomość</span><span aria-hidden="true">Napisz wiadomość</span></span></a>
+            <button type="button" class="cta-a__again" data-again>Zacznij od nowa</button>
+          </div>
+        </div>
+      </div>
+      <script type="application/json" data-replies-json set:html={JSON.stringify(replies)} />
+    </section>
+
+    <!-- ───── B: Calendar ───── -->
+    <section class="x-wrap cta-block">
+      <p class="cta-tag">Wariant B · Kalendarz</p>
+      <div class="cta-b">
+        <div class="cta-b__text">
+          <h2>Wybierz dzień. Resztę ustalimy w&nbsp;15&nbsp;minut.</h2>
+          <ul class="cta-b__facts"><li>Bezpłatnie</li><li>Google Meet</li><li>Bez zobowiązań</li></ul>
+        </div>
+        <div class="cta-b__days" data-days data-cal={CAL}></div>
+        <p class="cta-b__alt">Wolisz pisać? <a href="/kontakt">Formularz</a> albo <button type="button" data-x-copy={t.contact.email}><span data-x-copy-label>{t.contact.email}</span></button></p>
+      </div>
+    </section>
+
+    <!-- ───── C: Mini brief ───── -->
+    <section class="x-wrap cta-block">
+      <p class="cta-tag">Wariant C · Mini brief</p>
+      <div class="x-card cta-c" data-cta-c>
+        <div class="cta-c__head">
+          <h2>Trzy kliknięcia do pierwszej rozmowy.</h2>
+          <span class="cta-c__bar"><i data-progress></i></span>
+        </div>
+        <div class="cta-c__step" data-step="0">
+          <p class="cta-c__q"><b>1</b> Czego potrzebujesz?</p>
+          <div class="cta-c__chips">{needs.map((n) => <button type="button" data-need={n}>{n}</button>)}</div>
+          <button type="button" class="x-btn x-btn--sm cta-c__next" data-next disabled><span class="x-btn__label"><span>Dalej</span><span aria-hidden="true">Dalej</span></span></button>
+        </div>
+        <div class="cta-c__step" data-step="1" hidden>
+          <p class="cta-c__q"><b>2</b> Na kiedy?</p>
+          <div class="cta-c__chips">{whens.map((w) => <button type="button" data-when={w}>{w}</button>)}</div>
+        </div>
+        <div class="cta-c__step" data-step="2" hidden>
+          <p class="cta-c__q"><b>3</b> Gotowe. Tak to widzę:</p>
+          <p class="cta-c__summary" data-summary></p>
+          <div class="x-actions cta-c__actions">
+            <a class="x-btn" href="/kontakt" data-send><span class="x-btn__label"><span>Wyślij to Danielowi</span><span aria-hidden="true">Wyślij to Danielowi</span></span><span class="x-btn__icon" aria-hidden="true"><Fragment set:html={arrow} /><Fragment set:html={arrow} /></span></a>
+            <a class="x-btn x-btn--ghost" href={CAL} target="_blank" rel="noopener"><span class="x-btn__label"><span>Albo od razu 15 minut</span><span aria-hidden="true">Albo od razu 15 minut</span></span></a>
+          </div>
+          <button type="button" class="cta-a__again" data-restart>Zacznij od nowa</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ───── D: Big type + magnetic button ───── -->
+    <section class="x-wrap cta-block">
+      <p class="cta-tag">Wariant D · Duży napis i magnetyczny przycisk</p>
+      <div class="cta-d" data-cta-d>
+        <p class="cta-d__status"><i></i>Odpowiadam w ciągu 24 godzin</p>
+        <h2 class="cta-d__big">Porozma&shy;wiajmy</h2>
+        <a class="cta-d__magnet" href={CAL} target="_blank" rel="noopener" data-magnet><span>Umów<br />15 minut</span></a>
+        <p class="cta-d__alt">albo napisz: <button type="button" data-x-copy={t.contact.email}><span data-x-copy-label>{t.contact.email}</span></button></p>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    import '../scripts/next';
+    import gsap from 'gsap';
+
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const fine = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+    const $ = <T extends HTMLElement = HTMLElement>(s: string, r: ParentNode = document) => r.querySelector<T>(s)!;
+    const all = <T extends HTMLElement = HTMLElement>(s: string, r: ParentNode = document) => Array.from(r.querySelectorAll<T>(s));
+    const wait = (ms: number) => new Promise((r) => setTimeout(r, reduced ? 0 : ms));
+    const bubble = (cls: string, text: string) => { const b = document.createElement('div'); b.className = cls; b.textContent = text; return b; };
+    const pop = (el: HTMLElement) => { if (!reduced) gsap.from(el, { opacity: 0, y: 8, duration: 0.4, ease: 'expo.out' }); };
+
+    /* A: conversation */
+    const a = $('[data-cta-a]');
+    const data = JSON.parse($('[data-replies-json]').textContent ?? '[]') as { q: string; a: string; topic: string }[];
+    const thread = $('[data-thread]', a);
+    const repliesBox = $('[data-replies]', a);
+    const actions = $('[data-actions]', a);
+    all('[data-reply]', a).forEach((btn) => btn.addEventListener('click', async () => {
+      const r = data[Number(btn.dataset.reply)];
+      repliesBox.hidden = true;
+      const me = bubble('x-b x-b--me', r.q); thread.append(me); pop(me);
+      await wait(350);
+      const typing = document.createElement('div'); typing.className = 'x-b cta-a__typing'; typing.innerHTML = '<i></i><i></i><i></i>';
+      thread.append(typing); pop(typing);
+      await wait(1100);
+      typing.remove();
+      const reply = bubble('x-b', r.a); thread.append(reply); pop(reply);
+      $<HTMLAnchorElement>('[data-write]', a).href = r.topic ? `/kontakt?usluga=${encodeURIComponent(r.topic)}` : '/kontakt';
+      await wait(250);
+      actions.hidden = false; pop(actions);
+    }));
+    $('[data-again]', a).addEventListener('click', () => {
+      thread.replaceChildren(bubble('x-b', 'Cześć! Z czym przychodzisz?'));
+      actions.hidden = true; repliesBox.hidden = false; pop(repliesBox);
+    });
+
+    /* B: next five working days, each opens the booking page on that day */
+    const daysBox = $('[data-days]');
+    const cal = daysBox.dataset.cal!;
+    const wd = new Intl.DateTimeFormat('pl', { weekday: 'short' });
+    const mo = new Intl.DateTimeFormat('pl', { month: 'short' });
+    const day = new Date(); day.setDate(day.getDate() + 1);
+    const days: Date[] = [];
+    while (days.length < 5) { if (day.getDay() % 6 !== 0) days.push(new Date(day)); day.setDate(day.getDate() + 1); }
+    days.forEach((d, i) => {
+      const iso = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+      const link = document.createElement('a');
+      link.className = 'cta-b__day';
+      link.href = `${cal}?date=${iso}`; link.target = '_blank'; link.rel = 'noopener';
+      link.innerHTML = `<em>${i === 0 ? 'jutro' : wd.format(d)}</em><b>${d.getDate()}</b><span>${mo.format(d)}</span><i>15 min</i>`;
+      daysBox.append(link);
+    });
+    if (!reduced) gsap.from(all('.cta-b__day'), { opacity: 0, y: 16, duration: 0.6, ease: 'expo.out', stagger: 0.07, scrollTrigger: { trigger: daysBox, start: 'top 85%', once: true } });
+
+    /* C: mini brief */
+    const c = $('[data-cta-c]');
+    const steps = all('[data-step]', c);
+    const progress = $('[data-progress]', c);
+    const picked = new Set<string>();
+    let when = '';
+    const go = (n: number) => {
+      steps.forEach((s, i) => { s.hidden = i !== n; });
+      gsap.to(progress, { scaleX: (n + 1) / steps.length, duration: reduced ? 0 : 0.5, ease: 'power2.inOut' });
+      pop(steps[n]);
+    };
+    gsap.set(progress, { scaleX: 1 / steps.length, transformOrigin: '0% 50%' });
+    all('[data-need]', c).forEach((b) => b.addEventListener('click', () => {
+      const v = b.dataset.need!;
+      if (picked.has(v)) picked.delete(v); else picked.add(v);
+      b.classList.toggle('is-on', picked.has(v));
+      $<HTMLButtonElement>('[data-next]', c).disabled = picked.size === 0;
+    }));
+    $('[data-next]', c).addEventListener('click', () => go(1));
+    all('[data-when]', c).forEach((b) => b.addEventListener('click', () => {
+      when = b.dataset.when!;
+      all('[data-when]', c).forEach((x) => x.classList.toggle('is-on', x === b));
+      $('[data-summary]', c).innerHTML = `${[...picked].map((p) => `<b>${p}</b>`).join(' + ')} · ${when.toLowerCase()}`;
+      $<HTMLAnchorElement>('[data-send]', c).href = `/kontakt?usluga=${encodeURIComponent([...picked].join(','))}&termin=${encodeURIComponent(when)}`;
+      setTimeout(() => go(2), reduced ? 0 : 250);
+    }));
+    $('[data-restart]', c).addEventListener('click', () => {
+      picked.clear(); when = '';
+      all('[data-need], [data-when]', c).forEach((x) => x.classList.remove('is-on'));
+      $<HTMLButtonElement>('[data-next]', c).disabled = true;
+      go(0);
+    });
+
+    /* D: the round button leans towards the pointer while it is over the section */
+    const d = $('[data-cta-d]');
+    const magnet = $('[data-magnet]', d);
+    if (fine && !reduced) {
+      const x = gsap.quickTo(magnet, 'x', { duration: 0.6, ease: 'power3.out' });
+      const y = gsap.quickTo(magnet, 'y', { duration: 0.6, ease: 'power3.out' });
+      d.addEventListener('pointermove', (e) => {
+        const r = magnet.getBoundingClientRect();
+        const dx = e.clientX - (r.left + r.width / 2 - Number(gsap.getProperty(magnet, 'x')));
+        const dy = e.clientY - (r.top + r.height / 2 - Number(gsap.getProperty(magnet, 'y')));
+        const pull = Math.max(0, 1 - Math.hypot(dx, dy) / 420);
+        x(dx * 0.35 * pull); y(dy * 0.35 * pull);
+      });
+      d.addEventListener('pointerleave', () => { x(0); y(0); });
+    }
+  </script>
+
+  <style is:global>
+    .cta-lab [hidden] { display: none !important; }
+    .cta-intro { padding-top: clamp(7rem, 12vw, 9rem); }
+    .cta-intro h1 { font-size: clamp(2.5rem, 1.5rem + 4vw, 4.5rem); }
+    .cta-intro p { margin-top: 0.75rem; color: var(--muted); }
+    .cta-block { padding-top: clamp(4rem, 8vw, 7rem); }
+    .cta-tag { margin-bottom: 1rem; font: 0.75rem var(--font-mono); letter-spacing: 0.04em; text-transform: uppercase; color: #a3a3a3; }
+    .cta-lab h2 { font-size: clamp(2rem, 1.2rem + 3vw, 3.5rem); line-height: 1.02; text-wrap: balance; }
+    .cta-a__again { margin-top: 0.25rem; font-size: 0.8125rem; color: var(--muted); text-decoration: underline; text-underline-offset: 0.2em; }
+
+    /* A */
+    .cta-a { display: grid; gap: 2rem var(--gutter); align-items: center; padding: clamp(2rem, 5vw, 4.5rem); border-radius: calc(var(--radius) * 1.5); background: var(--ink); color: #fff; }
+    .cta-a__text p { margin-top: 1rem; max-width: 34ch; color: rgb(255 255 255 / 0.62); font-size: 1.0625rem; line-height: 1.5; }
+    .cta-a__chat { display: grid; gap: 1rem; padding: 1rem; border-radius: 1.25rem; background: #fff; color: var(--ink); font-size: 0.9375rem; line-height: 1.45; }
+    .cta-a__bar { display: flex; align-items: center; gap: 0.6rem; padding-bottom: 0.8rem; border-bottom: 1px solid #f1f1f1; }
+    .cta-a__bar span { display: grid; line-height: 1.25; }
+    .cta-a__bar em { font-style: normal; font-size: 0.75rem; color: var(--muted); }
+    .cta-a__thread { display: flex; flex-direction: column; gap: 0.45rem; min-height: 9rem; }
+    .cta-a__thread .x-b { max-width: 88%; }
+    .cta-a__typing { display: inline-flex; gap: 0.25rem; padding: 0.65rem 0.75rem; }
+    .cta-a__typing i { width: 0.35rem; height: 0.35rem; border-radius: 50%; background: #9a9a9a; animation: cta-dot 900ms ease-in-out infinite; }
+    .cta-a__typing i:nth-child(2) { animation-delay: 120ms; } .cta-a__typing i:nth-child(3) { animation-delay: 240ms; }
+    @keyframes cta-dot { 50% { transform: translateY(-3px); } }
+    .cta-a__replies { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+    .cta-a__replies button { padding: 0.55rem 0.9rem; border-radius: 99px; box-shadow: inset 0 0 0 1px rgb(134 74 249 / 0.4); color: #5b23d6; font-size: 0.875rem; transition: background-color 200ms ease, transform var(--dur-press) var(--ease-out); }
+    .cta-a__replies button:active { transform: scale(0.97); }
+    @media (hover: hover) and (pointer: fine) { .cta-a__replies button:hover { background: #f3eeff; } }
+    .cta-a__actions { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 0.75rem; }
+    @media (min-width: 900px) { .cta-a { grid-template-columns: 5fr 6fr; } }
+
+    /* B */
+    .cta-b { display: grid; gap: 2rem; padding: clamp(2rem, 5vw, 4.5rem); border-radius: calc(var(--radius) * 1.5); background: var(--ink); color: #fff; }
+    .cta-b__text { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: end; gap: 1.5rem; }
+    .cta-b__text h2 { max-width: 16ch; }
+    .cta-b__facts { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+    .cta-b__facts li { padding: 0.35rem 0.75rem; border-radius: 99px; background: rgb(255 255 255 / 0.1); font-size: 0.8125rem; color: rgb(255 255 255 / 0.75); }
+    .cta-b__days { display: grid; grid-template-columns: repeat(auto-fit, minmax(7.5rem, 1fr)); gap: 0.5rem; }
+    .cta-b__day { display: grid; justify-items: start; gap: 0.15rem; padding: 1rem 1.1rem 1.1rem; border-radius: 1rem; background: rgb(255 255 255 / 0.06); box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.1); transition: background-color 250ms ease, transform 300ms var(--ease-out), box-shadow 250ms ease; }
+    .cta-b__day em { font-style: normal; font-size: 0.8125rem; color: rgb(255 255 255 / 0.55); }
+    .cta-b__day b { font-family: var(--font-head); font-size: clamp(2.25rem, 1.5rem + 2vw, 3.25rem); line-height: 1; font-weight: 600; letter-spacing: -0.04em; }
+    .cta-b__day span { font-size: 0.8125rem; color: rgb(255 255 255 / 0.55); }
+    .cta-b__day i { margin-top: 0.9rem; padding: 0.25rem 0.55rem; border-radius: 99px; background: var(--accent); font-style: normal; font-size: 0.75rem; }
+    .cta-b__day:active { transform: scale(0.98); }
+    @media (hover: hover) and (pointer: fine) { .cta-b__day:hover { background: #fff; color: var(--ink); transform: translateY(-4px); } .cta-b__day:hover :is(em, span) { color: var(--muted); } }
+    .cta-b__alt { font-size: 0.9375rem; color: rgb(255 255 255 / 0.62); }
+    .cta-b__alt :is(a, button) { color: #fff; text-decoration: underline; text-underline-offset: 0.2em; }
+
+    /* C */
+    .cta-c { display: grid; gap: 1.5rem; padding: clamp(1.5rem, 4vw, 3.5rem); }
+    .cta-c__head { display: grid; gap: 1.25rem; }
+    .cta-c__bar { display: block; height: 0.3rem; border-radius: 99px; background: #e6e6e6; overflow: hidden; }
+    .cta-c__bar i { display: block; height: 100%; background: var(--accent); }
+    .cta-c__step { display: grid; justify-items: start; gap: 1rem; }
+    .cta-c__q { display: flex; align-items: center; gap: 0.6rem; font-size: 1.125rem; font-weight: 500; }
+    .cta-c__q b { display: grid; place-items: center; width: 1.6rem; height: 1.6rem; border-radius: 50%; background: var(--ink); color: #fff; font-size: 0.8125rem; }
+    .cta-c__chips { display: flex; flex-wrap: wrap; gap: 0.45rem; }
+    .cta-c__chips button { padding: 0.75rem 1.1rem; border-radius: 99px; background: #fff; box-shadow: inset 0 0 0 1px var(--line); font-size: 0.9375rem; transition: background-color 200ms ease, box-shadow 200ms ease, color 200ms ease, transform var(--dur-press) var(--ease-out); }
+    .cta-c__chips button:active { transform: scale(0.97); }
+    .cta-c__chips button.is-on { background: #f3eeff; box-shadow: inset 0 0 0 1.5px var(--accent); color: #5b23d6; }
+    .cta-c__next[disabled] { opacity: 0.35; pointer-events: none; }
+    .cta-c__summary { font-size: clamp(1.25rem, 1rem + 1vw, 1.75rem); line-height: 1.3; letter-spacing: -0.02em; }
+    .cta-c__summary b { font-weight: 600; }
+    .cta-c__actions { justify-content: flex-start; margin-top: 0; }
+
+    /* D */
+    .cta-d { position: relative; display: grid; justify-items: center; gap: 1rem; padding: clamp(3rem, 7vw, 6rem) var(--gutter); border-radius: calc(var(--radius) * 1.5); background: var(--paper-2); text-align: center; overflow: hidden; }
+    .cta-d__status { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.4rem 0.85rem; border-radius: 99px; background: #fff; font-size: 0.875rem; }
+    .cta-d__status i { width: 0.5rem; height: 0.5rem; border-radius: 50%; background: #22c55e; box-shadow: 0 0 0 0 rgb(34 197 94 / 0.5); animation: cta-ping 1.8s ease-out infinite; }
+    @keyframes cta-ping { 70% { box-shadow: 0 0 0 0.5rem rgb(34 197 94 / 0); } 100% { box-shadow: 0 0 0 0 rgb(34 197 94 / 0); } }
+    .cta-lab .cta-d__big { font-size: clamp(3.5rem, 1rem + 11vw, 11rem); line-height: 0.9; letter-spacing: -0.06em; }
+    .cta-d__magnet { display: grid; place-items: center; width: clamp(8rem, 14vw, 10.5rem); aspect-ratio: 1; margin-top: -1rem; border-radius: 50%; background: var(--accent); color: #fff; font-weight: 500; line-height: 1.2; box-shadow: 0 20px 40px -18px rgb(134 74 249 / 0.7); will-change: transform; transition: background-color 250ms ease; }
+    @media (hover: hover) and (pointer: fine) { .cta-d__magnet:hover { background: var(--ink); } }
+    .cta-d__alt { color: var(--muted); }
+    .cta-d__alt button { color: var(--ink); text-decoration: underline; text-underline-offset: 0.2em; }
+    @media (prefers-reduced-motion: reduce) { .cta-a__typing i, .cta-d__status i { animation: none; } }
+  </style>
+</Base>

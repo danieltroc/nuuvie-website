@@ -21,7 +21,10 @@ export default defineConfig({
       name: 'dev-only-pages',
       hooks: {
         'astro:config:setup': ({ command, injectRoute }) => {
-          if (command === 'dev') injectRoute({ pattern: '/fonty', entrypoint: './src/dev/fonty.astro' });
+          if (command !== 'dev') return;
+          injectRoute({ pattern: '/fonty', entrypoint: './src/dev/fonty.astro' });
+          // Call-to-action variants to choose from (not a real page)
+          injectRoute({ pattern: '/cta', entrypoint: './src/dev/cta.astro' });
         },
       },
     },
