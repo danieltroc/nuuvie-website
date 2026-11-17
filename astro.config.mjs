@@ -15,20 +15,22 @@ export default defineConfig({
   // `astro dev` has no Worker: send /api (the contact form) to `npm run preview:cf` on port 8787
   vite: { server: { proxy: { '/api': 'http://localhost:8787' } } },
   integrations: [
-    // Pages that only exist in `astro dev` (not built, not online): the font set until it launches.
-    // To publish one, move it back into src/pages and delete its line here.
+    // Pages kept out of src/pages until they launch.
+    // /fonty is built, but before the launch it opens only on *.workers.dev (preview): the Worker
+    // returns 404 for it on nuuvie.com (worker/index.ts) and the page is noindex.
+    // /cta exists only in `astro dev`.
     {
       name: 'dev-only-pages',
       hooks: {
         'astro:config:setup': ({ command, injectRoute }) => {
-          if (command !== 'dev') return;
           injectRoute({ pattern: '/fonty', entrypoint: './src/dev/fonty.astro' });
+          if (command !== 'dev') return;
           // Call-to-action variants to choose from (not a real page)
           injectRoute({ pattern: '/cta', entrypoint: './src/dev/cta.astro' });
         },
       },
     },
     // Language pairs are declared on each page (hreflang links in Base.astro), not here
-    sitemap({ filter: (page) => !page.includes('/404') }),
+    sitemap({ filter: (page) => !page.includes('/404') && !page.includes('/fonty') }),
   ],
 });

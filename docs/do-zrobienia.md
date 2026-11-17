@@ -55,7 +55,7 @@ Pomysł odłożony 17.11.2026, do decyzji, gdy strona będzie już online.
 
 ## 6. Fonty (premiera ok. 30.11.2026)
 
-Strona `/fonty` działa teraz **tylko lokalnie** (`astro dev`) i nie trafia na produkcję.
+Strona `/fonty` do premiery jest **podglądem**: działa pod <https://nuuvie-website.daniel-troc.workers.dev/fonty> (i lokalnie), ale na `nuuvie.com` zwraca 404 i nie trafia do Google (`noindex`, poza sitemapą). Link w stopce widać tylko lokalnie.
 
 Przed premierą:
 - [x] Strona przepisana pod prawdziwy produkt z pliku Figma „Fonts”: 250 par, 12 rozdziałów, licencje, instalacja, PDF + plik Figma (17.11.2026).
@@ -63,7 +63,8 @@ Przed premierą:
 - [ ] Sprawdzić grubości nagłówków przykładowych par ze slajdami (lista `raw` w `src/dev/fonty.astro`).
 - [ ] Przed publikacją: fonty Fontshare na stronie ładują się z api.fontshare.com. Rozważyć hostowanie u siebie (licencja ITF FFL na to pozwala).
 - [ ] Publikacja:
-  1. przenieść `src/dev/fonty.astro` do `src/pages/fonty.astro`;
-  2. usunąć wpis `dev-only-pages` w `astro.config.mjs`;
-  3. w `src/components/site/SiteFooter.astro` usunąć warunek `import.meta.env.DEV` przy linku „Zestaw fontów”.
+  1. w `worker/index.ts` ustawić `FONTY_LIVE = true`;
+  2. w `src/dev/fonty.astro` usunąć `noindex` przy `<Base …>`;
+  3. w `astro.config.mjs` usunąć `/fonty` z filtra sitemapy (i najlepiej przenieść plik do `src/pages/fonty.astro`, usuwając jego linię z `dev-only-pages`);
+  4. w `src/components/site/SiteFooter.astro` usunąć warunek `import.meta.env.DEV` przy linku „Zestaw fontów”.
 - Wersja EN: na razie nie.

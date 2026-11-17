@@ -1,8 +1,8 @@
 ---
 // Landing page for "Pary fontów 2027": 250 free font pairs as a PDF + Figma file
 // (source: Figma file "Fonts", EX25p6ADKUXa1qs8G0qrZy). Built on the "Next" design (styles/next.css).
-// DEV ONLY until the set goes on sale: this file lives outside src/pages and astro.config.mjs
-// registers /fonty only for `astro dev`, so production builds leave it out entirely.
+// PREVIEW until the set goes on sale: built, but open only on *.workers.dev. On nuuvie.com the
+// Worker answers 404 (worker/index.ts, FONTY_LIVE), and the page is noindex.
 // STILL TO FILL IN before launch: the price, the checkout link (BUY), and the heading weights in
 // `pairs` (best guesses, check them against the slides).
 import '../styles/next.css';
@@ -98,7 +98,7 @@ const nav = [
 ];
 const arrow = '<svg viewBox="0 0 12 12" fill="none"><path d="M2 10 10 2M3.5 2H10v6.5" stroke="currentColor" stroke-width="1.5" /></svg>';
 ---
-<Base locale="pl" title="Pary fontów 2027: 250 darmowych połączeń – Nuuvie" description="250 par darmowych fontów do projektów komercyjnych. Polskie znaki, sprawdzone licencje, 12 rozdziałów. PDF i plik Figma.">
+<Base locale="pl" noindex title="Pary fontów 2027: 250 darmowych połączeń – Nuuvie" description="250 par darmowych fontów do projektów komercyjnych. Polskie znaki, sprawdzone licencje, 12 rozdziałów. PDF i plik Figma.">
   <link slot="head" rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link slot="head" rel="preconnect" href="https://api.fontshare.com" crossorigin />
   {fontsUrls.map((href) => <link slot="head" rel="stylesheet" href={href} />)}
