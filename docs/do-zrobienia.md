@@ -29,7 +29,28 @@ Umami jest już w kodzie (ten sam identyfikator strony co w Webflow). Zacznie li
 - [ ] **Prace:** wpisać rok przy projektach w Sanity (kolumna „Rok” na liście prac pojawi się sama). Dodać kolejne projekty.
 - [ ] **Blog:** sprawdzić, czy żaden wpis nie ma oznaczenia „Przykładowa treść” (pojawia się nad treścią wpisu).
 
-## 5. Fonty (premiera ok. 30.11.2026)
+## 5. Do decyzji po starcie
+
+### Akcent w nagłówkach fontem Cakra
+
+Pomysł odłożony 17.11.2026, do decyzji, gdy strona będzie już online.
+
+- **Na czym polega:** nagłówki w prostym Interze, a **jedno słowo albo krótka fraza** w nagłówku w foncie [Cakra](https://bestfreefonts.com/cakra) (OoM Type, licencja SIL OFL, można komercyjnie), w fiolecie marki. Na przykład: „Projektuję marki i produkty, którym się **UFA**.”, „Design, który odpowiada za **WYNIK**.”, „W designie łatwo się **ZGUBIĆ**”.
+- **Gdzie jest:** gałąź `preview/cakra` (commit „Preview: plain Inter headings…”). Podgląd:
+  ```bash
+  git switch preview/cakra
+  ```
+  potem `astro dev`, a powrót: `git switch main`.
+- **Co już sprawdzone:** Cakra ma wszystkie polskie znaki. Same nagłówki w całości w Cakrze odrzucone (wersaliki, za głośno).
+- **Do ustalenia przed wdrożeniem:**
+  - słowo akcentu zaznaczane ręcznie w Sanity (np. `*za wynik*`), a ostatnie słowo tylko jako zapas; w podglądzie jest zawsze ostatnie słowo;
+  - „N” w Cakrze wygląda jak odwrócone „И” (np. „WYИIK”): albo to akceptujemy jako detal, albo dobieramy słowa bez „N”;
+  - kolor akcentu: fiolet czy czarny;
+  - Bricolage zostaje czy przechodzimy na Inter w nagłówkach;
+  - waga fontu (ok. 150 KB na każdej stronie): ewentualnie przyciąć do polskich i łacińskich znaków.
+- Odrzucona po drodze: Cakra z befonts (inny font o tej samej nazwie, demo tylko do użytku osobistego, bez polskich znaków).
+
+## 6. Fonty (premiera ok. 30.11.2026)
 
 Strona `/fonty` działa teraz **tylko lokalnie** (`astro dev`) i nie trafia na produkcję.
 
