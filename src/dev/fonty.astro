@@ -1,9 +1,10 @@
 ---
-// Landing page for the font-pairing set. Built on the "Next" design (styles/next.css).
+// Landing page for "Pary fontów 2027": 250 free font pairs as a PDF + Figma file
+// (source: Figma file "Fonts", EX25p6ADKUXa1qs8G0qrZy). Built on the "Next" design (styles/next.css).
 // DEV ONLY until the set goes on sale: this file lives outside src/pages and astro.config.mjs
 // registers /fonty only for `astro dev`, so production builds leave it out entirely.
-// PLACEHOLDERS to replace with real product data: the example pairs below, the price,
-// the checkout link (BUY) and the sample prompt.
+// STILL TO FILL IN before launch: the price, the checkout link (BUY), and the heading weights in
+// `pairs` (best guesses, check them against the slides).
 import '../styles/next.css';
 import '../styles/fonty.css';
 import Base from '../layouts/Base.astro';
@@ -12,58 +13,95 @@ import { getDict, socials } from '../i18n';
 
 const t = getDict('pl');
 const year = new Date().getFullYear();
-const BUY = `mailto:${t.contact.email}?subject=Zestaw%20font%C3%B3w`;
+const BUY = `mailto:${t.contact.email}?subject=Pary%20font%C3%B3w%202027`;
 
-// Example pairs (open-source fonts) used only to demonstrate the page. Swap for pairs from the real set.
-const pairs = [
-  { h: 'Fraunces', hw: 600, b: 'Inter' },
-  { h: 'Space Grotesk', hw: 600, b: 'IBM Plex Sans' },
-  { h: 'Playfair Display', hw: 600, b: 'Source Sans 3' },
-  { h: 'DM Serif Display', hw: 400, b: 'DM Sans' },
-  { h: 'Sora', hw: 600, b: 'Manrope' },
-  { h: 'Instrument Serif', hw: 400, b: 'Inter' },
+// Where each font shown on this page comes from. Fontshare = ITF FFL, everything else = SIL OFL.
+const fontshare = new Set(['Clash Display', 'Satoshi', 'Gambetta', 'General Sans', 'Cabinet Grotesk', 'Zodiak', 'Boska', 'Telma', 'Switzer']);
+const source = (f: string) => (fontshare.has(f) ? { src: 'Fontshare', lic: 'ITF FFL' } : { src: 'Google Fonts', lic: 'SIL OFL' });
+
+// Pairs from the set, with their page number in the PDF and their chapter.
+// hw = heading weight on this page (to check against the slides).
+const chapters = [
+  { name: 'Codzienne', count: 20, page: 9 },
+  { name: 'Nieoczekiwane', count: 20, page: 30 },
+  { name: 'Mix w nagłówku', count: 20, page: 51 },
+  { name: 'Nagłówek + akapit', count: 20, page: 72 },
+  { name: 'Nowoczesne', count: 20, page: 93 },
+  { name: 'Klasyczne', count: 20, page: 114 },
+  { name: 'Edytorskie', count: 20, page: 135 },
+  { name: 'Biznes / SaaS', count: 20, page: 156 },
+  { name: 'Lifestyle / Moda / Beauty', count: 20, page: 177 },
+  { name: 'Techniczne / Developerskie', count: 20, page: 198 },
+  { name: 'Mix w nagłówku: Google Fonts', count: 20, page: 219 },
+  { name: 'Trendy 2027', count: 30, page: 240 },
 ];
-const fontsUrl = 'https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600&family=Inter:wght@400;500&family=Space+Grotesk:wght@600&family=IBM+Plex+Sans:wght@400&family=Playfair+Display:wght@600&family=Source+Sans+3:wght@400&family=DM+Serif+Display&family=DM+Sans:wght@400&family=Sora:wght@600&family=Manrope:wght@400&family=Instrument+Serif&display=swap';
-const tiles = ['Fraunces', 'Inter', 'Space Grotesk', 'Playfair Display', 'DM Sans', 'Sora', 'Instrument Serif', 'Manrope', 'DM Serif Display', 'IBM Plex Sans', 'Source Sans 3', 'Fraunces'];
+const raw = [
+  { n: 11, ch: 1, h: 'Clash Display', hw: 600, b: 'Satoshi' },
+  { n: 12, ch: 1, h: 'Gambetta', hw: 500, b: 'General Sans' },
+  { n: 10, ch: 1, h: 'Cabinet Grotesk', hw: 800, b: 'Zodiak' },
+  { n: 16, ch: 1, h: 'Bricolage Grotesque', hw: 600, b: 'Petrona' },
+  { n: 33, ch: 2, h: 'Boska', hw: 500, b: 'Martian Mono' },
+  { n: 46, ch: 2, h: 'Telma', hw: 700, b: 'Switzer' },
+  { n: 52, ch: 3, h: 'Satoshi', hw: 700, b: 'Instrument Serif' },
+  { n: 86, ch: 4, h: 'Fraunces', hw: 500, b: 'Rethink Sans' },
+];
+const pairs = raw.map((p) => {
+  const hs = source(p.h), bs = source(p.b);
+  return {
+    ...p,
+    chapter: `${String(p.ch).padStart(2, '0')} ${chapters[p.ch - 1].name}`,
+    src: [...new Set([hs.src, bs.src])].join(' + '),
+    lic: [...new Set([hs.lic, bs.lic])].join(' + '),
+  };
+});
+// Fontshare's CSS API returns only the first font of a multi-font request, so one link per font
+const fontsUrls = [
+  ...['clash-display@600', 'satoshi@400,700', 'gambetta@500', 'general-sans@400', 'cabinet-grotesk@800', 'zodiak@400', 'boska@500', 'telma@700', 'switzer@400']
+    .map((f) => `https://api.fontshare.com/v2/css?f[]=${f}&display=swap`),
+  'https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600&family=Petrona:wght@400&family=Martian+Mono:wght@400&family=Instrument+Serif&family=Fraunces:opsz,wght@9..144,500&family=Rethink+Sans:wght@400&display=swap',
+];
+// "Aa" tiles: tiles 5 and 6 light up together as one real pair (Clash Display × Satoshi)
+const tiles = ['Gambetta', 'Telma', 'Zodiak', 'Boska', 'Fraunces', 'Clash Display', 'Satoshi', 'Instrument Serif', 'Cabinet Grotesk', 'Bricolage Grotesque', 'Switzer', 'General Sans'];
 
-// Type scale shown in the live demo: [name, role, sample, size px, line-height, letter-spacing em]
-const scale = [
-  ['Display', 'h', 'Typografia', 72, 1.0, -0.03],
-  ['H1', 'h', 'Nagłówek strony', 48, 1.08, -0.025],
-  ['H2', 'h', 'Tytuł sekcji', 32, 1.15, -0.02],
-  ['H3', 'h', 'Śródtytuł w treści', 24, 1.25, -0.01],
-  ['Lead', 'b', 'Wstęp, który prowadzi czytelnika dalej.', 20, 1.5, 0],
-  ['Body', 'b', 'Tekst główny. Tu liczy się czytelność i spokojny rytm.', 16, 1.6, 0],
-  ['Small', 'b', 'Podpisy, etykiety i drobny druk.', 14, 1.5, 0.005],
-] as const;
+const licences = [
+  {
+    name: 'SIL OFL',
+    from: 'Google Fonts, Uncut, Open Foundry, bestfreefonts. Większość fontów w kolekcji.',
+    can: ['Używasz komercyjnie: strony, aplikacje, druk, logo', 'Przekazujesz pliki fontu klientowi, developerowi lub drukarni', 'Osadzasz font w aplikacji i w PDF-ie', 'Modyfikujesz font, np. przycinasz webfont do potrzebnych znaków'],
+    cant: ['Sprzedawać samego pliku fontu jako produktu', 'Wydawać zmodyfikowanej wersji pod zastrzeżoną nazwą oryginału'],
+  },
+  {
+    name: 'ITF FFL',
+    from: 'Fontshare, m.in. Satoshi, Clash Display, Zodiak i General Sans.',
+    can: ['Używasz komercyjnie, także w logo i znakach towarowych', 'Hostujesz font na własnej stronie i osadzasz w aplikacji', 'Dzielisz się plikiem wewnątrz własnej firmy', 'Wysyłasz drukarni gotowe pliki do druku'],
+    cant: ['Przekazywać pliku fontu klientowi, agencji, freelancerowi ani drukarni. Każdy pobiera go sam z fontshare.com', 'Modyfikować, przycinać ani konwertować pliku fontu', 'Udostępniać fontu w narzędziach i szablonach dla innych użytkowników'],
+  },
+];
 
-const prompt = `Mam parę fontów: nagłówki — {NAGŁÓWEK}, tekst — {TEKST}.
-Zbuduj z nich pełną skalę typograficzną dla strony www:
-Display, H1–H4, Lead, Body, Small, Caption.
-Dla każdego stylu podaj rozmiar (desktop i mobile),
-interlinię, światło międzyliterowe i grubość.
-Wynik oddaj jako zmienne CSS gotowe do wklejenia.`;
-
-// CSS shown in the "Parametry pod web" card, typed in line by line
-const code = [['--font-heading', '"Fraunces"'], ['--font-body', '"Inter"'], ['--h1', '3rem / 1.08'], ['--tracking-h1', '-0.025em'], ['--body', '1rem / 1.6']];
-// The prompt with its placeholders ({NAGŁÓWEK}, {TEKST}) picked out
-const promptParts = prompt.split(/(\{[^}]+\})/);
+const steps = [
+  { t: 'Pobierz', d: '26 krojów spoza Google Fonts ma w pliku link do strony autora. Przy każdym numery stron, na których jest użyty.' },
+  { t: 'Zainstaluj', d: 'Pliki .otf: na macOS dwuklik i „Zainstaluj”, na Windows „Zainstaluj dla wszystkich użytkowników”.' },
+  { t: 'Zrestartuj Figmę', d: 'Zamknij Figmę i otwórz ją ponownie. Fonty z Google Fonts działają od razu, bez instalacji.' },
+];
 
 const includes = [
-  '250 fontów dobranych w pary',
-  'Parametry każdej pary pod web',
-  'PDF z zasadami i promptami',
-  'Album do wysłania klientowi',
+  '250 par fontów w 12 rozdziałach',
+  'PDF i plik Figma',
+  'Polskie znaki w każdym kroju',
+  'Licencja komercyjna przy każdym foncie',
+  'Linki do pobrania wszystkich krojów',
 ];
 const nav = [
   { href: '#srodek', label: 'Co w środku' },
-  { href: '#demo', label: 'Demo' },
-  { href: '#album', label: 'Album' },
+  { href: '#pary', label: 'Pary' },
+  { href: '#licencje', label: 'Licencje' },
 ];
+const arrow = '<svg viewBox="0 0 12 12" fill="none"><path d="M2 10 10 2M3.5 2H10v6.5" stroke="currentColor" stroke-width="1.5" /></svg>';
 ---
-<Base locale="pl" title="Zestaw 250 fontów dobranych w pary – Nuuvie" description="250 fontów dobranych w pary, z parametrami pod web, przewodnikiem PDF z promptami i albumem do wysłania klientowi.">
+<Base locale="pl" title="Pary fontów 2027: 250 darmowych połączeń – Nuuvie" description="250 par darmowych fontów do projektów komercyjnych. Polskie znaki, sprawdzone licencje, 12 rozdziałów. PDF i plik Figma.">
   <link slot="head" rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link slot="head" rel="stylesheet" href={fontsUrl} />
+  <link slot="head" rel="preconnect" href="https://api.fontshare.com" crossorigin />
+  {fontsUrls.map((href) => <link slot="head" rel="stylesheet" href={href} />)}
 
   <header class="x-nav">
     <div class="x-nav__blur" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
@@ -71,7 +109,7 @@ const nav = [
       <a class="x-brand" href="/" aria-label="Nuuvie Studio"><Mark id="mark-f-nav" /><span>Nuuvie</span></a>
       <nav aria-label="Menu">{nav.map((l) => <a href={l.href}>{l.label}</a>)}</nav>
       <div class="x-nav__right">
-        <a class="x-btn x-btn--sm" href="#kup"><span class="x-btn__label"><span>Kup zestaw</span><span aria-hidden="true">Kup zestaw</span></span><span class="x-btn__icon" aria-hidden="true"><svg viewBox="0 0 12 12" fill="none"><path d="M2 10 10 2M3.5 2H10v6.5" stroke="currentColor" stroke-width="1.5" /></svg><svg viewBox="0 0 12 12" fill="none"><path d="M2 10 10 2M3.5 2H10v6.5" stroke="currentColor" stroke-width="1.5" /></svg></span></a>
+        <a class="x-btn x-btn--sm" href="#kup"><span class="x-btn__label"><span>Kup zestaw</span><span aria-hidden="true">Kup zestaw</span></span><span class="x-btn__icon" aria-hidden="true" set:html={arrow + arrow} /></a>
       </div>
     </div>
   </header>
@@ -80,11 +118,11 @@ const nav = [
     <!-- ───── Hero ───── -->
     <section class="x-hero">
       <div class="x-wrap x-hero__text">
-        <h1 data-x-title>250 fontów. Dobranych w pary.</h1>
-        <p data-x-in>Gotowe zestawienia z parametrami pod web, przewodnikiem PDF i albumem, który wysyłasz klientowi do wyboru.</p>
+        <h1 data-x-title>250 par fontów. Darmowych, także komercyjnie.</h1>
+        <p data-x-in>Każda para pokazana w realnym kontekście, z polskimi znakami, licencją i linkiem do pobrania. PDF i plik Figma.</p>
         <div class="x-actions" data-x-in>
-          <a class="x-btn" href="#kup"><span class="x-btn__label"><span>Kup zestaw</span><span aria-hidden="true">Kup zestaw</span></span><span class="x-btn__icon" aria-hidden="true"><svg viewBox="0 0 12 12" fill="none"><path d="M2 10 10 2M3.5 2H10v6.5" stroke="currentColor" stroke-width="1.5" /></svg><svg viewBox="0 0 12 12" fill="none"><path d="M2 10 10 2M3.5 2H10v6.5" stroke="currentColor" stroke-width="1.5" /></svg></span></a>
-          <a class="x-btn x-btn--ghost" href="#demo"><span class="x-btn__label"><span>Zobacz, jak to działa</span><span aria-hidden="true">Zobacz, jak to działa</span></span></a>
+          <a class="x-btn" href="#kup"><span class="x-btn__label"><span>Kup zestaw</span><span aria-hidden="true">Kup zestaw</span></span><span class="x-btn__icon" aria-hidden="true" set:html={arrow + arrow} /></a>
+          <a class="x-btn x-btn--ghost" href="#pary"><span class="x-btn__label"><span>Zobacz pary</span><span aria-hidden="true">Zobacz pary</span></span></a>
         </div>
       </div>
 
@@ -92,20 +130,20 @@ const nav = [
         <div class="x-win f-spec" data-x-win data-f-spec data-pairs={JSON.stringify(pairs)} aria-hidden="true">
           <div class="x-win__bar">
             <span class="x-dots"><i></i><i></i><i></i></span>
-            <span class="x-win__title">Para <b data-f-idx>01</b> / {pairs.length} · przykład</span>
-            <span class="x-win__share"><em>Kopiuj CSS</em></span>
+            <span class="x-win__title">Para <b data-f-idx>{pairs[0].n}</b> / 250 · <span data-f-chap>{pairs[0].chapter}</span></span>
+            <span class="x-win__share"><em>Polskie znaki</em></span>
           </div>
           <div class="f-spec__body">
             <div class="f-spec__sample" data-f-sample>
-              <span class="f-spec__aa" data-f-h>Aa</span>
+              <span class="f-spec__aa" data-f-h>Ąę</span>
               <p class="f-spec__h" data-f-h>Dobra para robi połowę roboty.</p>
-              <p class="f-spec__b" data-f-b>Nagłówek przyciąga, tekst prowadzi. Kiedy dwa kroje do siebie pasują, cała strona od razu wygląda na przemyślaną.</p>
+              <p class="f-spec__b" data-f-b>Nagłówek przyciąga, tekst prowadzi. Kiedy dwa kroje do siebie pasują, cała strona od razu wygląda na przemyślaną. Zażółć gęślą jaźń.</p>
             </div>
             <aside class="f-spec__props">
-              <p>Nagłówki</p><span class="x-prop" data-f-hname>{pairs[0].h}</span>
+              <p>Nagłówki</p><span class="x-prop" data-f-hname>{pairs[0].h} {pairs[0].hw}</span>
               <p>Tekst</p><span class="x-prop" data-f-bname>{pairs[0].b}</span>
-              <p>H1</p><span class="x-prop">48 / 1.08 / −0.025em</span>
-              <p>Body</p><span class="x-prop">16 / 1.6 / 0</span>
+              <p>Źródło</p><span class="x-prop" data-f-src>{pairs[0].src}</span>
+              <p>Licencja</p><span class="x-prop" data-f-lic>{pairs[0].lic}</span>
             </aside>
           </div>
         </div>
@@ -116,30 +154,32 @@ const nav = [
     <section class="x-wrap x-sec" id="srodek">
       <header class="x-head">
         <h2 data-split="lines">Co jest w zestawie</h2>
-        <p data-fade>Cztery rzeczy, które zamykają temat typografii w projekcie.</p>
+        <p data-fade>Wszystko, czego potrzebujesz, żeby wybrać parę fontów i od razu z nią pracować.</p>
       </header>
       <div class="x-bento f-bento">
         <article class="x-card x-feat" data-fade>
           <div class="x-feat__gfx" data-scene="tiles" aria-hidden="true">
             <div class="f-tiles">{tiles.map((f, i) => <span class:list={[i === 5 && 'is-ink', i === 6 && 'is-accent']} style={`font-family:'${f}'`} data-f-tile data-f-pair={i === 5 || i === 6 ? '' : undefined}>Aa</span>)}</div>
           </div>
-          <div class="x-feat__text"><h3>250 fontów w parach</h3><p>Każdy krój ma partnera. Nie zgadujesz, co do czego pasuje.</p></div>
+          <div class="x-feat__text"><h3>250 par w realnym kontekście</h3><p>Każda para na osobnym slajdzie: jako nagłówek z dwoma krojami albo nagłówek z akapitem. Obok nazwy, grubości i krótkie uzasadnienie.</p></div>
         </article>
         <article class="x-card x-feat" data-fade>
-          <div class="x-feat__gfx" data-scene="code" aria-hidden="true">
-            <pre class="f-code"><code>{code.map(([k, v]) => <span class="f-code__line" data-line><i>{k}</i>: {v};</span>)}</code></pre>
+          <div class="x-feat__gfx" data-scene="chapters" aria-hidden="true">
+            <ol class="f-toc-mini">
+              {chapters.slice(4, 9).map((c, i) => (
+                <li data-row class:list={[i === 3 && 'is-pick']}><i>{String(i + 5).padStart(2, '0')}</i><span>{c.name}</span><b>{c.page}</b></li>
+              ))}
+            </ol>
           </div>
-          <div class="x-feat__text"><h3>Parametry pod web</h3><p>Rozmiary, interlinie i światła dla każdej pary. Wklejasz i działa.</p></div>
+          <div class="x-feat__text"><h3>12 rozdziałów</h3><p>Od codziennych i klasycznych po techniczne i trendy 2027. Szukasz pary pod SaaS? Masz cały rozdział.</p></div>
         </article>
         <article class="x-card x-feat" data-fade>
-          <div class="x-feat__gfx" data-scene="pdf" aria-hidden="true">
-            <div class="f-pdf">
-              <div class="f-sheet"><b>Typografia z pary fontów</b><span class="x-sk" data-sk></span><span class="x-sk" data-sk></span><span class="x-sk" data-sk></span><em data-tag>PDF</em></div>
-              <div class="f-typing" data-typing><i></i><i></i><i></i></div>
-              <div class="f-bubble" data-f-bubble>Zbuduj skalę typograficzną z tej pary…</div>
-            </div>
+          <div class="x-feat__gfx" data-scene="licence" aria-hidden="true">
+            <ul class="f-checks">
+              {['Strony i aplikacje', 'Druk', 'Logo', 'Polskie znaki'].map((l) => <li><span>{l}</span><i data-check>✓</i></li>)}
+            </ul>
           </div>
-          <div class="x-feat__text"><h3>PDF z zasadami i promptami</h3><p>Najważniejsze reguły i gotowe prompty, które z pary fontów robią całą typografię.</p></div>
+          <div class="x-feat__text"><h3>Licencje sprawdzone</h3><p>Każdy font wykorzystasz komercyjnie, także w projektach dla klientów. Przy każdym źródło i licencja.</p></div>
         </article>
         <article class="x-card x-feat" data-fade>
           <div class="x-feat__gfx" data-scene="album" aria-hidden="true">
@@ -147,81 +187,109 @@ const nav = [
               {pairs.slice(0, 3).map((p, i) => (
                 <div class:list={['f-page', i === 1 && 'is-pick']} data-f-page>
                   <b style={`font-family:'${p.h}';font-weight:${p.hw}`}>Aa</b>
-                  <span style={`font-family:'${p.b}'`}>{p.h} + {p.b}</span>
+                  <span style={`font-family:'${p.b}'`}>{p.h}<br />× {p.b}</span>
                   {i === 1 && <em data-pick>Wybrane</em>}
                 </div>
               ))}
             </div>
           </div>
-          <div class="x-feat__text"><h3>Album dla klienta</h3><p>Cały zbiór w jednym pliku. Wysyłasz, klient wskazuje parę.</p></div>
+          <div class="x-feat__text"><h3>PDF i plik Figma</h3><p>Przeglądasz w PDF-ie, pracujesz w Figmie. Możesz też pokazać pary klientowi i wybrać razem.</p></div>
         </article>
       </div>
     </section>
 
-    <!-- ───── Live demo: from a pair to a full type system ───── -->
-    <section class="x-wrap x-sec" id="demo">
+    <!-- ───── Live preview: the two ways a pair is shown ───── -->
+    <section class="x-wrap x-sec" id="pary">
       <header class="x-head">
-        <h2 data-split="lines">Z pary fontów do całej typografii</h2>
-        <p data-fade>Wybierz parę i zobacz gotową skalę z parametrami.</p>
+        <h2 data-split="lines">Dwa sposoby, jedna para</h2>
+        <p data-fade>Pary pokazane są tak, jak trafią do projektu: dwa kroje w jednym nagłówku albo nagłówek z akapitem.</p>
       </header>
       <div class="x-card f-demo" data-fade data-f-demo>
-        <div class="f-chips" role="tablist" aria-label="Przykładowe pary">
-          {pairs.map((p, i) => (
-            <button type="button" role="tab" aria-selected={i === 0 ? 'true' : 'false'} data-f-chip={i}>{p.h} + {p.b}</button>
-          ))}
+        <div class="f-demo__bar">
+          <div class="f-chips" role="group" aria-label="Pary z zestawu">
+            {pairs.map((p, i) => (
+              <button type="button" aria-pressed={i === 0 ? 'true' : 'false'} data-f-chip={i}>{p.h} × {p.b}</button>
+            ))}
+          </div>
+          <div class="f-seg" role="group" aria-label="Sposób łączenia">
+            <button type="button" aria-pressed="true" data-f-mode="mix">Mix w nagłówku</button>
+            <button type="button" aria-pressed="false" data-f-mode="para">Nagłówek + akapit</button>
+          </div>
         </div>
-        <div class="f-scale" data-f-scale>
-          {scale.map(([name, role, sample, size, lh, ls]) => (
-            <div class="f-row">
-              <span class="f-row__name">{name}</span>
-              <p class:list={['f-row__sample', role === 'h' ? 'is-h' : 'is-b']} style={`font-size:clamp(${Math.max(14, Math.round(size * 0.55))}px, ${(size / 14.4).toFixed(2)}vw, ${size}px);line-height:${lh};letter-spacing:${ls}em`}>{sample}</p>
-              <span class="f-row__params">{size}px · {lh} · {ls === 0 ? '0' : `${ls}em`}</span>
+        <div class="f-slide" data-f-slide data-mode="mix">
+          <div class="f-slide__top"><span class="f-pill" data-f-chap>{pairs[0].chapter}</span><span>Para <span data-f-idx>{pairs[0].n}</span> / 250</span></div>
+          <div class="f-slide__body">
+            <p class="f-slide__mix"><span class="is-h">Projekty, które</span> <span class="is-b">zostają w głowie</span></p>
+            <div class="f-slide__para">
+              <p class="is-h">Dobra para robi połowę roboty.</p>
+              <p class="is-b">Nagłówek przyciąga uwagę, tekst prowadzi czytelnika dalej. Kiedy dwa kroje do siebie pasują, cała strona od razu wygląda na przemyślaną, a polskie znaki nie psują rytmu.</p>
             </div>
-          ))}
+          </div>
+          <dl class="f-slide__meta">
+            <div><dt>Nagłówek</dt><dd data-f-hname>{pairs[0].h} {pairs[0].hw}</dd></div>
+            <div><dt>Tekst</dt><dd data-f-bname>{pairs[0].b}</dd></div>
+            <div><dt>Źródło</dt><dd data-f-src>{pairs[0].src}</dd></div>
+            <div><dt>Licencja</dt><dd data-f-lic>{pairs[0].lic}</dd></div>
+          </dl>
         </div>
       </div>
     </section>
 
-    <!-- ───── Prompt ───── -->
+    <!-- ───── Contents ───── -->
     <section class="x-wrap x-sec">
-      <div class="f-split">
-        <div class="f-split__text">
-          <h2 data-split="lines">Prompt, który robi resztę</h2>
-          <p data-fade>W PDF-ie znajdziesz gotowe prompty. Wklejasz nazwy fontów i dostajesz kompletną typografię: od nagłówków po drobny druk.</p>
-        </div>
-        <div class="x-card f-prompt" data-fade>
-          <div class="f-prompt__bar"><span>Przykładowy prompt</span><button class="x-btn x-btn--ghost x-btn--sm" type="button" data-f-copy><span data-f-copy-label>Kopiuj</span></button></div>
-          <pre data-f-prompt>{promptParts.map((part) => (/^\{.+\}$/.test(part) ? <mark class="f-ph">{part}</mark> : part))}</pre>
-        </div>
-      </div>
+      <header class="x-head x-head--split">
+        <h2 data-split="lines">12 rozdziałów, 250 par</h2>
+        <p data-fade>Codzienne i nieoczekiwane pary, mix w nagłówku, nagłówek z akapitem oraz zestawy tematyczne.</p>
+      </header>
+      <ol class="f-toc" data-fade>
+        {chapters.map((c, i) => (
+          <li><i>{String(i + 1).padStart(2, '0')}</i><span><b>{c.name}</b><small>{c.count} par</small></span><em>{c.page}</em></li>
+        ))}
+      </ol>
     </section>
 
-    <!-- ───── Album ───── -->
-    <section class="x-wrap x-sec" id="album">
-      <div class="f-split f-split--rev">
-        <div class="x-card f-albumbig" data-fade data-scene="albumbig" aria-hidden="true">
-          {pairs.map((p) => (
-            <div class="f-page" data-page>
-              <b style={`font-family:'${p.h}';font-weight:${p.hw}`}>Aa</b>
-              <span style={`font-family:'${p.b}'`}>{p.h} + {p.b}</span>
-            </div>
-          ))}
-        </div>
-        <div class="f-split__text">
-          <h2 data-split="lines">Album gotowy do wysłania</h2>
-          <p data-fade>Zamiast tłumaczyć klientowi różnicę między krojami, wysyłasz mu album z całym zbiorem. Ogląda, wybiera, a Ty masz od razu wszystkie parametry do wdrożenia.</p>
-        </div>
+    <!-- ───── Licences ───── -->
+    <section class="x-wrap x-sec" id="licencje">
+      <header class="x-head">
+        <h2 data-split="lines">Darmowe. Także komercyjnie.</h2>
+        <p data-fade>Każdy font wykorzystasz bezpłatnie w projektach dla siebie i dla klientów: na stronach, w aplikacjach, w druku i w logo.</p>
+      </header>
+      <div class="f-lic">
+        {licences.map((l) => (
+          <article class="x-card f-lic__card" data-fade>
+            <h3>{l.name}</h3>
+            <p class="f-lic__from">{l.from}</p>
+            <p class="f-lic__label is-ok">Możesz</p>
+            <ul class="is-ok">{l.can.map((x) => <li>{x}</li>)}</ul>
+            <p class="f-lic__label is-no">Nie możesz</p>
+            <ul class="is-no">{l.cant.map((x) => <li>{x}</li>)}</ul>
+          </article>
+        ))}
       </div>
+      <p class="f-lic__note" data-fade><b>W skrócie:</b> projektujesz bez ograniczeń. Uważaj tylko wtedy, gdy chcesz komuś przekazać sam plik fontu z Fontshare. <span>To skrót najważniejszych zasad, a nie porada prawna. W razie wątpliwości obowiązuje pełny tekst licencji danego fontu.</span></p>
+    </section>
+
+    <!-- ───── Getting started ───── -->
+    <section class="x-wrap x-sec">
+      <header class="x-head">
+        <h2 data-split="lines">Gotowe w trzy minuty</h2>
+        <p data-fade>Fonty z Google Fonts są wbudowane w Figmę. Pozostałe instalujesz raz.</p>
+      </header>
+      <ol class="f-steps">
+        {steps.map((s, i) => (
+          <li class="x-card" data-fade><i>{i + 1}</i><h3>{s.t}</h3><p>{s.d}</p></li>
+        ))}
+      </ol>
     </section>
 
     <!-- ───── Buy ───── -->
     <section class="x-wrap x-final" id="kup">
       <div class="x-final__in f-buy">
-        <h2 data-split="lines">Zestaw fontów Nuuvie</h2>
+        <h2 data-split="lines">Pary fontów 2027</h2>
         <ul data-fade>{includes.map((i) => <li>{i}</li>)}</ul>
         <p class="f-buy__price" data-fade>Cena wkrótce</p>
         <div class="x-actions" data-fade>
-          <a class="x-btn" href={BUY}><span class="x-btn__label"><span>Zapytaj o zestaw</span><span aria-hidden="true">Zapytaj o zestaw</span></span><span class="x-btn__icon" aria-hidden="true"><svg viewBox="0 0 12 12" fill="none"><path d="M2 10 10 2M3.5 2H10v6.5" stroke="currentColor" stroke-width="1.5" /></svg><svg viewBox="0 0 12 12" fill="none"><path d="M2 10 10 2M3.5 2H10v6.5" stroke="currentColor" stroke-width="1.5" /></svg></span></a>
+          <a class="x-btn" href={BUY}><span class="x-btn__label"><span>Zapytaj o zestaw</span><span aria-hidden="true">Zapytaj o zestaw</span></span><span class="x-btn__icon" aria-hidden="true" set:html={arrow + arrow} /></a>
         </div>
       </div>
     </section>
@@ -233,7 +301,7 @@ const nav = [
         <a class="x-brand" href="/" aria-label="Nuuvie Studio"><Mark id="mark-f-foot" /><span>Nuuvie</span></a>
         <p>Studio projektowe Daniela Trocia.</p>
       </div>
-      <div><p>Zestaw fontów</p><ul>{nav.map((l) => <li><a href={l.href}>{l.label}</a></li>)}</ul></div>
+      <div><p>Pary fontów</p><ul>{nav.map((l) => <li><a href={l.href}>{l.label}</a></li>)}</ul></div>
       <div><p>Social media</p><ul>{socials.map((s) => <li><a href={s.href} target="_blank" rel="noopener">{s.label}</a></li>)}</ul></div>
       <div><p>Informacje</p><ul>{t.footer.legal.map((l) => <li><a href={l.href}>{l.label}</a></li>)}</ul></div>
     </div>

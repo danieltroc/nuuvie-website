@@ -8,6 +8,9 @@ Lista na czas startu nowej strony. Odhaczaj `[x]` w miarę postępów.
 - [ ] Lighthouse na głównych stronach (główna, O Nuuvie, Strefa, Prace, wpis na blogu, Kontakt): szybkość, dostępność, SEO. Poprawki tego, co wyjdzie.
 - [ ] Obrazki do udostępniania (Open Graph) dla stron i wpisów: co pokazuje LinkedIn / Messenger po wklejeniu linku.
 - [ ] Strona 404 w nowym stylu.
+- [ ] **Decyzja: CTA na końcu stron.** Warianty do przeklikania lokalnie: `astro dev` → <http://localhost:4321/cta> (plik `src/dev/cta.astro`, na produkcji go nie ma). Najpewniej bierzemy **A · Rozmowa** i **B · Kalendarz**, każdy na innych stronach. Do ustalenia: który wariant na której stronie. Przy wdrożeniu:
+  - formularz `/kontakt` ma odczytywać parametry `?usluga=…&termin=…` i zaznaczać je sam (z wariantu A i C);
+  - sprawdzić, czy cal.com otwiera się na dniu z `?date=RRRR-MM-DD` (wariant B).
 
 ## 2. Przepięcie domeny (robisz Ty, krok po kroku)
 
@@ -55,7 +58,10 @@ Pomysł odłożony 17.11.2026, do decyzji, gdy strona będzie już online.
 Strona `/fonty` działa teraz **tylko lokalnie** (`astro dev`) i nie trafia na produkcję.
 
 Przed premierą:
-- [ ] Prawdziwe pary fontów zamiast przykładowych, cena, link do zakupu, docelowy prompt (plik `src/dev/fonty.astro`, na górze lista zaślepek).
+- [x] Strona przepisana pod prawdziwy produkt z pliku Figma „Fonts”: 250 par, 12 rozdziałów, licencje, instalacja, PDF + plik Figma (17.11.2026).
+- [ ] Cena i link do zakupu (plik `src/dev/fonty.astro`, na górze lista zaślepek).
+- [ ] Sprawdzić grubości nagłówków przykładowych par ze slajdami (lista `raw` w `src/dev/fonty.astro`).
+- [ ] Przed publikacją: fonty Fontshare na stronie ładują się z api.fontshare.com. Rozważyć hostowanie u siebie (licencja ITF FFL na to pozwala).
 - [ ] Publikacja:
   1. przenieść `src/dev/fonty.astro` do `src/pages/fonty.astro`;
   2. usunąć wpis `dev-only-pages` w `astro.config.mjs`;
