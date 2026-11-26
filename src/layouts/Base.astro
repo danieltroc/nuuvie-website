@@ -51,6 +51,8 @@ const alternates = alternate
     <meta property="og:description" content={description ?? t.meta.description} />
     <meta property="og:locale" content={locale === 'pl' ? 'pl_PL' : 'en_GB'} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    {/* Meta (Facebook/Instagram) domain verification for the Nuuvie business portfolio */}
+    <meta name="facebook-domain-verification" content="vvr2d97x0lywo1yp1e46bjl5yx36n5" />
     {/* Umami (cookie-free), the same site as on the old Webflow site so the stats carry on.
         data-domains: counts only on www.nuuvie.com, never on workers.dev or localhost. */}
     {import.meta.env.PROD && <script is:inline defer src="https://cloud.umami.is/script.js" data-website-id="fc31093f-1780-4c7b-8461-99b4316f6974" data-domains="www.nuuvie.com"></script>}
