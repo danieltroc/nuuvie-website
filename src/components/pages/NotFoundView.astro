@@ -1,7 +1,8 @@
 ---
 // "Page not found" (PL dist/404.html, EN dist/en/404.html). Cloudflare serves the nearest 404.html
 // for an unknown address (wrangler.jsonc: not_found_handling "404-page"), so /en/... gets the English one.
-// A line draws in and breaks off into dots: the path that leads nowhere.
+// A line draws in and breaks off into dots: the path that leads nowhere. Its points and handles can
+// be dragged like the pen tool in a design app; join the end to the purple circle and it "leads".
 import '../../styles/next.css';
 import Base from '../../layouts/Base.astro';
 import SiteNav from '../site/SiteNav.astro';
@@ -16,6 +17,11 @@ const copy = pl
       title: 'Nie ma takiej strony – Nuuvie',
       heading: 'Ta ścieżka nigdzie nie prowadzi.',
       lead: 'Strona, której szukasz, nie istnieje albo zmieniła adres.',
+      hint: 'Złap punkt albo uchwyt i popraw krzywą. Połącz jej koniec z fioletowym kółkiem.',
+      alt: 'Alt rozłącza uchwyty.',
+      reset: 'Od nowa',
+      doneHeading: 'Teraz prowadzi.',
+      doneLead: 'Dobra krzywa. Ręcznie, bez AI. Dokąd dalej?',
       home: 'Strona główna',
       contact: 'Napisz do mnie',
     }
@@ -23,6 +29,11 @@ const copy = pl
       title: 'Page not found – Nuuvie',
       heading: 'This path leads nowhere.',
       lead: 'The page you are looking for does not exist or has moved.',
+      hint: 'Grab a point or a handle and fix the curve. Join its end to the purple circle.',
+      alt: 'Alt breaks the handles apart.',
+      reset: 'Reset',
+      doneHeading: 'Now it leads somewhere.',
+      doneLead: 'A good curve, drawn by hand, no AI. Where to next?',
       home: 'Home',
       contact: 'Get in touch',
     };
@@ -33,14 +44,20 @@ const arrow = '<svg viewBox="0 0 12 12" fill="none"><path d="M2 10 10 2M3.5 2H10
 <Base locale={language} title={copy.title} noindex>
   <SiteNav language={language} />
   <main id="top" class="x">
-    <section class="x-wrap nf">
-      <svg class="nf__line" viewBox="0 0 800 120" fill="none" aria-hidden="true">
-        <path class="nf__path" d="M0 90 C 120 90, 160 30, 260 30 S 400 90, 500 70" stroke="#0a0a0a" stroke-width="2" />
-        <path class="nf__dash" d="M500 70 C 560 58, 600 50, 640 50" stroke="#0a0a0a" stroke-width="2" stroke-dasharray="2 10" stroke-linecap="round" />
-        <circle class="nf__end" cx="660" cy="50" r="7" stroke="#864af9" stroke-width="2" />
+    <section class="x-wrap nf" data-nf-toy data-done-heading={copy.doneHeading} data-done-lead={copy.doneLead}>
+      <svg class="nf__line" viewBox="0 40 800 140" fill="none" aria-hidden="true">
+        <g class="nf__ui" data-nf-guides></g>
+        <path class="nf__path" data-nf-path d="M0 130 C 120 130, 160 70, 260 70 S 400 130, 500 110" stroke="#0a0a0a" stroke-width="2" />
+        <path class="nf__dash" data-nf-dash d="M500 110 C 560 98, 600 90, 640 90" stroke="#0a0a0a" stroke-width="2" stroke-dasharray="2 10" stroke-linecap="round" />
+        <circle class="nf__end" cx="660" cy="90" r="7" stroke="#864af9" stroke-width="2" />
+        <g class="nf__ui" data-nf-knobs></g>
       </svg>
-      <h1>{copy.heading}</h1>
-      <p>{copy.lead}</p>
+      <p class="nf__hint" data-nf-hint hidden>
+        <span>{copy.hint}</span> <span class="nf__alt">{copy.alt}</span>
+        <button type="button" class="nf__reset" data-nf-reset hidden>{copy.reset}</button>
+      </p>
+      <h1 data-nf-title>{copy.heading}</h1>
+      <p class="nf__lead" data-nf-lead aria-live="polite">{copy.lead}</p>
       <div class="x-actions">
         <a class="x-btn" href={homeHref}><span class="x-btn__label"><span>{copy.home}</span><span aria-hidden="true">{copy.home}</span></span><span class="x-btn__icon" aria-hidden="true"><Fragment set:html={arrow} /><Fragment set:html={arrow} /></span></a>
         <a class="x-btn x-btn--ghost" href={contactHref}><span class="x-btn__label"><span>{copy.contact}</span><span aria-hidden="true">{copy.contact}</span></span></a>
@@ -50,18 +67,199 @@ const arrow = '<svg viewBox="0 0 12 12" fill="none"><path d="M2 10 10 2M3.5 2H10
   <SiteFooter language={language} />
 </Base>
 
+<script>
+  // Pen-tool toy: anchors (squares) and handles (dots) of the two Bézier segments can be dragged.
+  // Handles at the middle anchor stay mirrored (smooth curve) unless Alt is held. The end anchor
+  // snaps onto the purple circle; then the path "leads" and the heading changes.
+  type Pt = { x: number; y: number };
+  type Key = 'a0' | 'h0' | 'h1' | 'a1' | 'h2' | 'h3' | 'a2';
+  const toy = document.querySelector<HTMLElement>('[data-nf-toy]');
+  const svg = toy?.querySelector('svg');
+  if (toy && svg) {
+    const $ = <T extends Element>(s: string) => toy.querySelector<T>(s)!;
+    const path = $<SVGPathElement>('[data-nf-path]');
+    const dash = $<SVGPathElement>('[data-nf-dash]');
+    const guides = $<SVGGElement>('[data-nf-guides]');
+    const knobs = $<SVGGElement>('[data-nf-knobs]');
+    const hint = $<HTMLElement>('[data-nf-hint]');
+    const reset = $<HTMLButtonElement>('[data-nf-reset]');
+    const title = $<HTMLElement>('[data-nf-title]');
+    const lead = $<HTMLElement>('[data-nf-lead]');
+    const text = { heading: title.textContent, lead: lead.textContent };
+
+    const start: Record<Key, Pt> = { a0: { x: 0, y: 130 }, h0: { x: 120, y: 130 }, h1: { x: 160, y: 70 }, a1: { x: 260, y: 70 }, h2: { x: 360, y: 70 }, h3: { x: 400, y: 130 }, a2: { x: 500, y: 110 } };
+    const copy = () => Object.fromEntries(Object.entries(start).map(([k, p]) => [k, { ...p }])) as Record<Key, Pt>;
+    let pts = copy();
+    const target: Pt = { x: 660, y: 90 };
+    const owns: Partial<Record<Key, Key[]>> = { a0: ['h0'], a1: ['h1', 'h2'], a2: ['h3'] };
+    const anchorOf: Partial<Record<Key, Key>> = { h0: 'a0', h1: 'a1', h2: 'a1', h3: 'a2' };
+    const mirror: Partial<Record<Key, Key>> = { h1: 'h2', h2: 'h1' };
+
+    let drag: { key: Key; id: number } | null = null;
+    let done = false;
+    let live = false;
+    /** viewBox units per CSS pixel, so knobs and hit areas keep their on-screen size */
+    let k = 1;
+    const f = (p: Pt) => `${p.x.toFixed(1)} ${p.y.toFixed(1)}`;
+    const clamp = (p: Pt) => ({ x: Math.min(820, Math.max(-20, p.x)), y: Math.min(176, Math.max(44, p.y)) });
+
+    const render = () => {
+      const { a0, h0, h1, a1, h2, h3, a2 } = pts;
+      path.setAttribute('d', `M${f(a0)} C${f(h0)} ${f(h1)} ${f(a1)} C${f(h2)} ${f(h3)} ${f(a2)}`);
+      // the dots carry on in the curve's direction and stop short of the circle
+      const len = Math.hypot(a2.x - h3.x, a2.y - h3.y) || 1;
+      const reach = Math.hypot(target.x - a2.x, target.y - a2.y);
+      const c = { x: a2.x + ((a2.x - h3.x) / len) * reach * 0.5, y: a2.y + ((a2.y - h3.y) / len) * reach * 0.5 };
+      const back = Math.hypot(target.x - c.x, target.y - c.y) || 1;
+      const stop = { x: target.x + ((c.x - target.x) / back) * 16, y: target.y + ((c.y - target.y) / back) * 16 };
+      dash.setAttribute('d', `M${f(a2)} Q${f(c)} ${f(stop)}`);
+
+      const line = (a: Pt, b: Pt) => `<line x1="${a.x}" y1="${a.y}" x2="${b.x}" y2="${b.y}" stroke="#864af9" stroke-opacity="0.55" stroke-width="${k}" />`;
+      guides.innerHTML = line(a0, h0) + line(h1, a1) + line(a1, h2) + line(h3, a2);
+      const s = 9 * k;
+      knobs.innerHTML = (Object.keys(pts) as Key[]).map((key) => {
+        const p = pts[key];
+        const on = drag?.key === key;
+        // once joined, the filled circle stands in for the end anchor
+        if (key === 'a2' && done && !on) return '';
+        return key.startsWith('a')
+          ? `<rect x="${p.x - s / 2}" y="${p.y - s / 2}" width="${s}" height="${s}" fill="${on ? '#0a0a0a' : '#fff'}" stroke="#0a0a0a" stroke-width="${1.25 * k}" />`
+          : `<circle cx="${p.x}" cy="${p.y}" r="${4.5 * k}" fill="${on ? '#864af9' : '#fff'}" stroke="#864af9" stroke-width="${1.25 * k}" />`;
+      }).join('');
+    };
+
+    const setDone = (on: boolean) => {
+      if (on === done) return;
+      done = on;
+      toy.classList.toggle('is-done', on);
+      title.textContent = on ? toy.dataset.doneHeading! : text.heading;
+      lead.textContent = on ? toy.dataset.doneLead! : text.lead;
+    };
+
+    // after the first touch the line is a plain editable path (the draw-in dash pattern goes)
+    const wake = () => {
+      if (live) return;
+      live = true;
+      toy.classList.add('is-live');
+      reset.hidden = false;
+    };
+
+    const toSvg = (e: PointerEvent): Pt => {
+      const m = svg.getScreenCTM();
+      if (!m) return { x: 0, y: 0 };
+      const p = new DOMPoint(e.clientX, e.clientY).matrixTransform(m.inverse());
+      return { x: p.x, y: p.y };
+    };
+    const pick = (p: Pt) => {
+      let best: Key | null = null;
+      let bd = 22 * k;
+      // handles first, so a handle sitting on its anchor can still be pulled out
+      for (const key of ['h0', 'h1', 'h2', 'h3', 'a0', 'a1', 'a2'] as Key[]) {
+        const d = Math.hypot(pts[key].x - p.x, pts[key].y - p.y);
+        if (d < bd - 0.5) { bd = d; best = key; }
+      }
+      return best;
+    };
+
+    const move = (key: Key, to: Pt, alt: boolean) => {
+      const p = clamp(to);
+      const anchor = owns[key];
+      if (anchor) {
+        const dx = p.x - pts[key].x;
+        const dy = p.y - pts[key].y;
+        pts[key] = p;
+        anchor.forEach((h) => (pts[h] = { x: pts[h].x + dx, y: pts[h].y + dy }));
+      } else {
+        pts[key] = p;
+        const other = mirror[key];
+        const a = pts[anchorOf[key]!];
+        if (other && !alt) {
+          const len = Math.hypot(pts[other].x - a.x, pts[other].y - a.y);
+          const d = Math.hypot(a.x - p.x, a.y - p.y) || 1;
+          pts[other] = { x: a.x + ((a.x - p.x) / d) * len, y: a.y + ((a.y - p.y) / d) * len };
+        }
+      }
+      // the end anchor snaps onto the circle
+      if (key === 'a2') {
+        const near = Math.hypot(pts.a2.x - target.x, pts.a2.y - target.y) < Math.max(20, 18 * k);
+        if (near) {
+          pts.h3 = { x: pts.h3.x + target.x - pts.a2.x, y: pts.h3.y + target.y - pts.a2.y };
+          pts.a2 = { ...target };
+        }
+        setDone(near);
+      }
+    };
+
+    svg.addEventListener('pointerdown', (e) => {
+      const key = pick(toSvg(e));
+      if (!key) return;
+      e.preventDefault();
+      wake();
+      drag = { key, id: e.pointerId };
+      svg.setPointerCapture(e.pointerId);
+      svg.style.cursor = 'grabbing';
+      render();
+    });
+    svg.addEventListener('pointermove', (e) => {
+      if (!drag) {
+        if (e.pointerType === 'mouse') svg.style.cursor = pick(toSvg(e)) ? 'grab' : '';
+        return;
+      }
+      if (e.pointerId !== drag.id) return;
+      move(drag.key, toSvg(e), e.altKey);
+      render();
+    });
+    const end = (e: PointerEvent) => {
+      if (!drag || e.pointerId !== drag.id) return;
+      drag = null;
+      svg.style.cursor = '';
+      render();
+    };
+    svg.addEventListener('pointerup', end);
+    svg.addEventListener('pointercancel', end);
+
+    reset.addEventListener('click', () => {
+      pts = copy();
+      setDone(false);
+      render();
+    });
+
+    const measure = () => {
+      const w = svg.getBoundingClientRect().width;
+      k = w ? 800 / w : 1;
+      render();
+    };
+    new ResizeObserver(measure).observe(svg);
+    hint.hidden = false;
+  }
+</script>
+
 <style>
-  .nf { text-align: center; padding-block: clamp(3rem, 9vw, 7rem) var(--section); }
+  .nf { text-align: center; padding-block: clamp(6rem, 11vw, 8rem) var(--section); }
   .nf h1 { font-size: clamp(2.25rem, 1.3rem + 3.4vw, 4.5rem); line-height: 1.04; letter-spacing: -0.045em; font-weight: 500; text-wrap: balance; }
-  .nf p { margin: 1rem auto 0; max-width: 44ch; color: var(--muted); line-height: 1.5; font-size: clamp(1.0625rem, 1rem + 0.3vw, 1.25rem); }
+  .nf__lead { margin: 1rem auto 0; max-width: 44ch; color: var(--muted); line-height: 1.5; font-size: clamp(1.0625rem, 1rem + 0.3vw, 1.25rem); }
   .nf .x-actions { margin-top: 2rem; justify-content: center; }
-  .nf__line { width: min(100%, 640px); height: auto; margin: 0 auto clamp(2rem, 5vw, 3.5rem); display: block; }
+
+  .nf__line { width: min(100%, 720px); height: auto; margin: 0 auto; display: block; overflow: visible; touch-action: none; user-select: none; -webkit-user-select: none; }
+  .nf__hint { margin: 0.75rem auto clamp(2rem, 5vw, 3rem); max-width: 52ch; font-size: 0.8125rem; line-height: 1.5; color: var(--muted); text-wrap: balance; }
+  .nf__alt { display: none; }
+  @media (hover: hover) and (pointer: fine) { .nf__alt { display: inline; } }
+  .nf__reset { margin-left: 0.5rem; padding: 0; border: 0; background: none; font: inherit; color: var(--ink); text-decoration: underline; text-underline-offset: 0.2em; cursor: pointer; }
+  .nf__reset[hidden] { display: none; }
+
+  /* draw-in, then the dots, the circle and the pen-tool knobs */
   .nf__path { stroke-dasharray: 700; stroke-dashoffset: 700; animation: nf-draw 1.6s cubic-bezier(0.65, 0, 0.35, 1) 0.2s forwards; }
   .nf__dash, .nf__end { opacity: 0; animation: nf-fade 0.6s ease 1.7s forwards; }
+  .nf__ui { opacity: 0; animation: nf-fade 0.5s ease 2.1s forwards; }
+  .is-live .nf__path { animation: none; stroke-dasharray: none; stroke-dashoffset: 0; }
+  .is-live .nf__ui, .is-live .nf__dash, .is-live .nf__end { animation: none; opacity: 1; }
+  .nf__end { transition: fill 300ms ease; }
+  .is-done .nf__end { fill: #864af9; }
+  .is-done .nf__dash { visibility: hidden; }
   @keyframes nf-draw { to { stroke-dashoffset: 0; } }
   @keyframes nf-fade { to { opacity: 1; } }
   @media (prefers-reduced-motion: reduce) {
-    .nf__path { animation: none; stroke-dashoffset: 0; }
-    .nf__dash, .nf__end { animation: none; opacity: 1; }
+    .nf__path { animation: none; stroke-dasharray: none; stroke-dashoffset: 0; }
+    .nf__dash, .nf__end, .nf__ui { animation: none; opacity: 1; }
   }
 </style>
