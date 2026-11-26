@@ -4,10 +4,10 @@ Lista na czas startu nowej strony. Odhaczaj `[x]` w miarę postępów.
 
 ## 1. Przed przepięciem domeny (robię ja)
 
-- [ ] Przejście kontrolne po wszystkich stronach z ograniczonym ruchem (`prefers-reduced-motion`): wszystko widoczne, nic nie „wisi” w połowie animacji.
-- [ ] Lighthouse na głównych stronach (główna, O Nuuvie, Strefa, Prace, wpis na blogu, Kontakt): szybkość, dostępność, SEO. Poprawki tego, co wyjdzie.
+- [x] Przejście kontrolne po wszystkich stronach z ograniczonym ruchem (`prefers-reduced-motion`): sprawdzone 24.11 na 9 stronach, wszystko widoczne.
+- [x] Lighthouse (24.11, telefon): SEO i dobre praktyki 100, dostępność 90–100, szybkość 73–90. Poprawione: obrazki wpisów (WebP), cache wideo i obrazków, kontrast licznika w formularzu, kolejność nagłówków na głównej. Zostaje: szybkość strony głównej (animacje na starcie), do ewentualnego dopracowania.
 - [ ] Obrazki do udostępniania (Open Graph) dla stron i wpisów: co pokazuje LinkedIn / Messenger po wklejeniu linku.
-- [ ] Strona 404 w nowym stylu.
+- [x] Strona 404 w nowym stylu: wariant D · Urwana linia, PL (`dist/404.html`) i EN (`dist/en/404.html`, dla adresów `/en/...`).
 - [ ] **Decyzja: CTA na końcu stron.** Warianty do przeklikania lokalnie: `astro dev` → <http://localhost:4321/cta> (plik `src/dev/cta.astro`, na produkcji go nie ma). Najpewniej bierzemy **A · Rozmowa** i **B · Kalendarz**, każdy na innych stronach. Do ustalenia: który wariant na której stronie. Przy wdrożeniu:
   - formularz `/kontakt` ma odczytywać parametry `?usluga=…&termin=…` i zaznaczać je sam (z wariantu A i C);
   - sprawdzić, czy cal.com otwiera się na dniu z `?date=RRRR-MM-DD` (wariant B).
@@ -15,6 +15,13 @@ Lista na czas startu nowej strony. Odhaczaj `[x]` w miarę postępów.
 ## 2. Przepięcie domeny (robisz Ty, krok po kroku)
 
 Instrukcja: [`docs/przepiecie-domeny.md`](przepiecie-domeny.md).
+
+**Stan 24.11.2026:** kroki 1–7 zrobione. Nowa strona działa na `www.nuuvie.com` (Cloudflare), przekierowania i HTTPS sprawdzone, formularz wysyła maile (Resend zweryfikowany), poczta OVH działa. Domeny odnowione do 21.11.2027 (auto-odnawianie włączone).
+
+- [x] Krok 8: Google Search Console: usługa domeny nuuvie.com zweryfikowana (TXT w Cloudflare), sitemapa przesłana 24.11.
+- [ ] Krok 9 (od 1.12): DNSSEC z powrotem, tym razem włączany w Cloudflare.
+- [ ] Krok 10 (od 1.12): wyłączyć Webflow.
+- [ ] Opcjonalnie: `nuuvie.pl` → `www.nuuvie.com` (sekcja „Dodatkowo” w instrukcji).
 
 Umami jest już w kodzie (ten sam identyfikator strony co w Webflow). Zacznie liczyć sam, gdy strona ruszy pod `www.nuuvie.com`.
 
@@ -25,6 +32,10 @@ Umami jest już w kodzie (ten sam identyfikator strony co w Webflow). Zacznie li
   - formularz: dane z formularza trafiają mailem przez Resend; ochrona przed spamem Cloudflare Turnstile;
   - analityka: Umami (bez cookies), jeśli w polityce jest jeszcze Google Analytics, usunąć.
 - [ ] Przez tydzień zaglądać do Google Search Console (błędy 404, indeksowanie).
+
+## 3a. Statystyki
+
+- [ ] **Zdarzenia w Umami:** wysłanie formularza, kliknięcie „Umów rozmowę” (cal.com), kliknięcia w e-mail i telefon, a po premierze Fontów „Kup zestaw”. Statystyki: <https://cloud.umami.is> (ta sama strona co w Webflow, historia ciągła).
 
 ## 4. Treści (po przepięciu)
 

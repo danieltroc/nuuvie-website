@@ -120,7 +120,7 @@ const alternate = pl ? '/en' : '/';
 
     <!-- ───── Statement + three figures ───── -->
     <section class="x-wrap x-sec" id="about">
-      <p class="x-statement" data-scrub-words>{c.statement.lead} <span>{c.statement.rest}</span></p>
+      <h2 class="x-statement" data-scrub-words>{c.statement.lead} <span>{c.statement.rest}</span></h2>
       <div class="x-figs">
         {(c.figures ?? []).slice(0, 3).map((f, i) => (
           <div class="x-fig" data-fade>

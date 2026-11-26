@@ -30,6 +30,19 @@ export default defineConfig({
         },
       },
     },
+    // Cloudflare serves the nearest 404.html for an unknown address, so the English one must sit at
+    // dist/en/404.html (Astro writes en/404/index.html, it special-cases only the root 404)
+    {
+      name: 'en-404',
+      hooks: {
+        'astro:build:done': async ({ dir }) => {
+          const { rename, rmdir } = await import('node:fs/promises');
+          const folder = new URL('en/404/', dir);
+          await rename(new URL('index.html', folder), new URL('en/404.html', dir));
+          await rmdir(folder);
+        },
+      },
+    },
     // Language pairs are declared on each page (hreflang links in Base.astro), not here
     sitemap({ filter: (page) => !page.includes('/404') && !page.includes('/fonty') }),
   ],

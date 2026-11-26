@@ -247,6 +247,29 @@ Dopiero gdy przez tydzień wszystko działa:
 
 Nic z Webflow nie jest już potrzebne: treści są w Sanity, obrazki w projekcie.
 
+## Dodatkowo: nuuvie.pl → www.nuuvie.com (kiedykolwiek, 15 min)
+
+Niezależne od nuuvie.com, można zrobić od razu. Dziś `nuuvie.pl` pokazuje stronę „w budowie” od OVH i nie działa przez https. Po tych krokach każdy adres na `nuuvie.pl` i `www.nuuvie.pl` (także przez https) przekieruje na `https://www.nuuvie.com`. DNSSEC na `nuuvie.pl` jest wyłączony, więc nie trzeba na nic czekać.
+
+1. **Cloudflare → Add a domain** → wpisz `nuuvie.pl` → plan **Free** → zostaw import rekordów.
+2. **Sprawdź zaimportowane rekordy** (DNS → Records):
+   - **zostaw** pocztę bez zmian: 3 × `MX` (`mx1/mx2/mx3.mail.ovh.net`) i `TXT` z `v=spf1 include:mx.ovh.com -all`;
+   - **usuń** `A` dla `nuuvie.pl` i `www` z adresem `213.186.33.5` (to przekierowanie OVH) i `TXT` z treścią `1|www.nuuvie.pl`;
+   - **dodaj** dwa rekordy, oba z pomarańczową chmurką (**Proxied**):
+     - Type `A`, Name `@`, IPv4 `192.0.2.1`
+     - Type `A`, Name `www`, IPv4 `192.0.2.1`
+
+     (to adres zastępczy: ruch i tak przechwyci reguła z kroku 3).
+3. **Rules → Redirect Rules → Create rule:**
+   - nazwa: `nuuvie.pl → nuuvie.com`;
+   - **All incoming requests**;
+   - Then: **Static**, URL `https://www.nuuvie.com`, status **301**;
+   - Deploy.
+4. **OVH → Domeny → nuuvie.pl → Serwery DNS → Modyfikuj serwery DNS:** wpisz dwa serwery, które Cloudflare pokaże dla `nuuvie.pl` (mogą być inne niż dla nuuvie.com) → Zastosuj konfigurację.
+5. Po kilku godzinach (zwykle szybciej) Cloudflare przestawi `nuuvie.pl` na **Active** (przyjdzie mail). Test: <https://nuuvie.pl> i <http://www.nuuvie.pl> mają otworzyć www.nuuvie.com.
+
+Poczta na `@nuuvie.pl` (jeśli jest) działa dalej, bo rekordy MX i SPF zostają takie same.
+
 ## Plan B: jak wrócić do starej strony
 
 **Przed krokiem 10** (Webflow jeszcze opłacony):
