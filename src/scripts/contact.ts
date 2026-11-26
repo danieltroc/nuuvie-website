@@ -106,6 +106,8 @@ if (form) {
       const res = await fetch('/api/contact', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(payload) });
       const data = (await res.json().catch(() => ({}))) as { ok?: boolean; fields?: string[] };
       if (res.ok && data.ok) {
+        // conversion for the Meta pixel, if the visitor allowed it (CookieConsent.astro)
+        window.dispatchEvent(new CustomEvent('nuuvie:track', { detail: 'Lead' }));
         setStatus('');
         showDone();
         return;

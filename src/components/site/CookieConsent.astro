@@ -1,0 +1,126 @@
+---
+// Cookie banner for the Meta pixel (src/lib/consent.ts). Accept and reject are equally easy, the
+// pixel loads only after "Accept", and the footer's "Cookie settings" opens the banner again.
+// Other scripts report conversions with: window.dispatchEvent(new CustomEvent('nuuvie:track', { detail: 'Lead' }))
+import { META_PIXEL_ID } from '../../lib/consent';
+import type { Locale } from '../../i18n';
+interface Props { language: Locale }
+const { language } = Astro.props;
+const pl = language === 'pl';
+const c = pl
+  ? {
+      title: 'Pliki cookies',
+      text: 'Używam cookies Meta (Facebook, Instagram), żeby sprawdzać, czy moje reklamy działają. Włączę je tylko za Twoją zgodą. Statystyki strony działają bez cookies.',
+      more: 'Polityka prywatności',
+      accept: 'Akceptuję',
+      reject: 'Odrzucam',
+    }
+  : {
+      title: 'Cookies',
+      text: 'I use Meta cookies (Facebook, Instagram) to see whether my ads work. They are switched on only if you agree. Site statistics work without cookies.',
+      more: 'Privacy policy (PL)',
+      accept: 'Accept',
+      reject: 'Reject',
+    };
+---
+{META_PIXEL_ID && (
+  <section class="ck" data-ck hidden aria-labelledby="ck-title" lang={language}>
+    <p class="ck__title" id="ck-title">{c.title}</p>
+    <p class="ck__text">{c.text} <a href="/legal/polityka-prywatnosci">{c.more}</a>.</p>
+    <div class="ck__actions">
+      <button type="button" class="ck__btn" data-ck-choice="reject">{c.reject}</button>
+      <button type="button" class="ck__btn" data-ck-choice="accept">{c.accept}</button>
+    </div>
+  </section>
+)}
+
+<script>
+  import { META_PIXEL_ID, CONSENT_KEY, CONSENT_VERSION } from '../../lib/consent';
+
+  type Choice = { v: number; marketing: boolean; at: string };
+  type Fbq = ((...args: unknown[]) => void) & { callMethod?: (...a: unknown[]) => void; queue: unknown[]; loaded: boolean; version: string; push: unknown };
+  const w = window as unknown as { fbq?: Fbq; _fbq?: Fbq };
+
+  const read = (): Choice | null => {
+    try {
+      const c = JSON.parse(localStorage.getItem(CONSENT_KEY) ?? 'null') as Choice | null;
+      return c && c.v === CONSENT_VERSION ? c : null;
+    } catch { return null; }
+  };
+  const save = (marketing: boolean) => {
+    try { localStorage.setItem(CONSENT_KEY, JSON.stringify({ v: CONSENT_VERSION, marketing, at: new Date().toISOString() })); } catch { /* private mode: ask again next time */ }
+  };
+
+  // Meta's standard loader, run only after consent and only on the live site
+  const loadPixel = () => {
+    if (w.fbq || location.hostname !== 'www.nuuvie.com') return;
+    const fbq = function (...args: unknown[]) { fbq.callMethod ? fbq.callMethod(...args) : fbq.queue.push(args); } as Fbq;
+    fbq.push = fbq; fbq.loaded = true; fbq.version = '2.0'; fbq.queue = [];
+    w.fbq = w._fbq = fbq;
+    const s = document.createElement('script');
+    s.async = true;
+    s.src = 'https://connect.facebook.net/en_US/fbevents.js';
+    document.head.append(s);
+    fbq('init', META_PIXEL_ID);
+    fbq('track', 'PageView');
+  };
+
+  // Turning consent off: drop Meta's first-party cookies and reload without the pixel
+  const revoke = () => {
+    for (const name of ['_fbp', '_fbc']) {
+      document.cookie = `${name}=; Max-Age=0; path=/; domain=.nuuvie.com`;
+      document.cookie = `${name}=; Max-Age=0; path=/`;
+    }
+    if (w.fbq) location.reload();
+  };
+
+  const banner = document.querySelector<HTMLElement>('[data-ck]');
+  if (banner && META_PIXEL_ID) {
+    const open = () => { banner.hidden = false; };
+    const close = () => { banner.hidden = true; };
+    const choice = read();
+    if (choice?.marketing) loadPixel();
+    if (!choice) open();
+
+    banner.querySelectorAll<HTMLButtonElement>('[data-ck-choice]').forEach((btn) =>
+      btn.addEventListener('click', () => {
+        const yes = btn.dataset.ckChoice === 'accept';
+        const before = read();
+        save(yes);
+        close();
+        if (yes) loadPixel();
+        else if (before?.marketing) revoke();
+      }),
+    );
+    document.querySelectorAll<HTMLElement>('[data-ck-open]').forEach((el) => {
+      el.hidden = false;
+      el.addEventListener('click', open);
+    });
+
+    // Conversions: form sent (Lead, from contact.ts), booking link (Contact), checkout link (InitiateCheckout)
+    const track = (event: string) => w.fbq?.('track', event);
+    window.addEventListener('nuuvie:track', (e) => track((e as CustomEvent<string>).detail));
+    document.addEventListener('click', (e) => {
+      const a = (e.target as Element | null)?.closest?.('a[href]') as HTMLAnchorElement | null;
+      if (!a) return;
+      if (a.hostname === 'cal.com') track('Contact');
+      else if (a.hostname.endsWith('easy.tools')) track('InitiateCheckout');
+    });
+  }
+</script>
+
+<style>
+  .ck { position: fixed; z-index: 90; left: max(1rem, env(safe-area-inset-left)); bottom: max(1rem, env(safe-area-inset-bottom)); width: min(24rem, calc(100vw - 2rem)); padding: 1.1rem 1.2rem 1.2rem; border-radius: 1rem; background: #fff; color: var(--ink); box-shadow: 0 0 0 1px rgb(10 10 10 / 0.08), 0 12px 40px -12px rgb(10 10 10 / 0.25); animation: ck-in 400ms cubic-bezier(0.22, 1, 0.36, 1); }
+  .ck[hidden] { display: none; }
+  .ck__title { font-size: 0.9375rem; font-weight: 600; letter-spacing: -0.01em; }
+  .ck__text { margin-top: 0.35rem; font-size: 0.8125rem; line-height: 1.5; color: var(--muted); }
+  .ck__text a { color: var(--ink); text-decoration: underline; text-underline-offset: 0.2em; }
+  .ck__actions { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-top: 0.9rem; }
+  /* both choices look the same: refusing is as easy as agreeing */
+  .ck__btn { height: 2.375rem; border: 0; border-radius: 999px; background: #fff; color: var(--ink); box-shadow: inset 0 0 0 1px rgb(10 10 10 / 0.18); font: inherit; font-size: 0.875rem; font-weight: 500; cursor: pointer; transition: background-color 200ms ease, transform 160ms ease; }
+  .ck__btn:active { transform: scale(0.97); }
+  .ck__btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  @media (hover: hover) and (pointer: fine) { .ck__btn:hover { background: #f4f4f4; } }
+  @keyframes ck-in { from { opacity: 0; transform: translateY(12px); } }
+  @media (prefers-reduced-motion: reduce) { .ck { animation: none; } }
+</style>

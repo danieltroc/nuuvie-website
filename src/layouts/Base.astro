@@ -4,6 +4,7 @@ import '@fontsource-variable/bricolage-grotesque/opsz.css';
 import '@fontsource-variable/inter';
 import '../styles/global.css';
 import { type Locale, getDict } from '../i18n';
+import CookieConsent from '../components/site/CookieConsent.astro';
 interface Props {
   locale: Locale;
   /** Design tokens set; the site currently uses only "next" (styles/next.css). */
@@ -64,6 +65,7 @@ const alternates = alternate
   </head>
   <body>
     <slot />
+    <CookieConsent language={locale} />
     <script>
       import '../scripts/motion';
     </script>

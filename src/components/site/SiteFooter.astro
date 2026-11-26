@@ -32,7 +32,16 @@ const year = new Date().getFullYear();
       <li><a href={t.contact.bookHref}>{pl ? 'Umów rozmowę' : 'Book a call'}</a></li>
       {socials.map((s) => <li><a href={s.href} target="_blank" rel="noopener">{s.label}</a></li>)}
     </ul></div>
-    <div><p>{pl ? 'Informacje' : 'Info'}</p><ul>{t.footer.legal.map((l) => <li><a href={l.href}>{l.label}</a></li>)}</ul></div>
+    <div><p>{pl ? 'Informacje' : 'Info'}</p><ul>
+      {t.footer.legal.map((l) => <li><a href={l.href}>{l.label}</a></li>)}
+      {/* opens the cookie banner again (CookieConsent.astro shows it when the pixel is on) */}
+      <li data-ck-open hidden><button type="button" class="x-foot__ck">{pl ? 'Ustawienia cookies' : 'Cookie settings'}</button></li>
+    </ul></div>
   </div>
   <p class="x-wrap x-foot__copy">© {year} Nuuvie Studio</p>
 </footer>
+
+<style>
+  .x-foot__ck { padding: 0; border: 0; background: none; font: inherit; color: inherit; cursor: pointer; text-align: left; }
+  .x-foot__ck:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+</style>
