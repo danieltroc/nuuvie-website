@@ -29,6 +29,9 @@ const c = pl
       budgets: ['do 5 tys. zł', '5–15 tys. zł', '15–40 tys. zł', 'powyżej 40 tys. zł', 'Jeszcze nie wiem'],
       name: 'Imię i nazwisko', email: 'E-mail', company: 'Firma (opcjonalnie)', message: 'Opowiedz o projekcie',
       consentA: 'Zgadzam się na przetwarzanie moich danych w celu odpowiedzi na wiadomość, zgodnie z', consentB: 'polityką prywatności', privacy: '/legal/polityka-prywatnosci',
+      // Optional, unticked, not needed to send or get a reply (privacy policy § 9)
+      marketing: 'Wyrażam zgodę na otrzymywanie od Nuuvie informacji handlowych drogą elektroniczną (np. e-mailem) oraz na wykorzystanie urządzenia do marketingu bezpośredniego. Mogę ją cofnąć w każdej chwili.',
+      optional: 'opcjonalnie',
       send: 'Wyślij wiadomość', sending: 'Wysyłam…', hint: 'albo ⌘ + Enter',
       errors: { name: 'Podaj imię i nazwisko.', email: 'Podaj poprawny adres e-mail.', message: 'Napisz kilka słów o projekcie (min. 10 znaków).', consent: 'Potrzebuję Twojej zgody, żeby odpisać.' },
       fail: 'Nie udało się wysłać. Spróbuj za chwilę albo napisz na', rate: 'Za dużo prób naraz. Spróbuj za minutę albo napisz na',
@@ -47,6 +50,8 @@ const c = pl
       budgets: ['under PLN 5k', 'PLN 5–15k', 'PLN 15–40k', 'over PLN 40k', 'Not sure yet'],
       name: 'Full name', email: 'Email', company: 'Company (optional)', message: 'Tell me about the project',
       consentA: 'I agree to my data being processed to reply to this message, in line with the', consentB: 'privacy policy', privacy: '/legal/polityka-prywatnosci',
+      marketing: 'I agree to receive commercial information from Nuuvie by electronic means (e.g. email) and to my device being used for direct marketing. I can withdraw this consent at any time.',
+      optional: 'optional',
       send: 'Send message', sending: 'Sending…', hint: 'or ⌘ + Enter',
       errors: { name: 'Please enter your name.', email: 'Please enter a valid email address.', message: 'Write a few words about the project (at least 10 characters).', consent: 'I need your consent to reply.' },
       fail: 'Couldn’t send it. Try again in a moment or write to', rate: 'Too many attempts at once. Try again in a minute or write to',
@@ -141,6 +146,9 @@ const arrow = '<svg viewBox="0 0 12 12" fill="none"><path d="M2 10 10 2M3.5 2H10
           <div class="c-field c-field--check" data-field="consent">
             <label class="c-check"><input name="consent" type="checkbox" required /><i aria-hidden="true"></i><span>{c.consentA} <a href={c.privacy} target="_blank">{c.consentB}</a>.</span></label>
             <p class="c-error">{c.errors.consent}</p>
+          </div>
+          <div class="c-field c-field--check">
+            <label class="c-check"><input name="marketing" type="checkbox" /><i aria-hidden="true"></i><span>{c.marketing} <em class="c-optional">({c.optional})</em></span></label>
           </div>
 
           <div class="cf-turnstile c-turnstile" data-sitekey={siteKey} data-appearance="interaction-only" data-theme="light" data-size="flexible" data-language={language}></div>

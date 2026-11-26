@@ -27,15 +27,22 @@ Umami jest już w kodzie (ten sam identyfikator strony co w Webflow). Zacznie li
 
 ## 3. Zaraz po przepięciu
 
-- [ ] **Polityka prywatności** (pilne, bo formularz zbiera dane). Dopisać:
-  - hosting: Cloudflare (zamiast Webflow);
-  - formularz: dane z formularza trafiają mailem przez Resend; ochrona przed spamem Cloudflare Turnstile;
-  - analityka: Umami (bez cookies), jeśli w polityce jest jeszcze Google Analytics, usunąć.
+- [x] Ogłoszenie o zmianie Regulaminu i Polityki prywatności (od 4.12.2026) na obu stronach prawnych (26.11).
+- [ ] **Polityka prywatności: szkic w Sanity (26.11), tylko dopiski** o narzędziach i bannerze cookies (Umami, Meta Pixel po zgodzie, Turnstile, Cloudflare, Resend, „Ustawienia cookies”). Reszta polityki i Regulamin bez zmian, nowe wersje wchodzą później (ogłoszenie na górze stron). Publish w Studio. Przy nowej wersji: usunąć Google Analytics, Smartlook i Webflow, sprawdzić art. 399 PKE i datę wejścia w życie (ogłoszenie: 4.12).
+- [x] **Zgoda marketingowa w formularzu `/kontakt`** (potwierdzone 26.11): osobne, nieobowiązkowe pole, odznaczone domyślnie; w mailu z formularza linijka „Zgoda marketingowa: TAK (data)” jako dowód. Musi działać najpóźniej 2.12.
 - [ ] Przez tydzień zaglądać do Google Search Console (błędy 404, indeksowanie).
 
 ## 3a. Statystyki
 
 - [ ] **Zdarzenia w Umami:** wysłanie formularza, kliknięcie „Umów rozmowę” (cal.com), kliknięcia w e-mail i telefon, a po premierze Fontów „Kup zestaw”. Statystyki: <https://cloud.umami.is> (ta sama strona co w Webflow, historia ciągła).
+
+## 3b. Meta (reklamy na Instagramie)
+
+Piksel działa od 26.11.2026 (zbiór danych `994634066083263`, portfolio „Nuuvie”), tylko po zgodzie w bannerze cookies.
+
+- [ ] **Weryfikacja domeny w Meta:** Meta Business Suite → Ustawienia → Bezpieczeństwo marki → Domeny → sprawdzić, czy `nuuvie.com` jest na liście i zweryfikowana. Jeśli nie: dodać, wybrać rekord DNS TXT i dodać go w Cloudflare (DNS → Records).
+- [ ] **easy.tools:** w ustawieniach integracji wpisać ten sam identyfikator piksela, żeby Meta widziała zakupy (Fonty, spotkania 1:1).
+- [ ] Puste portfolio „Nuuvie” (0 zasobów) w Meta Business Suite: sprawdzić i ewentualnie usunąć, żeby się nie myliło.
 
 ## 4. Treści (po przepięciu)
 

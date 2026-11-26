@@ -79,6 +79,8 @@
 .c-check input:focus-visible + i { box-shadow: inset 0 0 0 1.5px var(--accent), 0 0 0 4px rgb(134 74 249 / 0.15); }
 .c-check span { min-width: 0; }
 .c-check a { color: var(--ink); text-decoration: underline; text-underline-offset: 0.15em; text-decoration-thickness: 1px; }
+.c-field--check + .c-field--check { margin-top: -0.25rem; }
+.c-optional { font-style: normal; color: var(--muted); opacity: 0.8; }
 .c-field--check.is-invalid .c-check i { box-shadow: inset 0 0 0 1.5px #e5484d; }
 
 /* Honeypot: off-screen, not display:none (some bots skip hidden fields) */

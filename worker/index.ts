@@ -97,6 +97,9 @@ async function contact(request: Request, env: Env) {
   if (company) lines.push(`Firma: ${company}`);
   if (services.length) lines.push(`Czego potrzebuje: ${services.join(', ')}`);
   if (budget) lines.push(`Budżet: ${budget}`);
+  // Record of the optional marketing consent (privacy policy § 9): what was ticked and when
+  const marketing = data.marketing === true;
+  lines.push(`Zgoda marketingowa: ${marketing ? `TAK (${new Date().toISOString()})` : 'nie'}`);
   lines.push(`Język strony: ${language.toUpperCase()}`, '', message);
   const body = lines.join('\n');
 

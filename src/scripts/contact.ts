@@ -97,6 +97,7 @@ if (form) {
       services: Array.from(form.querySelectorAll<HTMLInputElement>('[name="services"]:checked')).map((i) => i.value),
       budget: form.querySelector<HTMLInputElement>('[name="budget"]:checked')?.value ?? '',
       consent: checks.consent(),
+      marketing: (form.elements.namedItem('marketing') as HTMLInputElement | null)?.checked === true,
       website: value('website'),
       elapsed: Math.round(performance.now() - started),
       language: form.dataset.lang,
