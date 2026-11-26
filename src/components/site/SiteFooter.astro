@@ -3,12 +3,15 @@ import Mark from '../Mark.astro';
 import { getDict, socials, type Locale } from '../../i18n';
 import { blogPath } from '../../lib/sanity';
 import { homeHref } from '../../lib/pages';
+import { PATH as TT_PATH, isLive } from '../../lib/typo-toolkit';
 interface Props { language: Locale }
 const { language } = Astro.props;
 const t = getDict(language);
 const pl = language === 'pl';
 const en = pl ? '' : '/en';
 const year = new Date().getFullYear();
+// Polish only; on nuuvie.com the page opens on 30.11, so the link appears with the first build after that
+const showToolkit = pl && (import.meta.env.DEV || isLive(Date.now()));
 ---
 <footer class="x-foot">
   <div class="x-wrap x-foot__grid x-foot__grid--5">
@@ -24,7 +27,7 @@ const year = new Date().getFullYear();
     </ul></div>
     <div><p>{pl ? 'Dla designerów' : 'For designers'}</p><ul>
       <li><a href={`${en}/strefa-designera`}>{pl ? 'Strefa Designera' : 'Designer Zone'}</a></li>
-      {import.meta.env.DEV && <li><a href="/fonty">{pl ? 'Zestaw fontów' : 'Font set'}</a></li> /* dev only until launch, see astro.config.mjs */}
+      {showToolkit && <li><a href={TT_PATH}>TYPO Toolkit 2027</a></li> /* from the launch build on (src/lib/typo-toolkit.ts) */}
     </ul></div>
     <div><p>{pl ? 'Kontakt' : 'Contact'}</p><ul>
       <li><a href={`${en}/kontakt`}>{pl ? 'Formularz kontaktowy' : 'Contact form'}</a></li>

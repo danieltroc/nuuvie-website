@@ -16,14 +16,11 @@ export default defineConfig({
   vite: { server: { proxy: { '/api': 'http://localhost:8787' } } },
   integrations: [
     // Pages kept out of src/pages until they launch.
-    // /fonty is built, but before the launch it opens only on *.workers.dev (preview): the Worker
-    // returns 404 for it on nuuvie.com (worker/index.ts) and the page is noindex.
     // /cta exists only in `astro dev`.
     {
       name: 'dev-only-pages',
       hooks: {
         'astro:config:setup': ({ command, injectRoute }) => {
-          injectRoute({ pattern: '/fonty', entrypoint: './src/dev/fonty.astro' });
           if (command !== 'dev') return;
           // Call-to-action variants to choose from (not a real page)
           injectRoute({ pattern: '/cta', entrypoint: './src/dev/cta.astro' });
@@ -44,6 +41,6 @@ export default defineConfig({
       },
     },
     // Language pairs are declared on each page (hreflang links in Base.astro), not here
-    sitemap({ filter: (page) => !page.includes('/404') && !page.includes('/fonty') }),
+    sitemap({ filter: (page) => !page.includes('/404') }),
   ],
 });

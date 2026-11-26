@@ -1,6 +1,6 @@
 /**
  * The site's only server code. Static files are served by Cloudflare directly; this Worker runs
- * only for /api/* (the contact form) and /fonty (wrangler.jsonc: assets.run_worker_first).
+ * only for /api/* (the contact form) and the TYPO Toolkit page (wrangler.jsonc: assets.run_worker_first).
  *
  * Spam protection, cheapest checks first:
  *  1. same-origin requests only, small bodies only
@@ -10,6 +10,8 @@
  *  5. Cloudflare Turnstile token verified with TURNSTILE_SECRET
  * Mail goes out through Resend (RESEND_API_KEY). Local testing: CONTACT_DRY_RUN=1 in .dev.vars.
  */
+
+import { PATH as TT_PATH, isLive } from '../src/lib/typo-toolkit';
 
 interface RateLimiter { limit(options: { key: string }): Promise<{ success: boolean }> }
 interface Env {
@@ -128,17 +130,17 @@ async function contact(request: Request, env: Env) {
 }
 
 /**
- * The font set page before its launch: a preview on *.workers.dev only, 404 on nuuvie.com.
- * At launch set FONTY_LIVE to true (and drop noindex in src/dev/fonty.astro).
+ * TYPO Toolkit 2027 (src/lib/typo-toolkit.ts). Before LAUNCH: a preview on *.workers.dev only
+ * (noindex), 404 on nuuvie.com. From LAUNCH on it is an ordinary page, no change needed.
  */
-const FONTY_LIVE = false;
-async function fonty(request: Request, env: Env, url: URL) {
-  if (!FONTY_LIVE && url.hostname.endsWith('nuuvie.com')) {
+async function typoToolkit(request: Request, env: Env, url: URL) {
+  const live = isLive(Date.now());
+  if (!live && url.hostname.endsWith('nuuvie.com')) {
     const page = await env.ASSETS.fetch(new Request(new URL('/404', url)));
     return new Response(page.body, { status: 404, headers: page.headers });
   }
   const res = await env.ASSETS.fetch(request);
-  if (FONTY_LIVE) return res;
+  if (live) return res;
   const out = new Response(res.body, res);
   out.headers.set('X-Robots-Tag', 'noindex, nofollow');
   return out;
@@ -148,7 +150,9 @@ export default {
   async fetch(request: Request, env: Env): Promise<Response> {
     const url = new URL(request.url);
     if (url.pathname === '/api/contact') return contact(request, env);
-    if (url.pathname === '/fonty' || url.pathname === '/fonty/') return fonty(request, env, url);
+    // The old preview address
+    if (url.pathname === '/fonty' || url.pathname === '/fonty/') return Response.redirect(new URL(TT_PATH, url).href, 301);
+    if (url.pathname === TT_PATH || url.pathname === `${TT_PATH}/`) return typoToolkit(request, env, url);
     return env.ASSETS.fetch(request);
   },
 };

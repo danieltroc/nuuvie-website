@@ -1,4 +1,4 @@
-/* Font-set landing page (/fonty/). Builds on next.css; only page-specific pieces live here. */
+/* TYPO Toolkit 2027 (/sklep/typo-toolkit). Builds on next.css; only page-specific pieces live here. */
 
 .f { --fh: 'Clash Display'; --fhw: 600; --fb: 'Satoshi'; }
 .f .x-hero h1 { max-width: 15ch; }
@@ -125,3 +125,120 @@
 .f-buy ul { display: grid; gap: 0.5rem; justify-content: center; margin-top: 2rem; color: rgb(255 255 255 / 0.8); text-align: left; }
 .f-buy li::before { content: '✓'; margin-right: 0.6rem; color: #c4a8ff; }
 .f-buy .f-buy__price { margin-top: 2rem; font-size: clamp(1.5rem, 1rem + 1.6vw, 2.25rem); letter-spacing: -0.03em; color: #fff; }
+
+/* ═════════════ TYPO Toolkit 2027 ═════════════ */
+.tt .x-hero h1 { max-width: 12ch; }
+.tt .x-hero h1 em { font-style: normal; color: var(--accent); }
+.tt-kicker { display: inline-block; margin-bottom: 1.25rem; padding: 0.35rem 0.8rem; border-radius: 999px; background: var(--paper-2); font-size: 0.8125rem; font-weight: 500; }
+/* Price box (hero and final CTA) */
+.tt-offer { display: grid; justify-items: center; gap: 1rem; margin-top: 2rem; }
+.tt-price { display: grid; justify-items: center; gap: 0.3rem; }
+.tt-price b { font-size: clamp(2.25rem, 1.6rem + 2vw, 3.25rem); font-weight: 600; letter-spacing: -0.04em; line-height: 1; font-variant-numeric: tabular-nums; }
+.tt .x-hero__text .tt-price span, .tt-price span { margin: 0; max-width: none; font-size: 0.9375rem; color: var(--muted); }
+.tt .x-hero__text .tt-count, .tt-count { font-variant-numeric: tabular-nums; font-size: 0.875rem; color: var(--ink); }
+.tt-count[hidden], .tt-badge[hidden] { display: none; }
+.tt .x-hero__text .tt-badge, .tt-badge { margin: 0; max-width: none; padding: 0.35rem 0.8rem; border-radius: 999px; background: #f3eeff; color: #5b23d6; font-size: 0.8125rem; font-weight: 500; }
+.tt-offer .x-actions { margin-top: 0.25rem; justify-content: center; align-items: center; gap: 1rem 1.5rem; flex-wrap: wrap; }
+.tt-link { font-size: 0.9375rem; text-decoration: underline; text-underline-offset: 0.2em; }
+.tt .x-hero__text .tt-trust, .tt-trust { margin: 0; max-width: none; font-size: 0.8125rem; color: var(--muted); }
+.tt-offer--dark .tt-price span, .tt-offer--dark .tt-trust { color: rgb(255 255 255 / 0.7); }
+.tt-offer--dark .tt-price b, .tt-offer--dark .tt-count { color: #fff; }
+.tt-offer--dark .tt-badge { background: rgb(255 255 255 / 0.12); color: #fff; }
+.x-btn[aria-disabled='true'] { pointer-events: none; opacity: 0.55; }
+
+/* Numbers */
+.tt-stats { padding-top: clamp(2.5rem, 5vw, 4rem); }
+.tt-stats ul { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.5rem; }
+.tt-stats li { padding: 0.5rem 0.9rem; border-radius: 999px; background: var(--paper-2); font-size: 0.875rem; }
+
+/* Problem */
+.tt-pains { display: grid; gap: var(--gutter); }
+@media (min-width: 900px) { .tt-pains { grid-template-columns: repeat(3, 1fr); } }
+.tt-pains li { padding: clamp(1.25rem, 2.5vw, 2rem); }
+.tt-pains i { font-style: normal; font-size: 0.8125rem; color: var(--accent); }
+.tt-pains p { margin-top: 1rem; font-size: clamp(1.125rem, 1rem + 0.4vw, 1.375rem); line-height: 1.3; letter-spacing: -0.015em; }
+.tt-story { max-width: 46rem; margin: clamp(2rem, 4vw, 3rem) auto 0; display: grid; gap: 1rem; font-size: clamp(1.0625rem, 1rem + 0.3vw, 1.25rem); line-height: 1.55; color: var(--muted); }
+.tt-story b { font-weight: 500; color: var(--ink); }
+
+/* Skill mock in the bento */
+.tt-chat li { font-size: 0.8125rem; gap: 0.75rem; }
+.tt-chat li:first-child { color: var(--muted); font-style: italic; }
+
+/* What you get */
+.tt-benefits { display: grid; gap: var(--gutter); }
+@media (min-width: 700px) { .tt-benefits { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1000px) { .tt-benefits { grid-template-columns: repeat(3, 1fr); } }
+.tt-benefits article { padding: clamp(1.25rem, 2.5vw, 1.75rem); }
+.tt-benefits h3 { font-size: 1.125rem; font-weight: 500; letter-spacing: -0.015em; }
+.tt-benefits p { margin-top: 0.5rem; color: var(--muted); line-height: 1.5; font-size: 0.9375rem; }
+.tt-after { display: grid; justify-items: center; gap: 1.25rem; margin-top: clamp(2rem, 4vw, 3rem); text-align: center; }
+.tt-after p { font-size: clamp(1.25rem, 1rem + 0.8vw, 1.75rem); letter-spacing: -0.02em; }
+
+/* Preview: contents and sample */
+.tt-toc { margin-top: clamp(2.5rem, 5vw, 4rem); }
+.tt-toc__head { font-size: 0.75rem; color: var(--muted); }
+.tt-toc__head b { font-size: 0.75rem !important; font-weight: 400 !important; }
+.tt-toc__head em { font-size: 0.75rem !important; }
+@media (min-width: 900px) { .tt-toc__head { display: none !important; } }
+.tt-sample { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 1rem 2rem; margin-top: clamp(2rem, 4vw, 3rem); padding: clamp(1.25rem, 3vw, 2rem); scroll-margin-top: 5rem; }
+.tt-sample h3 { font-size: 1.375rem; font-weight: 500; letter-spacing: -0.02em; }
+.tt-sample p { margin-top: 0.25rem; color: var(--muted); }
+.tt-soon { font-size: 0.875rem; color: var(--muted); }
+
+/* Who it is for */
+.tt-who { display: grid; gap: var(--gutter); }
+@media (min-width: 900px) { .tt-who { grid-template-columns: 1.4fr 1fr; } .tt-who__main { grid-row: span 2; } }
+.tt-who article { padding: clamp(1.25rem, 3vw, 2rem); }
+.tt-who h3 { font-size: 1.25rem; font-weight: 500; letter-spacing: -0.015em; margin-bottom: 0.9rem; }
+.tt-who p { color: var(--muted); line-height: 1.55; }
+.tt-who__main ul { display: grid; gap: 0.9rem; }
+.tt-who__main li { display: grid; gap: 0.15rem; }
+.tt-who__main li span { font-size: 1.0625rem; }
+.tt-who__main li small { font-size: 0.875rem; color: var(--muted); }
+.tt-who__client { margin-top: 1.25rem; padding-top: 1rem; border-top: 1px solid var(--line); }
+.tt-needs { display: grid; gap: 0.5rem; color: var(--muted); }
+.tt-needs li::before { content: '·'; margin-right: 0.5rem; color: var(--accent); }
+
+/* Author */
+.tt-author { display: grid; gap: clamp(1.25rem, 3vw, 2.5rem); align-items: center; padding: clamp(1.25rem, 3vw, 2.5rem); }
+@media (min-width: 800px) { .tt-author { grid-template-columns: 14rem 1fr; } }
+.tt-author img { width: 100%; max-width: 14rem; aspect-ratio: 1; object-fit: cover; border-radius: 1rem; }
+.tt-author h2 { font-size: clamp(1.75rem, 1.2rem + 1.6vw, 2.5rem); font-weight: 500; letter-spacing: -0.03em; }
+.tt-author p { margin-top: 0.75rem; max-width: 56ch; color: var(--muted); line-height: 1.55; font-size: 1.0625rem; }
+
+/* Prices */
+.tt-prices { display: grid; gap: 0.5rem; }
+.tt-prices__row { display: grid; gap: 0.25rem 1.5rem; padding: 1.1rem 1.25rem; border-radius: 0.875rem; background: var(--paper-2); font-size: 0.9375rem; line-height: 1.45; }
+.tt-prices__row b { font-weight: 500; }
+.tt-prices__price { font-size: 1.375rem; font-weight: 600; letter-spacing: -0.02em; }
+.tt-prices__head { display: none; }
+@media (min-width: 900px) {
+  .tt-prices__row { grid-template-columns: 1.1fr 0.7fr 1.3fr 2fr; align-items: center; }
+  .tt-prices__head { display: grid; background: none; padding-block: 0 0.25rem; font-size: 0.75rem; color: var(--muted); }
+}
+.tt-now { display: none; margin-left: 0.5rem; padding: 0.15rem 0.5rem; border-radius: 999px; background: var(--accent); color: #fff; font-style: normal; font-size: 0.6875rem; vertical-align: middle; }
+.tt-prices__row.is-now { background: #f3eeff; box-shadow: inset 0 0 0 1.5px var(--accent); }
+.tt-prices__row.is-now .tt-now { display: inline-block; }
+.tt-price-notes { display: grid; gap: 0.5rem; max-width: 62ch; margin-top: 1.5rem; font-size: 0.875rem; color: var(--muted); line-height: 1.5; }
+.tt-price-notes a { color: var(--ink); text-decoration: underline; text-underline-offset: 0.2em; }
+
+/* FAQ */
+.tt-faq { max-width: 52rem; margin-inline: auto; border-top: 1px solid var(--line); }
+.tt-faq details { border-bottom: 1px solid var(--line); }
+.tt-faq summary { display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding: 1.15rem 0; font-size: clamp(1.0625rem, 1rem + 0.3vw, 1.1875rem); letter-spacing: -0.01em; cursor: pointer; list-style: none; }
+.tt-faq summary::-webkit-details-marker { display: none; }
+.tt-faq summary i { position: relative; flex: none; width: 0.85rem; height: 0.85rem; }
+.tt-faq summary i::before, .tt-faq summary i::after { content: ''; position: absolute; left: 0; right: 0; top: 50%; height: 1.5px; margin-top: -0.75px; background: currentColor; transition: transform 250ms var(--ease-out); }
+.tt-faq summary i::after { transform: rotate(90deg); }
+.tt-faq details[open] summary i::after { transform: rotate(0deg); }
+.tt-faq details p { padding: 0 2rem 1.25rem 0; color: var(--muted); line-height: 1.6; max-width: 62ch; }
+
+/* Licences: three cards */
+@media (min-width: 1100px) { .tt-lic { grid-template-columns: repeat(3, 1fr); } }
+
+/* Sticky bar */
+.tt-bar { position: fixed; z-index: 40; left: 0; right: 0; bottom: 0; padding: 0.6rem 0 max(0.6rem, env(safe-area-inset-bottom)); background: rgb(255 255 255 / 0.9); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); box-shadow: 0 -1px 0 var(--line); transform: translateY(110%); transition: transform 350ms var(--ease-out); }
+.tt-bar.is-on { transform: none; }
+.tt-bar__in { display: flex; justify-content: space-between; align-items: center; gap: 1rem; font-size: 0.875rem; }
+.tt-bar__in span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+@media (prefers-reduced-motion: reduce) { .tt-bar { transition: none; } }

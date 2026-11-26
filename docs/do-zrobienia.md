@@ -28,7 +28,7 @@ Umami jest już w kodzie (ten sam identyfikator strony co w Webflow). Zacznie li
 ## 3. Zaraz po przepięciu
 
 - [x] Ogłoszenie o zmianie Regulaminu i Polityki prywatności (od 4.12.2026) na obu stronach prawnych (26.11).
-- [ ] **Polityka prywatności: szkic w Sanity (26.11), tylko dopiski** o narzędziach i bannerze cookies (Umami, Meta Pixel po zgodzie, Turnstile, Cloudflare, Resend, „Ustawienia cookies”). Reszta polityki i Regulamin bez zmian, nowe wersje wchodzą później (ogłoszenie na górze stron). Publish w Studio. Przy nowej wersji: usunąć Google Analytics, Smartlook i Webflow, sprawdzić art. 399 PKE i datę wejścia w życie (ogłoszenie: 4.12).
+- [x] **Polityka prywatności: dopiski opublikowane (26.11)** o narzędziach i bannerze cookies (Umami, Meta Pixel po zgodzie, Turnstile, Cloudflare, Resend, „Ustawienia cookies”). Reszta polityki i Regulamin bez zmian, nowe wersje wchodzą później (ogłoszenie na górze stron). Publish w Studio. Przy nowej wersji: usunąć Google Analytics, Smartlook i Webflow, sprawdzić art. 399 PKE i datę wejścia w życie (ogłoszenie: 4.12).
 - [x] **Zgoda marketingowa w formularzu `/kontakt`** (potwierdzone 26.11): osobne, nieobowiązkowe pole, odznaczone domyślnie; w mailu z formularza linijka „Zgoda marketingowa: TAK (data)” jako dowód. Musi działać najpóźniej 2.12.
 - [ ] Przez tydzień zaglądać do Google Search Console (błędy 404, indeksowanie).
 
@@ -40,8 +40,10 @@ Umami jest już w kodzie (ten sam identyfikator strony co w Webflow). Zacznie li
 
 Piksel działa od 26.11.2026 (zbiór danych `994634066083263`, portfolio „Nuuvie”), tylko po zgodzie w bannerze cookies.
 
-- [ ] **Weryfikacja domeny w Meta:** Meta Business Suite → Ustawienia → Bezpieczeństwo marki → Domeny → sprawdzić, czy `nuuvie.com` jest na liście i zweryfikowana. Jeśli nie: dodać, wybrać rekord DNS TXT i dodać go w Cloudflare (DNS → Records).
-- [ ] **easy.tools:** w ustawieniach integracji wpisać ten sam identyfikator piksela, żeby Meta widziała zakupy (Fonty, spotkania 1:1).
+- [x] **Weryfikacja domeny w Meta** (26.11): meta-znacznik w `Base.astro`, status „Zweryfikowano”.
+- [x] **easy.tools:** piksel w Ustawienia sklepu → Analityka, zdarzenia Purchase i InitiateCheckout włączone; koszyk „Spotkanie 1:1” sprawdzony (26.11). Nowe produkty dostają to samo domyślnie.
+- [ ] **easy.tools, przy nowym Regulaminie:** w koszykach produktów cyfrowych (Fonty) włączyć pole „Zgoda na treści cyfrowe” (oświadczenie o utracie prawa odstąpienia przed zamówieniem). Opcjonalnie „Zgoda marketingowa” w koszyku, jeśli zbieramy zgody od kupujących.
+- [ ] **Konto reklamowe** w portfolio Nuuvie (teraz 0 kont): potrzebne do reklam.
 - [ ] Puste portfolio „Nuuvie” (0 zasobów) w Meta Business Suite: sprawdzić i ewentualnie usunąć, żeby się nie myliło.
 
 ## 4. Treści (po przepięciu)

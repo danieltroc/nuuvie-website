@@ -125,3 +125,69 @@ fontsReady().then(() => {
   initScenes(scenes);
   ScrollTrigger.refresh();
 });
+
+/* ───── Price windows: the price, countdown, badge and buy buttons follow the clock ─────
+   Windows and the launch time live in src/lib/typo-toolkit.ts. ?stan=pre|59|69|79 previews one. */
+import { PHASES, CHECKOUT, phaseAt, type Phase } from '../lib/typo-toolkit';
+
+function initPrices() {
+  const root = $('[data-tt]');
+  if (!root) return;
+  const forced = new URLSearchParams(location.search).get('stan');
+  const pick = (): Phase => PHASES.find((p) => p.id === forced) ?? phaseAt(Date.now());
+  const two = (n: number) => String(n).padStart(2, '0');
+  let current: Phase | null = null;
+
+  const render = () => {
+    const p = pick();
+    if (p !== current) {
+      current = p;
+      root.dataset.phase = p.id;
+      const label = p.price ? `${p.price} zł` : 'Wkrótce';
+      $$('[data-tt-price]').forEach((el) => (el.textContent = label));
+      $$('[data-tt-note]').forEach((el) => (el.textContent = p.note));
+      $$('[data-tt-badge]').forEach((el) => { el.textContent = p.badge ?? ''; el.hidden = !p.badge; });
+      $$('[data-tt-bar-text]').forEach((el) => (el.textContent = p.bar));
+      $$('[data-tt-buy-label]').forEach((el) => (el.textContent = p.price ? `Kup TYPO Toolkit 2027 · ${label}` : 'Wkrótce: premiera 30.11, 8:00'));
+      // Before the launch the buttons do nothing; afterwards they go to the checkout (or the prices)
+      $$<HTMLAnchorElement>('[data-tt-buy]').forEach((a) => {
+        a.href = CHECKOUT || '#cena';
+        if (p.id === 'pre') a.setAttribute('aria-disabled', 'true'); else a.removeAttribute('aria-disabled');
+      });
+      $$('[data-tt-row]').forEach((el) => el.classList.toggle('is-now', el.dataset.ttRow === p.id));
+    }
+    // Countdown to the end of this window (none in the open-ended one)
+    const left = p.until && !forced ? Date.parse(p.until) - Date.now() : 0;
+    $$('[data-tt-count]').forEach((el) => {
+      el.hidden = left <= 0;
+      if (left <= 0) return;
+      const s = Math.floor(left / 1000);
+      const d = Math.floor(s / 86400);
+      const time = `${two(Math.floor((s % 86400) / 3600))}:${two(Math.floor((s % 3600) / 60))}:${two(s % 60)}`;
+      el.textContent = `${p.id === 'pre' ? 'Do premiery' : 'Do zmiany ceny'}: ${d ? `${d} d ` : ''}${time}`;
+    });
+  };
+  render();
+  setInterval(render, 1000);
+}
+
+/* Sticky bar: shows once the hero is off screen, hides again at the final CTA */
+function initBar() {
+  const bar = $('[data-tt-bar]');
+  const hero = $('[data-tt-hero]');
+  const final = $('[data-tt-final]');
+  if (!bar || !hero || !final) return;
+  let pastHero = false;
+  let atFinal = false;
+  const sync = () => {
+    const on = pastHero && !atFinal;
+    bar.classList.toggle('is-on', on);
+    bar.setAttribute('aria-hidden', String(!on));
+    bar.querySelector('a')?.setAttribute('tabindex', on ? '0' : '-1');
+  };
+  new IntersectionObserver(([e]) => { pastHero = !e.isIntersecting && e.boundingClientRect.top < 0; sync(); }).observe(hero);
+  new IntersectionObserver(([e]) => { atFinal = e.isIntersecting; sync(); }).observe(final);
+}
+
+initPrices();
+initBar();
