@@ -8,6 +8,7 @@ import Base from '../../layouts/Base.astro';
 import SiteNav from '../site/SiteNav.astro';
 import SiteFooter from '../site/SiteFooter.astro';
 import PostHeading from '../blog/PostHeading.astro';
+import LegalChangeNotice from './LegalChangeNotice.astro';
 import { formatDate, getDict } from '../../i18n';
 import { legalPath, type LegalPage } from '../../lib/sanity';
 import { headingsOf } from '../../lib/text';
@@ -18,6 +19,8 @@ const pl = language === 'pl';
 const translation = page.translations[0];
 const toc = headingsOf(page.body);
 const email = getDict(language).contact.email;
+// Change notice (26.11–4.12.2026) on the Polish Terms and Privacy Policy
+const notice = pl && ['regulamin', 'polityka-prywatnosci'].includes(page.slug);
 // The same page in the other language (language switch + hreflang)
 const alternate = translation ? legalPath(translation.language, translation.slug) : undefined;
 ---
@@ -49,6 +52,7 @@ const alternate = translation ? legalPath(translation.language, translation.slug
               <ol>{toc.map((h) => <li><a href={`#${h.id}`}>{h.text}</a></li>)}</ol>
             </details>
           )}
+          {notice && <LegalChangeNotice />}
           <PortableText value={page.body as never} components={{ block: { h2: PostHeading, h3: PostHeading } }} />
           <div class="x-card b-legalbox" data-fade>
             <p><b>{pl ? 'Masz pytania o swoje dane?' : 'Questions about your data?'}</b></p>

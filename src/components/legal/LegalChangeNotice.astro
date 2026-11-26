@@ -1,0 +1,44 @@
+---
+// Notice about upcoming changes to the Terms and the Privacy Policy, shown at the top of both
+// Polish legal pages. Published 26.11.2026, effective 4.12.2026. Remove it (and its use in
+// LegalPageView.astro) once the new texts are in place and the notice is no longer needed.
+const email = 'hej@nuuvie.com';
+---
+<aside class="b-notice" aria-labelledby="zmiany-tytul" data-fade>
+  <p class="b-notice__tag">Zmiany od 4 grudnia 2026 r.</p>
+  <h2 id="zmiany-tytul">Informacja o zmianie Regulaminu i Polityki Prywatności</h2>
+  <p class="b-notice__meta">Zamieszczono: 26 listopada 2026 r. Zmiany wchodzą w życie: 4 grudnia 2026 r.</p>
+
+  <h3>Regulamin – co się zmienia</h3>
+  <ol>
+    <li>Doprecyzowanie licencji na treści cyfrowe, w tym możliwość modyfikowania Pliku Figma oraz swobodne korzystanie z idei i zestawień krojów pisma w projektach własnych i klientów.</li>
+    <li>Poprawione zasady utraty prawa odstąpienia od umowy przy treściach cyfrowych (właściwa podstawa prawna i oświadczenie składane przed zamówieniem).</li>
+    <li>Nowe definicje (Zestaw, Plik Figma, Skill, Warunki Produktu, Kroje Zewnętrzne).</li>
+    <li>Zasady stosowania Warunków Produktu.</li>
+    <li>Doprecyzowanie zasad zmiany Regulaminu.</li>
+  </ol>
+
+  <h3>Polityka Prywatności – co się zmienia</h3>
+  <ol>
+    <li>Zgoda na cookies analityczne i marketingowe oraz poprawione podstawy prawne.</li>
+    <li>Informacja o danych przy zamówieniach oraz przy kontakcie przez media społecznościowe i kanał nadawczy.</li>
+    <li>Poprawki dotyczące przekazywania danych poza EOG.</li>
+    <li>Odrębna zgoda marketingowa w formularzu kontaktowym.</li>
+  </ol>
+
+  <p>Zmiany nie wpływają na umowy zawarte przed 4 grudnia 2026 r.</p>
+  <p>Dotychczasowe wersje dostępne na żądanie pod adresem: <a href={`mailto:${email}`}>{email}</a></p>
+</aside>
+
+<style>
+  .b-notice { margin-bottom: clamp(2.5rem, 5vw, 3.5rem); padding: clamp(1.25rem, 3vw, 2rem); border-radius: 1rem; background: #f3eeff; color: var(--ink); }
+  .b-notice__tag { display: inline-block; margin: 0 0 0.9rem; padding: 0.25rem 0.65rem; border-radius: 999px; background: #864af9; color: #fff; font-size: 0.75rem; font-weight: 500; letter-spacing: 0.01em; }
+  .b-notice h2 { margin: 0; font-size: clamp(1.375rem, 1.2rem + 0.8vw, 1.75rem); line-height: 1.15; letter-spacing: -0.03em; font-weight: 500; text-wrap: balance; }
+  .b-notice__meta { margin-top: 0.5rem; font-size: 0.875rem; color: var(--muted); }
+  .b-notice h3 { margin: 1.5rem 0 0.5rem; font-size: 1rem; font-weight: 600; letter-spacing: -0.01em; }
+  .b-notice ol { margin: 0; padding-left: 1.25rem; display: grid; gap: 0.4rem; }
+  .b-notice li, .b-notice p { font-size: 0.9375rem; line-height: 1.55; }
+  .b-notice > p:not([class]) { margin-top: 1rem; }
+  .b-notice > p:not([class]) + p:not([class]) { margin-top: 0.25rem; }
+  .b-notice a { color: #5b23d6; text-decoration: underline; text-underline-offset: 0.2em; }
+</style>
