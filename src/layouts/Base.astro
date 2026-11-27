@@ -15,8 +15,10 @@ interface Props {
   noindex?: boolean;
   /** Path of the same page in the other language, if it exists (adds hreflang links). */
   alternate?: string;
+  /** Social share image (absolute or root-relative URL) */
+  image?: string;
 }
-const { locale, theme = 'next', title, description, noindex = false, alternate } = Astro.props;
+const { locale, theme = 'next', title, description, noindex = false, alternate, image } = Astro.props;
 const t = getDict(locale);
 const site = Astro.site ?? new URL('https://www.nuuvie.com');
 // One canonical address per page, without a trailing slash (same as the old Webflow site)
@@ -50,6 +52,8 @@ const alternates = alternate
     <meta property="og:title" content={title ?? t.meta.title} />
     <meta property="og:description" content={description ?? t.meta.description} />
     <meta property="og:locale" content={locale === 'pl' ? 'pl_PL' : 'en_GB'} />
+    {image && <meta property="og:image" content={new URL(image, site).href} />}
+    {image && <meta name="twitter:card" content="summary_large_image" />}
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     {/* Meta (Facebook/Instagram) domain verification for the Nuuvie business portfolio */}
     <meta name="facebook-domain-verification" content="vvr2d97x0lywo1yp1e46bjl5yx36n5" />

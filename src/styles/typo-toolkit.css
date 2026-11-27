@@ -96,22 +96,6 @@
 .f-toc em { font-style: normal; font-size: 1.125rem; font-variant-numeric: tabular-nums; }
 @media (min-width: 900px) { .f-toc { grid-template-columns: 1fr 1fr; grid-auto-flow: column; grid-template-rows: repeat(6, auto); } }
 
-/* ───── Licences ───── */
-.f-lic { display: grid; gap: var(--gutter); }
-@media (min-width: 900px) { .f-lic { grid-template-columns: 1fr 1fr; } }
-.f-lic__card { padding: clamp(1.25rem, 3vw, 2.25rem); }
-.f-lic__card h3 { font-size: clamp(1.75rem, 1.2rem + 1.6vw, 2.5rem); font-weight: 500; letter-spacing: -0.03em; }
-.f-lic__from { margin-top: 0.4rem; font-size: 0.875rem; color: var(--muted); }
-.f-lic__label { margin: 1.75rem 0 0.6rem; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.06em; }
-.f-lic__label.is-ok { color: #1a8f4c; }
-.f-lic__label.is-no { color: var(--pink); }
-.f-lic__card ul { display: grid; gap: 0.5rem; font-size: 0.9375rem; line-height: 1.45; }
-.f-lic__card li { display: grid; grid-template-columns: 1.1rem 1fr; }
-.f-lic__card ul.is-ok li::before { content: '+'; color: #1a8f4c; }
-.f-lic__card ul.is-no li::before { content: '×'; color: var(--pink); }
-.f-lic__note { margin-top: 1.5rem; max-width: 62ch; font-size: 0.9375rem; line-height: 1.55; }
-.f-lic__note b { font-weight: 500; }
-.f-lic__note span { display: block; margin-top: 0.5rem; font-size: 0.8125rem; color: var(--muted); }
 
 /* ───── Getting started ───── */
 .f-steps { display: grid; gap: var(--gutter); }
@@ -234,7 +218,6 @@
 .tt-faq details p { padding: 0 2rem 1.25rem 0; color: var(--muted); line-height: 1.6; max-width: 62ch; }
 
 /* Licences: three cards */
-@media (min-width: 1100px) { .tt-lic { grid-template-columns: repeat(3, 1fr); } }
 
 /* Sticky bar */
 .tt-bar { position: fixed; z-index: 40; left: 0; right: 0; bottom: 0; padding: 0.6rem 0 max(0.6rem, env(safe-area-inset-bottom)); background: rgb(255 255 255 / 0.9); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); box-shadow: 0 -1px 0 var(--line); transform: translateY(110%); transition: transform 350ms var(--ease-out); }
@@ -242,3 +225,19 @@
 .tt-bar__in { display: flex; justify-content: space-between; align-items: center; gap: 1rem; font-size: 0.875rem; }
 .tt-bar__in span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 @media (prefers-reduced-motion: reduce) { .tt-bar { transition: none; } }
+
+/* ───── Album: real slides from the Figma file ───── */
+.tt-album { margin-inline: calc(var(--gutter) * -1); }
+.tt-album__track {
+  display: grid; grid-auto-flow: column; grid-auto-columns: 86%; gap: var(--gutter);
+  overflow-x: auto; scroll-snap-type: x mandatory; overscroll-behavior-x: contain;
+  padding: 0 var(--gutter) 1rem; scroll-padding-inline: var(--gutter);
+  scrollbar-width: thin; list-style: none; margin: 0;
+}
+@media (min-width: 900px) { .tt-album__track { grid-auto-columns: 62%; } }
+.tt-album__track:focus-visible { outline: 2px solid var(--ink); outline-offset: 4px; }
+.tt-album li { scroll-snap-align: start; }
+.tt-album figure { margin: 0; }
+.tt-album img { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; border-radius: var(--radius); box-shadow: 0 0 0 1px var(--line); }
+.tt-album figcaption { margin-top: 0.75rem; font-size: 0.875rem; color: var(--muted); }
+.tt-album__try { margin: clamp(2rem, 4vw, 3rem) 0 1rem; font-size: 0.9375rem; color: var(--muted); }

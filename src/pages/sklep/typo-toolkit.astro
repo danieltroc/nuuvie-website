@@ -8,6 +8,14 @@ import '../../styles/next.css';
 import '../../styles/typo-toolkit.css';
 import Base from '../../layouts/Base.astro';
 import Mark from '../../components/Mark.astro';
+import { Image, getImage } from 'astro:assets';
+import sCover from '../../assets/typo-toolkit/s-cover.png';
+import s011 from '../../assets/typo-toolkit/s-011.png';
+import s230 from '../../assets/typo-toolkit/s-230.png';
+import s162 from '../../assets/typo-toolkit/s-162.png';
+import s137 from '../../assets/typo-toolkit/s-137.png';
+import s116 from '../../assets/typo-toolkit/s-116.png';
+import s225 from '../../assets/typo-toolkit/s-225.png';
 import { getDict, socials } from '../../i18n';
 import { CHECKOUT, SAMPLE, PHASES, phaseAt } from '../../lib/typo-toolkit';
 
@@ -22,31 +30,42 @@ const fontshare = new Set(['Clash Display', 'Satoshi', 'Gambetta', 'General Sans
 const source = (f: string) => (fontshare.has(f) ? { src: 'Fontshare', lic: 'ITF FFL' } : { src: 'Google Fonts', lic: 'SIL OFL' });
 
 // Pairs from the set, with their page number in the PDF and their chapter.
-// hw = heading weight on this page (to check against the slides). The first three are the preview
-// pages named in the plan (s. 11, 158, 183).
+// Page numbers, chapters and heading weights (hw) as on the slides in the Figma file (285 pages).
 const chapters = [
   { name: 'Codzienne', count: 20, page: 9 },
   { name: 'Nieoczekiwane', count: 20, page: 30 },
-  { name: 'Mix w nagłówku', count: 20, page: 51 },
-  { name: 'Nagłówek + akapit', count: 20, page: 72 },
-  { name: 'Nowoczesne', count: 20, page: 93 },
-  { name: 'Klasyczne', count: 20, page: 114 },
-  { name: 'Edytorskie', count: 20, page: 135 },
-  { name: 'Biznes / SaaS', count: 20, page: 156 },
-  { name: 'Lifestyle / Moda / Beauty', count: 20, page: 177 },
-  { name: 'Techniczne / Developerskie', count: 20, page: 198 },
-  { name: 'Mix w nagłówku: Google Fonts', count: 20, page: 219 },
-  { name: 'Trendy 2027', count: 30, page: 240 },
+  { name: 'Uniwersalne', count: 20, page: 51 },
+  { name: 'Nowoczesne', count: 20, page: 72 },
+  { name: 'Klasyczne', count: 20, page: 93 },
+  { name: 'Edytorskie', count: 20, page: 114 },
+  { name: 'Biznes / SaaS', count: 20, page: 135 },
+  { name: 'Lifestyle / Moda / Beauty', count: 20, page: 156 },
+  { name: 'Techniczne / Developerskie', count: 20, page: 177 },
+  { name: 'Trendy 2027', count: 30, page: 198 },
+  { name: 'Mix w nagłówku', count: 20, page: 229 },
+  { name: 'Mix w nagłówku: Google Fonts', count: 20, page: 250 },
 ];
 const raw = [
   { n: 11, ch: 1, h: 'Clash Display', hw: 600, b: 'Satoshi' },
-  { n: 158, ch: 8, h: 'Sora', hw: 600, b: 'DM Sans' },
-  { n: 183, ch: 9, h: 'Marcellus', hw: 400, b: 'Poppins' },
+  { n: 137, ch: 7, h: 'Sora', hw: 600, b: 'DM Sans' },
+  { n: 162, ch: 8, h: 'Marcellus', hw: 400, b: 'Poppins' },
   { n: 12, ch: 1, h: 'Gambetta', hw: 500, b: 'General Sans' },
   { n: 33, ch: 2, h: 'Boska', hw: 500, b: 'Martian Mono' },
-  { n: 52, ch: 3, h: 'Satoshi', hw: 700, b: 'Instrument Serif' },
-  { n: 86, ch: 4, h: 'Fraunces', hw: 500, b: 'Rethink Sans' },
+  { n: 230, ch: 11, h: 'Satoshi', hw: 900, b: 'Instrument Serif' },
+  { n: 65, ch: 3, h: 'Fraunces', hw: 500, b: 'Rethink Sans' },
 ];
+// Real slides exported from the Figma file (node ids in the comments), shown in the album strip
+const slides = [
+  { img: sCover, cap: 'Okładka', alt: 'Okładka TYPO Toolkit 2027: dwanaście krojów pisma i napis 250 par' }, // 195:173
+  { img: s011, cap: 's. 11 · Codzienne · Clash Display × Satoshi', alt: 'Slajd z parą Clash Display i Satoshi: nagłówek „Faktura poszła sama o 6:02”' }, // 256:6604
+  { img: s230, cap: 's. 230 · Mix w nagłówku · Satoshi × Instrument Serif', alt: 'Slajd z parą Satoshi i Instrument Serif: nagłówek „Robimy etykiety dla 12 browarów”' }, // 256:6646
+  { img: s162, cap: 's. 162 · Lifestyle / Moda / Beauty · Marcellus × Poppins', alt: 'Slajd z parą Marcellus i Poppins: nagłówek „Koloryzacja, wtorek 16:30”' }, // 246:5362
+  { img: s137, cap: 's. 137 · Biznes / SaaS · Sora × DM Sans', alt: 'Slajd z parą Sora i DM Sans: nagłówek „Przelew za fakturę w 11 sekund”' }, // 246:4694
+  { img: s116, cap: 's. 116 · Edytorskie · EB Garamond × Roboto', alt: 'Slajd z parą EB Garamond i Roboto: nagłówek „Ceny mieszkań rosną wolniej”' }, // 255:4535
+  { img: s225, cap: 's. 225 · Trendy 2027 · Zalando Sans Expanded × Momo Trust Sans', alt: 'Slajd z parą Zalando Sans Expanded i Momo Trust Sans: nagłówek „Regał składany bez narzędzi”' }, // 255:5513
+];
+// Share image: the cover slide
+const og = await getImage({ src: sCover, width: 1200, format: 'jpg', quality: 82 });
 const pairs = raw.map((p) => {
   const hs = source(p.h), bs = source(p.b);
   return {
@@ -58,33 +77,12 @@ const pairs = raw.map((p) => {
 });
 // Fontshare's CSS API returns only the first font of a multi-font request, so one link per font
 const fontsUrls = [
-  ...['clash-display@600', 'satoshi@400,700', 'gambetta@500', 'general-sans@400', 'cabinet-grotesk@800', 'zodiak@400', 'boska@500', 'telma@700', 'switzer@400']
+  ...['clash-display@600', 'satoshi@400,700,900', 'gambetta@500', 'general-sans@400', 'cabinet-grotesk@800', 'zodiak@400', 'boska@500', 'telma@700', 'switzer@400']
     .map((f) => `https://api.fontshare.com/v2/css?f[]=${f}&display=swap`),
   'https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600&family=Petrona:wght@400&family=Martian+Mono:wght@400&family=Instrument+Serif&family=Fraunces:opsz,wght@9..144,500&family=Rethink+Sans:wght@400&family=Sora:wght@600&family=DM+Sans:wght@400&family=Marcellus&family=Poppins:wght@400&display=swap',
 ];
 // "Aa" tiles: tiles 5 and 6 light up together as one real pair (Clash Display × Satoshi)
 const tiles = ['Gambetta', 'Telma', 'Zodiak', 'Boska', 'Fraunces', 'Clash Display', 'Satoshi', 'Instrument Serif', 'Cabinet Grotesk', 'Bricolage Grotesque', 'Switzer', 'General Sans'];
-
-const licences = [
-  {
-    name: 'SIL OFL',
-    from: 'Google Fonts i inne źródła. Licencja zawsze podana przy foncie. Większość krojów w zestawie.',
-    can: ['Używasz komercyjnie: strony, aplikacje, druk, logo', 'Przekazujesz pliki fontu klientowi, developerowi lub drukarni', 'Osadzasz font w aplikacji i w PDF-ie', 'Modyfikujesz font, np. przycinasz webfont do potrzebnych znaków'],
-    cant: ['Sprzedawać samego pliku fontu jako produktu', 'Wydawać zmodyfikowanej wersji pod zastrzeżoną nazwą oryginału'],
-  },
-  {
-    name: 'ITF FFL',
-    from: 'Fontshare, m.in. Satoshi, Clash Display, Zodiak i General Sans.',
-    can: ['Używasz komercyjnie, także w logo i znakach towarowych', 'Hostujesz font na własnej stronie i osadzasz w aplikacji', 'Dzielisz się plikiem wewnątrz własnej firmy', 'Wysyłasz drukarni gotowe pliki do druku'],
-    cant: ['Przekazywać pliku fontu klientowi, agencji ani freelancerowi. Każdy pobiera go sam z fontshare.com', 'Modyfikować, przycinać ani konwertować pliku fontu', 'Udostępniać fontu w narzędziach i szablonach dla innych użytkowników'],
-  },
-  {
-    name: 'Ubuntu Font Licence',
-    from: 'Rodzina Ubuntu.',
-    can: ['Używasz komercyjnie: strony, aplikacje, druk', 'Przekazujesz i osadzasz plik fontu', 'Modyfikujesz font'],
-    cant: ['Wydawać zmienionej wersji pod oryginalną nazwą Ubuntu'],
-  },
-];
 
 const steps = [
   { t: 'Pobierz', d: '26 krojów spoza Google Fonts ma w pliku link do strony autora. Przy każdym podane są numery stron, na których jest użyty.' },
@@ -103,7 +101,7 @@ const benefits = [
   { t: 'Poza domyślnym wyborem', d: 'Ok. 210 różnych krojów w 250 parach, od codziennych po trendy na 2027. Masz z czego wybierać, gdy chcesz wyjść poza kolejny projekt z Interem.' },
   { t: 'Pewność wyboru', d: 'Widzisz parę w prawdziwym układzie, zanim wstawisz ją do projektu: nagłówek z akapitem, na polskim tekście, w konkretnym zastosowaniu, np. salon, kancelaria, fintech.' },
   { t: 'Argumenty dla klienta', d: 'Przy każdej parze masz krótkie uzasadnienie, dlaczego działa, np. „Clash ma charakter i ostre detale, a Satoshi jest neutralny i bardzo czytelny”. Od tego łatwiej zacząć rozmowę z klientem.' },
-  { t: 'Licencje bez szukania', d: 'Przy każdym foncie źródło i licencja. Od razu wiesz, co wolno, np. że fonty z Fontshare klient pobiera sam.' },
+  { t: 'Licencje bez szukania', d: 'Przy każdym foncie źródło, licencja i link do pobrania.' },
   { t: 'Polski tekst', d: 'Każda próbka jest po polsku, z ą, ę, ł i ż, więc ogonki widzisz, zanim wybierzesz parę.' },
   { t: 'Gotowe w Figmie', d: 'Fonty z Google Fonts działają w Figmie od razu (ok. 82% użyć w poradniku). Pozostałe 26 krojów instalujesz raz. Kopiujesz parę do projektu zamiast odtwarzać ją od zera.' },
   { t: 'Poradnik', d: 'Najlepsze praktyki w jednym miejscu: parowanie krojów, hierarchia treści, typografia do projektu. Skrót zamiast szukania po blogach.' },
@@ -127,9 +125,9 @@ const priceRows = [
   { id: '79', name: 'Regularne', price: '79 zł', when: 'od 8.12', what: '250 par, poradnik, plik Figma. Skill do Claude: +29 zł przy zakupie zestawu' },
 ];
 const faq = [
-  { q: 'Dlaczego nie wziąć darmowych par z internetu?', a: 'Możesz, wiedza o typografii jest w sieci. Płacisz za oszczędzony czas: 250 par jest już wybranych, pokazanych na polskim tekście w gotowym układzie, z opisem „dlaczego działa”, licencją i linkiem.' },
+  { q: 'Dlaczego nie wziąć darmowych par z internetu?', a: 'Możesz. TYPO Toolkit to dopracowane, kompletne narzędzie, a nie zbiór linków: 250 par jest już wybranych i pokazanych na polskim tekście w gotowym układzie, z opisem „dlaczego działa” i linkiem do pobrania. Płacisz za oszczędzony czas.' },
   { q: 'Dlaczego cena rośnie?', a: 'Najniższa cena to nagroda za szybką decyzję w tygodniu premiery. Cena rośnie w trzech oknach, tylko w górę, bez promocji i przekreśleń, a terminy są prawdziwe.' },
-  { q: 'Czy mogę użyć tych par w projektach klientów?', a: 'Tak. Pary jako pomysł stosujesz w swoich i klienckich projektach. Fonty podlegają licencjom autorów podanym przy parze (SIL OFL, ITF FFL z Fontshare, Ubuntu Font Licence). Przy fontach z Fontshare nie przekazujesz klientowi pliku fontu, klient pobiera go sam. PDF-a, pliku Figma i skilla nie rozsyłasz ani nie sprzedajesz dalej.' },
+  { q: 'Czy mogę użyć tych par w projektach klientów?', a: 'Tak. Wszystkie fonty są darmowe do użytku komercyjnego, licencja jest podana przy każdym foncie. PDF-a, pliku Figma i skilla nie rozsyłasz ani nie sprzedajesz dalej.' },
   { q: 'Czy mogę pokazać pary klientowi lub wysłać mu PDF?', a: 'Pokaż pojedyncze slajdy na ekranie w prezentacji i wybierzcie razem. Całego PDF-a nie przesyłaj.' },
   { q: 'Czy fonty obsługują polskie znaki?', a: 'Każda para jest pokazana na polskim tekście z ą, ę, ł i ż, więc od razu widzisz, jak wyglądają.' },
   { q: 'Czego potrzebuję?', a: 'Czytnika PDF. Do pliku Figma konta Figma. Do skilla konta Claude z włączonym wykonywaniem kodu. Fonty spoza Google Fonts instalujesz raz.' },
@@ -147,7 +145,7 @@ const nav = [
 const arrow = '<svg viewBox="0 0 12 12" fill="none"><path d="M2 10 10 2M3.5 2H10v6.5" stroke="currentColor" stroke-width="1.5" /></svg>';
 const priceLabel = (p: typeof phase) => (p.price ? `${p.price} zł` : 'Wkrótce');
 ---
-<Base locale="pl" title="TYPO Toolkit 2027: 250 par fontów i plik Figma | Nuuvie" description="Kompletny zestaw do pracy z typografią: 250 par fontów na polskim tekście, poradnik, plik Figma i skill do Claude. Premiera 30.11.">
+<Base locale="pl" image={og.src} title="TYPO Toolkit 2027: 250 par fontów i plik Figma | Nuuvie" description="Dopracowane, kompletne narzędzie do pracy z typografią: 250 par fontów na polskim tekście, poradnik, plik Figma i skill do Claude. Premiera 30.11.">
   <link slot="head" rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link slot="head" rel="preconnect" href="https://api.fontshare.com" crossorigin />
   {fontsUrls.map((href) => <link slot="head" rel="stylesheet" href={href} />)}
@@ -169,7 +167,7 @@ const priceLabel = (p: typeof phase) => (p.price ? `${p.price} zł` : 'Wkrótce'
       <div class="x-wrap x-hero__text">
         <p class="tt-kicker" data-x-in>TYPO Toolkit 2027</p>
         <h1 data-x-title>Fonty bez <em>zgadywania</em></h1>
-        <p data-x-in>Kompletny zestaw do pracy z typografią: 250 par fontów w prawdziwych układach, poradnik, plik Figma i skill do Claude.</p>
+        <p data-x-in>Dopracowane, kompletne narzędzie do pracy z typografią: 250 par fontów w prawdziwych układach, poradnik, plik Figma i skill do Claude.</p>
         <div class="tt-offer" data-x-in>
           <div class="tt-price">
             <b data-tt-price>{priceLabel(phase)}</b>
@@ -189,7 +187,7 @@ const priceLabel = (p: typeof phase) => (p.price ? `${p.price} zł` : 'Wkrótce'
         <div class="x-win f-spec" data-x-win data-f-spec data-pairs={JSON.stringify(pairs)} aria-hidden="true">
           <div class="x-win__bar">
             <span class="x-dots"><i></i><i></i><i></i></span>
-            <span class="x-win__title">Para <b data-f-idx>{pairs[0].n}</b> / 250 · <span data-f-chap>{pairs[0].chapter}</span></span>
+            <span class="x-win__title">Strona <b data-f-idx>{pairs[0].n}</b> / 285 · <span data-f-chap>{pairs[0].chapter}</span></span>
             <span class="x-win__share"><em>Polskie znaki</em></span>
           </div>
           <div class="f-spec__body">
@@ -222,7 +220,7 @@ const priceLabel = (p: typeof phase) => (p.price ? `${p.price} zł` : 'Wkrótce'
       <ol class="tt-pains">{pains.map((p, i) => <li class="x-card" data-fade><i>{i + 1}</i><p>{p}</p></li>)}</ol>
       <div class="tt-story" data-fade>
         <p>Znam to z własnych projektów. Dlatego zacząłem „Pary fontów”. Zapytałem projektantów w ankiecie na Instagramie, z czym mają największy problem. Prawie połowa odpowiedziała: wszystko po trochu. Więc dokończyłem projekt i tak powstał TYPO Toolkit 2027.</p>
-        <p><b>Wiedza o typografii jest dostępna w sieci. Tu dostajesz skrót:</b> gotowe pary, licencje opisane przy każdym foncie i plik, z którego od razu pracujesz.</p>
+        <p><b>TYPO Toolkit 2027 to dopracowane, kompletne narzędzie do pracy z typografią.</b> Dostajesz gotowe pary, poradnik i plik, z którego od razu pracujesz.</p>
       </div>
     </section>
 
@@ -295,8 +293,21 @@ const priceLabel = (p: typeof phase) => (p.price ? `${p.price} zł` : 'Wkrótce'
     <section class="x-wrap x-sec" id="pary">
       <header class="x-head">
         <h2 data-split="lines">Zobacz, jak wygląda środek.</h2>
-        <p data-fade>Prawdziwe pary z zestawu. Każdą pokazuję na dwa sposoby: dwa kroje w jednym nagłówku albo nagłówek z akapitem.</p>
+        <p data-fade>Prawdziwe slajdy z zestawu. Każda para ma swój slajd: przykład w konkretnym zastosowaniu, nazwy i grubości krojów, krótkie „dlaczego działa” i link do pobrania.</p>
       </header>
+      <div class="tt-album" data-fade>
+        <ul class="tt-album__track" tabindex="0" aria-label="Slajdy z TYPO Toolkit 2027 (przewiń w bok)">
+          {slides.map((s, i) => (
+            <li>
+              <figure>
+                <Image src={s.img} alt={s.alt} widths={[640, 960, 1440]} sizes="(min-width: 900px) 62vw, 86vw" loading={i < 2 ? 'eager' : 'lazy'} />
+                <figcaption>{s.cap}</figcaption>
+              </figure>
+            </li>
+          ))}
+        </ul>
+      </div>
+      <p class="tt-album__try" data-fade>Sprawdź sam: wybierz parę i przełącz sposób łączenia.</p>
       <div class="x-card f-demo" data-fade data-f-demo>
         <div class="f-demo__bar">
           <div class="f-chips" role="group" aria-label="Pary z zestawu">
@@ -435,22 +446,9 @@ const priceLabel = (p: typeof phase) => (p.price ? `${p.price} zł` : 'Wkrótce'
     <!-- ───── Licences ───── -->
     <section class="x-wrap x-sec" id="licencje">
       <header class="x-head">
-        <h2 data-split="lines">Licencje: skąd są fonty i co wolno.</h2>
-        <p data-fade>Fonty w zestawie są dostępne bezpłatnie u autorów i mają licencje pozwalające na użytek komercyjny. Poniżej skrót. W razie wątpliwości obowiązuje pełny tekst licencji.</p>
+        <h2 data-split="lines">Licencje</h2>
+        <p data-fade>Wszystkie fonty w zestawie są darmowe u autorów i pozwalają na użytek komercyjny. Licencja i link do pobrania są podane przy każdym foncie.</p>
       </header>
-      <div class="f-lic tt-lic">
-        {licences.map((l) => (
-          <article class="x-card f-lic__card" data-fade>
-            <h3>{l.name}</h3>
-            <p class="f-lic__from">{l.from}</p>
-            <p class="f-lic__label is-ok">Możesz</p>
-            <ul class="is-ok">{l.can.map((x) => <li>{x}</li>)}</ul>
-            <p class="f-lic__label is-no">Nie możesz</p>
-            <ul class="is-no">{l.cant.map((x) => <li>{x}</li>)}</ul>
-          </article>
-        ))}
-      </div>
-      <p class="f-lic__note" data-fade><span>To skrót, a nie porada prawna.</span></p>
     </section>
 
     <!-- ───── Final CTA ───── -->
