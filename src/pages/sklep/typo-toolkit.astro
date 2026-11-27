@@ -57,7 +57,7 @@ const raw = [
 ];
 // Real slides exported from the Figma file (node ids in the comments), shown in the album strip
 const slides = [
-  { img: sCover, cap: 'Okładka', alt: 'Okładka Typo Toolkit 2027: dwanaście krojów pisma i napis 250 par' }, // 195:173
+  { img: sCover, cap: 'Typo Toolkit 2027 · okładka', alt: 'Okładka Typo Toolkit 2027: dwanaście krojów pisma i napis 250 par' }, // 195:173
   { img: s011, cap: 's. 11 · Codzienne · Clash Display × Satoshi', alt: 'Slajd z parą Clash Display i Satoshi: nagłówek „Faktura poszła sama o 6:02”' }, // 256:6604
   { img: s230, cap: 's. 230 · Mix w nagłówku · Satoshi × Instrument Serif', alt: 'Slajd z parą Satoshi i Instrument Serif: nagłówek „Robimy etykiety dla 12 browarów”' }, // 256:6646
   { img: s162, cap: 's. 162 · Lifestyle / Moda / Beauty · Marcellus × Poppins', alt: 'Slajd z parą Marcellus i Poppins: nagłówek „Koloryzacja, wtorek 16:30”' }, // 246:5362
@@ -67,6 +67,8 @@ const slides = [
 ];
 // Share image: the cover slide
 const og = await getImage({ src: sCover, width: 1200, format: 'jpg', quality: 82 });
+// Hero: the cover first, then real pair slides from different chapters
+const heroSlides = [slides[0], slides[1], slides[3], slides[2], slides[4]];
 const pairs = raw.map((p) => {
   const hs = source(p.h), bs = source(p.b);
   return {
@@ -91,7 +93,13 @@ const steps = [
   { t: 'Zrestartuj Figmę', d: 'Zamknij Figmę i otwórz ją ponownie. Fonty z Google Fonts działają od razu, bez instalacji.' },
 ];
 
-const stats = ['250 par', '12 rozdziałów', '209 krojów', 'każda para na polskim tekście', 'źródło i licencja przy każdym foncie'];
+// Big numbers under the hero (from the catalogue, checked 27.11)
+const stats = [
+  { n: 250, suf: '', t: 'par fontów', d: 'każda na polskim tekście, w gotowym układzie' },
+  { n: 209, suf: '', t: 'krojów pisma', d: 'od codziennych po Trendy 2027' },
+  { n: 12, suf: '', t: 'rozdziałów', d: 'pod typ projektu, po 20 par' },
+  { n: 82, suf: '%', t: 'użyć z Google Fonts', d: 'działają w Figmie od razu' },
+];
 const pains = [
   'Przeglądasz fonty w nieskończoność.',
   'Kończysz na bezpiecznym wyborze: kolejny projekt z Interem.',
@@ -180,23 +188,18 @@ const arrow = '<svg viewBox="0 0 12 12" fill="none"><path d="M2 10 10 2M3.5 2H10
       </div>
 
       <div class="x-wrap x-stage" data-x-stage>
-        <div class="x-win f-spec" data-x-win data-f-spec data-pairs={JSON.stringify(pairs)} aria-hidden="true">
+        <div class="x-win tt-deck" data-x-win data-tt-deck data-pairs={JSON.stringify(pairs)}>
           <div class="x-win__bar">
             <span class="x-dots"><i></i><i></i><i></i></span>
-            <span class="x-win__title">Strona <b data-f-idx>{pairs[0].n}</b> / 285 · <span data-f-chap>{pairs[0].chapter}</span></span>
+            <span class="x-win__title" data-tt-deck-cap aria-live="polite">{heroSlides[0].cap}</span>
           </div>
-          <div class="f-spec__body">
-            <div class="f-spec__sample" data-f-sample>
-              <span class="f-spec__aa" data-f-h>Ąę</span>
-              <p class="f-spec__h" data-f-h>Dobra para robi połowę roboty.</p>
-              <p class="f-spec__b" data-f-b>Nagłówek przyciąga, tekst prowadzi. Kiedy dwa kroje do siebie pasują, cała strona od razu wygląda na przemyślaną. Zażółć gęślą jaźń.</p>
-            </div>
-            <aside class="f-spec__props">
-              <p>Nagłówki</p><span class="x-prop" data-f-hname>{pairs[0].h} {pairs[0].hw}</span>
-              <p>Tekst</p><span class="x-prop" data-f-bname>{pairs[0].b}</span>
-              <p>Źródło</p><span class="x-prop" data-f-src>{pairs[0].src}</span>
-              <p>Licencja</p><span class="x-prop" data-f-lic>{pairs[0].lic}</span>
-            </aside>
+          <div class="tt-deck__stage">
+            {heroSlides.map((s, i) => (
+              <Image class:list={[i === 0 && 'is-on']} src={s.img} alt={s.alt} widths={[960, 1440, 1920]} sizes="(min-width: 1200px) 76rem, 94vw" loading={i < 2 ? 'eager' : 'lazy'} fetchpriority={i === 0 ? 'high' : 'auto'} data-tt-deck-slide data-cap={s.cap} />
+            ))}
+          </div>
+          <div class="tt-deck__dots" role="group" aria-label="Slajdy z albumu">
+            {heroSlides.map((s, i) => <button type="button" aria-label={s.cap} aria-pressed={i === 0 ? 'true' : 'false'} data-tt-deck-dot={i}><i></i></button>)}
           </div>
         </div>
       </div>
@@ -204,7 +207,7 @@ const arrow = '<svg viewBox="0 0 12 12" fill="none"><path d="M2 10 10 2M3.5 2H10
 
     <!-- ───── Numbers ───── -->
     <section class="x-wrap tt-stats" aria-label="W liczbach">
-      <ul data-fade>{stats.map((s) => <li>{s}</li>)}</ul>
+      <ul class="tt-nums">{stats.map((s) => <li data-fade><b><span data-tt-count-to={s.n}>{s.n}</span>{s.suf}</b><strong>{s.t}</strong><span>{s.d}</span></li>)}</ul>
     </section>
 
     <!-- ───── Problem ───── -->

@@ -15,7 +15,7 @@ const $ = <T extends HTMLElement = HTMLElement>(s: string, r: ParentNode = docum
 const $$ = <T extends HTMLElement = HTMLElement>(s: string, r: ParentNode = document) => Array.from(r.querySelectorAll<T>(s));
 const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-const spec = $('[data-f-spec]');
+const spec = $('[data-pairs]');
 const pairs: Pair[] = spec ? JSON.parse(spec.dataset.pairs ?? '[]') : [];
 // Load every pair's fonts up front, so switching pairs in the demo never flashes a fallback font
 pairs.forEach((p) => {
@@ -172,6 +172,44 @@ function initPrices() {
   setInterval(render, 1000);
 }
 
+/* Hero: album slides cross-fade. The active dot fills up over the slide's time (CSS); when the
+   fill ends the next slide comes in. Off screen the fill pauses, so nothing runs unseen. */
+function initDeck() {
+  const deck = $('[data-tt-deck]');
+  if (!deck) return;
+  const slides = $$('[data-tt-deck-slide]', deck);
+  const dots = $$('[data-tt-deck-dot]', deck);
+  const cap = $('[data-tt-deck-cap]', deck);
+  let i = 0;
+  const show = (n: number) => {
+    i = (n + slides.length) % slides.length;
+    slides.forEach((s, k) => s.classList.toggle('is-on', k === i));
+    dots.forEach((d, k) => d.setAttribute('aria-pressed', String(k === i)));
+    if (cap) cap.textContent = slides[i].dataset.cap ?? '';
+  };
+  dots.forEach((d, k) => {
+    d.addEventListener('click', () => show(k));
+    d.querySelector('i')?.addEventListener('animationend', () => { if (k === i) show(i + 1); });
+  });
+  new IntersectionObserver(([e]) => deck.classList.toggle('is-paused', !e.isIntersecting), { threshold: 0.3 }).observe(deck);
+}
+
+/* Big numbers count up once, when they scroll into view */
+function initCounts() {
+  const els = $$('[data-tt-count-to]');
+  if (!els.length || reduced || !('IntersectionObserver' in window)) return;
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((e) => {
+      if (!e.isIntersecting) return;
+      io.unobserve(e.target);
+      const el = e.target as HTMLElement;
+      const obj = { v: 0 };
+      gsap.to(obj, { v: Number(el.dataset.ttCountTo), duration: 1.4, ease: 'power3.out', onUpdate: () => (el.textContent = String(Math.round(obj.v))) });
+    });
+  }, { threshold: 0.6 });
+  els.forEach((el) => { el.textContent = '0'; io.observe(el); });
+}
+
 /* Sticky bar: shows once the hero is off screen, hides again at the final CTA */
 function initBar() {
   const bar = $('[data-tt-bar]');
@@ -192,3 +230,5 @@ function initBar() {
 
 initPrices();
 initBar();
+initCounts();
+initDeck();
