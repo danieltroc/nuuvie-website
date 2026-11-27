@@ -17,6 +17,11 @@ const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 const spec = $('[data-f-spec]');
 const pairs: Pair[] = spec ? JSON.parse(spec.dataset.pairs ?? '[]') : [];
+// Load every pair's fonts up front, so switching pairs in the demo never flashes a fallback font
+pairs.forEach((p) => {
+  document.fonts.load(`${p.hw} 1em "${p.h}"`).catch(() => {});
+  document.fonts.load(`400 1em "${p.b}"`).catch(() => {});
+});
 
 /** Point a block's font variables at a pair and fill in its labels. */
 const apply = (root: HTMLElement, p: Pair) => {
@@ -127,7 +132,7 @@ fontsReady().then(() => {
 });
 
 /* ───── Price windows: the price, countdown, badge and buy buttons follow the clock ─────
-   Windows and the launch time live in src/lib/typo-toolkit.ts. ?stan=pre|59|69|79 previews one. */
+   Windows and the launch time live in src/lib/typo-toolkit.ts. ?stan=59|69|79 previews one. */
 import { PHASES, CHECKOUT, phaseAt, type Phase } from '../lib/typo-toolkit';
 
 function initPrices() {
@@ -143,29 +148,25 @@ function initPrices() {
     if (p !== current) {
       current = p;
       root.dataset.phase = p.id;
-      const label = p.price ? `${p.price} zł` : 'Wkrótce';
-      $$('[data-tt-price]').forEach((el) => (el.textContent = label));
-      $$('[data-tt-note]').forEach((el) => (el.textContent = p.note));
-      $$('[data-tt-badge]').forEach((el) => { el.textContent = p.badge ?? ''; el.hidden = !p.badge; });
-      $$('[data-tt-bar-text]').forEach((el) => (el.textContent = p.bar));
-      $$('[data-tt-buy-label]').forEach((el) => (el.textContent = p.price ? `Kup TYPO Toolkit 2027 · ${label}` : 'Wkrótce: premiera 30.11, 8:00'));
-      // Before the launch the buttons do nothing; afterwards they go to the checkout (or the prices)
-      $$<HTMLAnchorElement>('[data-tt-buy]').forEach((a) => {
-        a.href = CHECKOUT || '#cena';
-        if (p.id === 'pre') a.setAttribute('aria-disabled', 'true'); else a.removeAttribute('aria-disabled');
-      });
+      const fill = (sel: string, v: string | null) => $$(sel).forEach((el) => { el.textContent = v ?? ''; el.hidden = !v; });
+      fill('[data-tt-price]', `${p.price} zł`);
+      fill('[data-tt-label]', p.label);
+      fill('[data-tt-until]', p.untilText);
+      fill('[data-tt-next]', p.next);
+      fill('[data-tt-badge]', p.badge);
+      fill('[data-tt-bar-text]', p.bar);
+      // Buy buttons go to the checkout (or to the prices while there is no checkout link)
+      $$<HTMLAnchorElement>('[data-tt-buy]').forEach((a) => (a.href = CHECKOUT || '#cena'));
       $$('[data-tt-row]').forEach((el) => el.classList.toggle('is-now', el.dataset.ttRow === p.id));
     }
-    // Countdown to the end of this window (none in the open-ended one)
+    // Countdown to the end of this window (none in the open-ended one, none in a ?stan= preview)
     const left = p.until && !forced ? Date.parse(p.until) - Date.now() : 0;
-    $$('[data-tt-count]').forEach((el) => {
-      el.hidden = left <= 0;
-      if (left <= 0) return;
+    $$('[data-tt-count]').forEach((el) => (el.hidden = left <= 0));
+    if (left > 0) {
       const s = Math.floor(left / 1000);
-      const d = Math.floor(s / 86400);
-      const time = `${two(Math.floor((s % 86400) / 3600))}:${two(Math.floor((s % 3600) / 60))}:${two(s % 60)}`;
-      el.textContent = `${p.id === 'pre' ? 'Do premiery' : 'Do zmiany ceny'}: ${d ? `${d} d ` : ''}${time}`;
-    });
+      const v: Record<string, number> = { d: Math.floor(s / 86400), h: Math.floor((s % 86400) / 3600), m: Math.floor((s % 3600) / 60), s: s % 60 };
+      $$('[data-tt-cd]').forEach((el) => (el.textContent = two(v[el.dataset.ttCd!])));
+    }
   };
   render();
   setInterval(render, 1000);

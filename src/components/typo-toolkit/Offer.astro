@@ -1,0 +1,35 @@
+---
+// Buy block for the Typo Toolkit page (hero and final CTA): two buttons, then one card with the
+// price, the window it belongs to, the countdown to the next price and what is included.
+// The script (scripts/typo-toolkit.ts) keeps every [data-tt-*] field in step with the clock.
+import type { Phase } from '../../lib/typo-toolkit';
+interface Props { phase: Phase; buyHref: string; dark?: boolean }
+const { phase, buyHref, dark = false } = Astro.props;
+const arrow = '<svg viewBox="0 0 12 12" fill="none"><path d="M2 10 10 2M3.5 2H10v6.5" stroke="currentColor" stroke-width="1.5" /></svg>';
+const units = [['d', 'dni'], ['h', 'godz.'], ['m', 'min'], ['s', 'sek.']];
+---
+<div class:list={['tt-buy', dark && 'tt-buy--dark']}>
+  <div class="x-actions tt-buy__actions">
+    <a class="x-btn" href={buyHref} data-tt-buy><span class="x-btn__label"><span>Kup teraz</span><span aria-hidden="true">Kup teraz</span></span><span class="x-btn__icon" aria-hidden="true" set:html={arrow + arrow} /></a>
+    <a class="x-btn x-btn--ghost" href="#probka"><span class="x-btn__label"><span>Zobacz próbkę</span><span aria-hidden="true">Zobacz próbkę</span></span></a>
+  </div>
+
+  <div class="tt-deal">
+    <div class="tt-deal__price"><b data-tt-price>{phase.price} zł</b></div>
+    <div class="tt-deal__window">
+      <strong data-tt-label>{phase.label}</strong>
+      <span data-tt-until>{phase.untilText}</span>
+    </div>
+    <div class="tt-deal__count" data-tt-count hidden={!phase.until}>
+      <span class="tt-deal__count-label">Do zmiany ceny</span>
+      <span class="tt-deal__clock" role="timer" aria-live="off">
+        {units.map(([k, l]) => <span><b data-tt-cd={k}>00</b><small>{l}</small></span>)}
+      </span>
+    </div>
+    <div class="tt-deal__foot">
+      <span class="tt-deal__badge" data-tt-badge hidden={!phase.badge}>{phase.badge}</span>
+      <span data-tt-next hidden={!phase.next}>{phase.next}</span>
+    </div>
+  </div>
+  <p class="tt-trust">Ceny brutto · dostęp w e-mailu zaraz po płatności · PDF + plik Figma</p>
+</div>

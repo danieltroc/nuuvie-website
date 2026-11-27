@@ -6,6 +6,7 @@
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { SplitText } from 'gsap/SplitText';
+import { keepNbsp } from './split-options';
 
 gsap.registerPlugin(ScrollTrigger, SplitText);
 
@@ -26,6 +27,7 @@ function initHero() {
   const title = $('[data-x-title]');
   if (title) {
     SplitText.create(title, {
+      ...keepNbsp,
       type: 'lines',
       mask: 'lines',
       linesClass: 'sl',

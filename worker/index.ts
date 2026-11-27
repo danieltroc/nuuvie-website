@@ -1,6 +1,6 @@
 /**
  * The site's only server code. Static files are served by Cloudflare directly; this Worker runs
- * only for /api/* (the contact form) and the TYPO Toolkit page (wrangler.jsonc: assets.run_worker_first).
+ * only for /api/* (the contact form) and the Typo Toolkit page (wrangler.jsonc: assets.run_worker_first).
  *
  * Spam protection, cheapest checks first:
  *  1. same-origin requests only, small bodies only
@@ -130,7 +130,7 @@ async function contact(request: Request, env: Env) {
 }
 
 /**
- * TYPO Toolkit 2027 (src/lib/typo-toolkit.ts). Before LAUNCH: a preview on *.workers.dev only
+ * Typo Toolkit 2027 (src/lib/typo-toolkit.ts). Before LAUNCH: a preview on *.workers.dev only
  * (noindex), 404 on nuuvie.com. From LAUNCH on it is an ordinary page, no change needed.
  */
 async function typoToolkit(request: Request, env: Env, url: URL) {
@@ -152,7 +152,8 @@ export default {
     if (url.pathname === '/api/contact') return contact(request, env);
     // The old preview address
     if (url.pathname === '/fonty' || url.pathname === '/fonty/') return Response.redirect(new URL(TT_PATH, url).href, 301);
-    if (url.pathname === TT_PATH || url.pathname === `${TT_PATH}/`) return typoToolkit(request, env, url);
+    // The page and its files (the free sample PDF)
+    if (url.pathname === TT_PATH || url.pathname.startsWith(`${TT_PATH}/`)) return typoToolkit(request, env, url);
     return env.ASSETS.fetch(request);
   },
 };

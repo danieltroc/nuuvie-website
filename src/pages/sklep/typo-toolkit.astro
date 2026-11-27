@@ -1,6 +1,6 @@
 ---
-// TYPO Toolkit 2027 (/sklep/typo-toolkit): 250 font pairs (PDF), a guide, a Figma file and a Claude
-// skill. Content: "Plan strony TYPO Toolkit 2027, wersja 4" (Google Doc). Pairs come from the Figma
+// Typo Toolkit 2027 (/sklep/typo-toolkit): 250 font pairs (PDF), a guide, a Figma file and a Claude
+// skill. Content: "Plan strony Typo Toolkit 2027, wersja 4" (Google Doc). Pairs come from the Figma
 // file "Fonts" (EX25p6ADKUXa1qs8G0qrZy). Built on the "Next" design (styles/next.css).
 // Price windows, the launch time, the checkout and sample links: src/lib/typo-toolkit.ts. Before
 // the launch the Worker shows this page only on *.workers.dev (worker/index.ts).
@@ -8,6 +8,7 @@ import '../../styles/next.css';
 import '../../styles/typo-toolkit.css';
 import Base from '../../layouts/Base.astro';
 import Mark from '../../components/Mark.astro';
+import Offer from '../../components/typo-toolkit/Offer.astro';
 import { Image, getImage } from 'astro:assets';
 import sCover from '../../assets/typo-toolkit/s-cover.png';
 import s011 from '../../assets/typo-toolkit/s-011.png';
@@ -42,8 +43,8 @@ const chapters = [
   { name: 'Lifestyle / Moda / Beauty', count: 20, page: 156 },
   { name: 'Techniczne / Developerskie', count: 20, page: 177 },
   { name: 'Trendy 2027', count: 30, page: 198 },
-  { name: 'Mix w nagłówku', count: 20, page: 229 },
-  { name: 'Mix w nagłówku: Google Fonts', count: 20, page: 250 },
+  { name: 'Mix w nagłówku', count: 20, page: 229 },
+  { name: 'Mix w nagłówku: Google Fonts', count: 20, page: 250 },
 ];
 const raw = [
   { n: 11, ch: 1, h: 'Clash Display', hw: 600, b: 'Satoshi' },
@@ -56,13 +57,13 @@ const raw = [
 ];
 // Real slides exported from the Figma file (node ids in the comments), shown in the album strip
 const slides = [
-  { img: sCover, cap: 'Okładka', alt: 'Okładka TYPO Toolkit 2027: dwanaście krojów pisma i napis 250 par' }, // 195:173
-  { img: s011, cap: 's. 11 · Codzienne · Clash Display × Satoshi', alt: 'Slajd z parą Clash Display i Satoshi: nagłówek „Faktura poszła sama o 6:02”' }, // 256:6604
-  { img: s230, cap: 's. 230 · Mix w nagłówku · Satoshi × Instrument Serif', alt: 'Slajd z parą Satoshi i Instrument Serif: nagłówek „Robimy etykiety dla 12 browarów”' }, // 256:6646
-  { img: s162, cap: 's. 162 · Lifestyle / Moda / Beauty · Marcellus × Poppins', alt: 'Slajd z parą Marcellus i Poppins: nagłówek „Koloryzacja, wtorek 16:30”' }, // 246:5362
-  { img: s137, cap: 's. 137 · Biznes / SaaS · Sora × DM Sans', alt: 'Slajd z parą Sora i DM Sans: nagłówek „Przelew za fakturę w 11 sekund”' }, // 246:4694
-  { img: s116, cap: 's. 116 · Edytorskie · EB Garamond × Roboto', alt: 'Slajd z parą EB Garamond i Roboto: nagłówek „Ceny mieszkań rosną wolniej”' }, // 255:4535
-  { img: s225, cap: 's. 225 · Trendy 2027 · Zalando Sans Expanded × Momo Trust Sans', alt: 'Slajd z parą Zalando Sans Expanded i Momo Trust Sans: nagłówek „Regał składany bez narzędzi”' }, // 255:5513
+  { img: sCover, cap: 'Okładka', alt: 'Okładka Typo Toolkit 2027: dwanaście krojów pisma i napis 250 par' }, // 195:173
+  { img: s011, cap: 's. 11 · Codzienne · Clash Display × Satoshi', alt: 'Slajd z parą Clash Display i Satoshi: nagłówek „Faktura poszła sama o 6:02”' }, // 256:6604
+  { img: s230, cap: 's. 230 · Mix w nagłówku · Satoshi × Instrument Serif', alt: 'Slajd z parą Satoshi i Instrument Serif: nagłówek „Robimy etykiety dla 12 browarów”' }, // 256:6646
+  { img: s162, cap: 's. 162 · Lifestyle / Moda / Beauty · Marcellus × Poppins', alt: 'Slajd z parą Marcellus i Poppins: nagłówek „Koloryzacja, wtorek 16:30”' }, // 246:5362
+  { img: s137, cap: 's. 137 · Biznes / SaaS · Sora × DM Sans', alt: 'Slajd z parą Sora i DM Sans: nagłówek „Przelew za fakturę w 11 sekund”' }, // 246:4694
+  { img: s116, cap: 's. 116 · Edytorskie · EB Garamond × Roboto', alt: 'Slajd z parą EB Garamond i Roboto: nagłówek „Ceny mieszkań rosną wolniej”' }, // 255:4535
+  { img: s225, cap: 's. 225 · Trendy 2027 · Zalando Sans Expanded × Momo Trust Sans', alt: 'Slajd z parą Zalando Sans Expanded i Momo Trust Sans: nagłówek „Regał składany bez narzędzi”' }, // 255:5513
 ];
 // Share image: the cover slide
 const og = await getImage({ src: sCover, width: 1200, format: 'jpg', quality: 82 });
@@ -85,67 +86,75 @@ const fontsUrls = [
 const tiles = ['Gambetta', 'Telma', 'Zodiak', 'Boska', 'Fraunces', 'Clash Display', 'Satoshi', 'Instrument Serif', 'Cabinet Grotesk', 'Bricolage Grotesque', 'Switzer', 'General Sans'];
 
 const steps = [
-  { t: 'Pobierz', d: '26 krojów spoza Google Fonts ma w pliku link do strony autora. Przy każdym podane są numery stron, na których jest użyty.' },
-  { t: 'Zainstaluj', d: 'Pliki .otf: na macOS dwuklik i „Zainstaluj”, na Windows „Zainstaluj dla wszystkich użytkowników”.' },
-  { t: 'Zrestartuj Figmę', d: 'Zamknij Figmę i otwórz ją ponownie. Fonty z Google Fonts działają od razu, bez instalacji.' },
+  { t: 'Pobierz', d: '26 krojów spoza Google Fonts ma w pliku link do strony autora. Przy każdym podane są numery stron, na których jest użyty.' },
+  { t: 'Zainstaluj', d: 'Pliki .otf: na macOS dwuklik i „Zainstaluj”, na Windows „Zainstaluj dla wszystkich użytkowników”.' },
+  { t: 'Zrestartuj Figmę', d: 'Zamknij Figmę i otwórz ją ponownie. Fonty z Google Fonts działają od razu, bez instalacji.' },
 ];
 
-const stats = ['250 par', '12 rozdziałów', 'ok. 210 krojów', 'każda para na polskim tekście', 'źródło i licencja przy każdym foncie'];
+const stats = ['250 par', '12 rozdziałów', '209 krojów', 'każda para na polskim tekście', 'źródło i licencja przy każdym foncie'];
 const pains = [
-  'Przeglądasz fonty w nieskończoność.',
-  'Kończysz na bezpiecznym wyborze: kolejny projekt z Interem.',
-  'Znajdziesz font, a potem szukasz mu pary: kolejne godziny, kolejne próby.',
+  'Przeglądasz fonty w nieskończoność.',
+  'Kończysz na bezpiecznym wyborze: kolejny projekt z Interem.',
+  'Znajdziesz font, a potem szukasz mu pary: kolejne godziny, kolejne próby.',
 ];
 const benefits = [
-  { t: 'Czas', d: 'Zamiast przeglądać dziesiątki kart w przeglądarce, otwierasz rozdział pasujący do projektu i wybierasz z 20 par. Szukasz pary pod SaaS? To cały rozdział.' },
-  { t: 'Poza domyślnym wyborem', d: 'Ok. 210 różnych krojów w 250 parach, od codziennych po trendy na 2027. Masz z czego wybierać, gdy chcesz wyjść poza kolejny projekt z Interem.' },
-  { t: 'Pewność wyboru', d: 'Widzisz parę w prawdziwym układzie, zanim wstawisz ją do projektu: nagłówek z akapitem, na polskim tekście, w konkretnym zastosowaniu, np. salon, kancelaria, fintech.' },
-  { t: 'Argumenty dla klienta', d: 'Przy każdej parze masz krótkie uzasadnienie, dlaczego działa, np. „Clash ma charakter i ostre detale, a Satoshi jest neutralny i bardzo czytelny”. Od tego łatwiej zacząć rozmowę z klientem.' },
-  { t: 'Licencje bez szukania', d: 'Przy każdym foncie źródło, licencja i link do pobrania.' },
-  { t: 'Polski tekst', d: 'Każda próbka jest po polsku, z ą, ę, ł i ż, więc ogonki widzisz, zanim wybierzesz parę.' },
-  { t: 'Gotowe w Figmie', d: 'Fonty z Google Fonts działają w Figmie od razu (ok. 82% użyć w poradniku). Pozostałe 26 krojów instalujesz raz. Kopiujesz parę do projektu zamiast odtwarzać ją od zera.' },
-  { t: 'Poradnik', d: 'Najlepsze praktyki w jednym miejscu: parowanie krojów, hierarchia treści, typografia do projektu. Skrót zamiast szukania po blogach.' },
-  { t: 'Skill do Claude', d: 'Pierwszy przegląd pod Twój opis projektu: podpowiada parę z uzasadnieniem i buduje system typograficzny na wybranym foncie. W cenie zestawu do 7.12, od 8.12 dodasz go do zestawu za 29 zł. Nie sprzedaję go osobno.' },
+  { t: 'Czas', d: 'Otwierasz rozdział pasujący do projektu i wybierasz z 20 par. Szukasz pary pod SaaS? Masz cały rozdział, od strony 135.' },
+  { t: 'Poza domyślnym wyborem', d: '209 krojów w 250 parach, od codziennych po Trendy 2027. Masz z czego wybierać, gdy chcesz wyjść poza kolejny projekt z Interem.' },
+  { t: 'Pewność wyboru', d: 'Widzisz parę w prawdziwym układzie, zanim wstawisz ją do projektu: nagłówek z akapitem na polskim tekście, w konkretnym zastosowaniu, np. salon fryzjerski, kancelaria, fintech.' },
+  { t: 'Argumenty dla klienta', d: 'Przy każdej parze masz krótkie uzasadnienie, dlaczego działa, np. „Clash ma charakter i ostre detale, a Satoshi jest neutralny i bardzo czytelny”. Od tego łatwiej zacząć rozmowę z klientem.' },
+];
+// Skill: a real answer from the test on 27.11 (pages and notes match the catalogue)
+const convo = [
+  { tier: 'Bezpieczna', pair: 'Zilla Slab × Inter', page: 173, why: 'Zilla Slab ma cyfry nautyczne, więc kwoty w menu warto sprawdzić przed drukiem.' },
+  { tier: 'Z charakterem', pair: 'Young Serif × Instrument Sans', page: 22, why: 'Young Serif ma jedną grubość, więc hierarchię budujesz rozmiarem.' },
+  { tier: 'Odważna', pair: 'Rubik Mono One × Fraunces', page: 44, why: 'Rubik Mono One to same wersaliki: „zł” w nagłówku zmieni się w „ZŁ”.' },
+];
+const skillCan = [
+  { t: 'Trzy pary pod klienta', d: 'Bezpieczna, z charakterem i odważna, każda z uzasadnieniem i numerem strony w albumie.' },
+  { t: 'Ograniczenia klienta', d: 'Tylko Google Fonts, Canva, druk, cenniki z kwotami. Pisze też, z których par zrezygnował i dlaczego.' },
+  { t: 'Szczegóły krojów', d: 'Cyfry w cennikach, brak kursywy, same wersaliki.' },
+  { t: 'Zamiennik płatnego kroju', d: 'Np. dla Circulara znajduje darmowe kroje z albumu i uczciwie opisuje różnice.' },
+  { t: 'Szkielet typograficzny', d: 'Rozmiary na telefon i desktop, gotowy kod (Next.js, Tailwind) i tokeny do pobrania.' },
+  { t: 'Licencje i wdrożenie', d: 'Co wolno z każdym fontem i jak osadzić fonty na stronie bez wysyłania danych do Google.' },
 ];
 const audience = [
-  { who: 'projektujesz produkty cyfrowe', where: 'Biznes / SaaS i Techniczne / Developerskie', n: 40 },
-  { who: 'projektujesz marki i identyfikacje', where: 'Klasyczne, Edytorskie i Lifestyle / Moda / Beauty', n: 60 },
+  { who: 'projektujesz produkty cyfrowe', where: 'Biznes / SaaS i Techniczne / Developerskie', n: 40 },
+  { who: 'projektujesz marki i identyfikacje', where: 'Klasyczne, Edytorskie i Lifestyle / Moda / Beauty', n: 60 },
   { who: 'dopiero uczysz się łączyć fonty', where: 'Codzienne', n: 20 },
-  { who: 'masz doświadczenie i szukasz nowych kombinacji', where: 'Nieoczekiwane i Trendy 2027', n: 50 },
+  { who: 'masz doświadczenie i szukasz nowych kombinacji', where: 'Nieoczekiwane i Trendy 2027', n: 50 },
 ];
 const needs = [
   'Czytnik PDF.',
   'Do pliku Figma: konto Figma.',
-  'Do skilla: konto Claude z włączonym wykonywaniem kodu.',
-  'Fonty spoza Google Fonts instalujesz raz.',
+  'Do skilla: Claude. Działa w aplikacji Claude, w przeglądarce i na komputerze.',
+  'Fonty spoza Google Fonts (26 krojów) instalujesz raz.',
 ];
 const priceRows = [
   { id: '59', name: 'Premierowe', price: '59 zł', when: '30.11, 8:00 – 1.12, 23:59', what: '250 par, poradnik, plik Figma, skill do Claude' },
-  { id: '69', name: 'Startowe', price: '69 zł', when: '2.12 – 7.12, 23:59', what: 'to samo' },
-  { id: '79', name: 'Regularne', price: '79 zł', when: 'od 8.12', what: '250 par, poradnik, plik Figma. Skill do Claude: +29 zł przy zakupie zestawu' },
+  { id: '69', name: 'Startowe', price: '69 zł', when: '2.12 – 7.12, 23:59', what: '250 par, poradnik, plik Figma, skill do Claude' },
+  { id: '79', name: 'Regularne', price: '79 zł', when: 'od 8.12', what: '250 par, poradnik, plik Figma. Skill do Claude: +29 zł przy zakupie zestawu (razem 108 zł)' },
 ];
 const faq = [
-  { q: 'Dlaczego nie wziąć darmowych par z internetu?', a: 'Możesz. TYPO Toolkit to dopracowane, kompletne narzędzie, a nie zbiór linków: 250 par jest już wybranych i pokazanych na polskim tekście w gotowym układzie, z opisem „dlaczego działa” i linkiem do pobrania. Płacisz za oszczędzony czas.' },
-  { q: 'Dlaczego cena rośnie?', a: 'Najniższa cena to nagroda za szybką decyzję w tygodniu premiery. Cena rośnie w trzech oknach, tylko w górę, bez promocji i przekreśleń, a terminy są prawdziwe.' },
-  { q: 'Czy mogę użyć tych par w projektach klientów?', a: 'Tak. Wszystkie fonty są darmowe do użytku komercyjnego, licencja jest podana przy każdym foncie. PDF-a, pliku Figma i skilla nie rozsyłasz ani nie sprzedajesz dalej.' },
-  { q: 'Czy mogę pokazać pary klientowi lub wysłać mu PDF?', a: 'Pokaż pojedyncze slajdy na ekranie w prezentacji i wybierzcie razem. Całego PDF-a nie przesyłaj.' },
-  { q: 'Czy fonty obsługują polskie znaki?', a: 'Każda para jest pokazana na polskim tekście z ą, ę, ł i ż, więc od razu widzisz, jak wyglądają.' },
-  { q: 'Czego potrzebuję?', a: 'Czytnika PDF. Do pliku Figma konta Figma. Do skilla konta Claude z włączonym wykonywaniem kodu. Fonty spoza Google Fonts instalujesz raz.' },
-  { q: 'Czym jest skill i czy muszę go mieć?', a: 'To plik, który wgrywasz do Claude (Customize → Skills). Opisujesz projekt, a skill podpowiada parę z poradnika i uzasadnia wybór, a także buduje system typograficzny na wybranym foncie. Wymaga Claude z włączonym wykonywaniem kodu. Nie jest potrzebny do PDF-a i Figmy. W cenie zestawu do 7.12, od 8.12 dodasz go do zestawu za 29 zł przy zakupie.' },
-  { q: 'Dlaczego skill nie jest sprzedawany osobno?', a: 'Skill korzysta z par i opisów z zestawu, dlatego dostępny jest tylko razem z nim. Dodajesz go w chwili zakupu zestawu. Później dokupić go nie można.' },
-  { q: 'Czy mogę pracować w Figmie z agentem AI?', a: 'Tak, przez Figma MCP, ale limity odczytu zależą od planu Figma i od tego, gdzie leży plik. Na darmowym planie to tylko kilka lub kilkanaście odczytów miesięcznie.' },
-  { q: 'Kiedy i jak dostanę pliki?', a: 'Po zaksięgowaniu płatności dostajesz e-mail z linkiem do pobrania (PDF ok. 66 MB) i dostępem do pliku Figma.' },
-  { q: 'Czy mogę zwrócić zakup?', a: 'Treść cyfrowa jest dostarczana od razu. Po wyrażeniu zgody na natychmiastowe dostarczenie nie przysługuje prawo odstąpienia. Jeśli plik nie działa lub jest niezgodny z opisem, napisz, reklamację rozpatrzę w 14 dni.' },
+  { q: 'Dlaczego nie wziąć darmowych par z internetu?', a: 'Możesz. Tutaj 250 par jest już wybranych i pokazanych na polskim tekście w gotowym układzie, z opisem „dlaczego działa” i linkiem do pobrania. Płacisz za godziny, które oszczędzasz na szukaniu i porównywaniu.' },
+  { q: 'Dlaczego cena rośnie?', a: 'Najniższa cena jest dla osób, które kupią w tygodniu premiery. Cena rośnie w trzech oknach, tylko w górę, a terminy z tabeli są stałe.' },
+  { q: 'Czy mogę użyć tych par w projektach klientów?', a: 'Tak. Wszystkie fonty są darmowe do użytku komercyjnego, licencja jest podana przy każdym foncie. PDF-a, pliku Figma i skilla nie rozsyłasz ani nie sprzedajesz dalej.' },
+  { q: 'Czy mogę pokazać pary klientowi lub wysłać mu PDF?', a: 'Pokaż pojedyncze slajdy na ekranie w prezentacji i wybierzcie razem. Całego PDF-a nie przesyłaj.' },
+  { q: 'Czy fonty obsługują polskie znaki?', a: 'Każda para jest pokazana na polskim tekście z ą, ę, ł i ż, więc od razu widzisz, jak wyglądają.' },
+  { q: 'Czego potrzebuję?', a: 'Czytnika PDF. Do pliku Figma konta Figma. Skill działa w aplikacji Claude, w przeglądarce i na komputerze. Fonty spoza Google Fonts (26 krojów) instalujesz raz.' },
+  { q: 'Czym jest skill i czy muszę go mieć?', a: 'To plik ZIP, który wgrywasz do Claude: w menu bocznym Plugins → Add → Upload plugin i wybierasz typo-toolkit-skill.zip. Skill potrzebuje przełącznika „Create and edit files” (Settings → Capabilities), który zwykle jest już włączony. Opisujesz projekt, a skill proponuje trzy pary z albumu z numerami stron i uzasadnieniem, a na wybranej parze buduje szkielet typograficzny z kodem i tokenami. Do PDF-a i Figmy nie jest potrzebny. W cenie zestawu do 7.12, od 8.12 dodasz go przy zakupie za 29 zł (razem 108 zł).' },
+  { q: 'Dlaczego skill nie jest sprzedawany osobno?', a: 'Skill korzysta z par i opisów z zestawu, dlatego dostępny jest tylko razem z nim. Od 8.12 dodajesz go w chwili zakupu zestawu, razem 108 zł. Później dokupić go nie można.' },
+  { q: 'Czy mogę pracować w Figmie z agentem AI?', a: 'Tak, przez Figma MCP, ale limity odczytu zależą od planu Figma i od tego, gdzie leży plik. Na darmowym planie to tylko kilka lub kilkanaście odczytów miesięcznie.' },
+  { q: 'Kiedy i jak dostanę pliki?', a: 'Po zaksięgowaniu płatności dostajesz e-mail z linkiem do pobrania (PDF ok. 66 MB) i dostępem do pliku Figma.' },
+  { q: 'Czy mogę zwrócić zakup?', a: 'Treść cyfrowa jest dostarczana od razu. Po wyrażeniu zgody na natychmiastowe dostarczenie nie przysługuje prawo odstąpienia. Jeśli plik nie działa lub jest niezgodny z opisem, napisz, reklamację rozpatrzę w 14 dni.' },
 ];
 const nav = [
-  { href: '#srodek', label: 'Co w środku' },
+  { href: '#srodek', label: 'Co w środku' },
   { href: '#cena', label: 'Cena' },
   { href: '#faq', label: 'FAQ' },
 ];
 const arrow = '<svg viewBox="0 0 12 12" fill="none"><path d="M2 10 10 2M3.5 2H10v6.5" stroke="currentColor" stroke-width="1.5" /></svg>';
-const priceLabel = (p: typeof phase) => (p.price ? `${p.price} zł` : 'Wkrótce');
 ---
-<Base locale="pl" image={og.src} title="TYPO Toolkit 2027: 250 par fontów i plik Figma | Nuuvie" description="Dopracowane, kompletne narzędzie do pracy z typografią: 250 par fontów na polskim tekście, poradnik, plik Figma i skill do Claude. Premiera 30.11.">
+<Base locale="pl" image={og.src} title="Typo Toolkit 2027: 250 par fontów i plik Figma | Nuuvie" description="250 par fontów dla projektantów, każda na polskim tekście w gotowym układzie. Do tego poradnik, plik Figma i skill do Claude.">
   <link slot="head" rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link slot="head" rel="preconnect" href="https://api.fontshare.com" crossorigin />
   {fontsUrls.map((href) => <link slot="head" rel="stylesheet" href={href} />)}
@@ -156,7 +165,7 @@ const priceLabel = (p: typeof phase) => (p.price ? `${p.price} zł` : 'Wkrótce'
       <a class="x-brand" href="/" aria-label="Nuuvie Studio"><Mark id="mark-tt-nav" /><span>Nuuvie</span></a>
       <nav aria-label="Menu">{nav.map((l) => <a href={l.href}>{l.label}</a>)}</nav>
       <div class="x-nav__right">
-        <a class="x-btn x-btn--sm" href={buyHref} data-tt-buy><span class="x-btn__label"><span>Kup TYPO Toolkit</span><span aria-hidden="true">Kup TYPO Toolkit</span></span><span class="x-btn__icon" aria-hidden="true" set:html={arrow + arrow} /></a>
+        <a class="x-btn x-btn--sm" href={buyHref} data-tt-buy><span class="x-btn__label"><span>Kup Typo Toolkit</span><span aria-hidden="true">Kup Typo Toolkit</span></span><span class="x-btn__icon" aria-hidden="true" set:html={arrow + arrow} /></a>
       </div>
     </div>
   </header>
@@ -165,22 +174,9 @@ const priceLabel = (p: typeof phase) => (p.price ? `${p.price} zł` : 'Wkrótce'
     <!-- ───── Hero ───── -->
     <section class="x-hero" data-tt-hero>
       <div class="x-wrap x-hero__text">
-        <p class="tt-kicker" data-x-in>TYPO Toolkit 2027</p>
-        <h1 data-x-title>Fonty bez <em>zgadywania</em></h1>
-        <p data-x-in>Dopracowane, kompletne narzędzie do pracy z typografią: 250 par fontów w prawdziwych układach, poradnik, plik Figma i skill do Claude.</p>
-        <div class="tt-offer" data-x-in>
-          <div class="tt-price">
-            <b data-tt-price>{priceLabel(phase)}</b>
-            <span data-tt-note>{phase.note}</span>
-            <span class="tt-count" data-tt-count hidden></span>
-          </div>
-          <p class="tt-badge" data-tt-badge hidden={!phase.badge}>{phase.badge}</p>
-          <div class="x-actions">
-            <a class="x-btn" href={buyHref} data-tt-buy data-tt-buy-main><span class="x-btn__label"><span data-tt-buy-label>Kup TYPO Toolkit 2027 · {priceLabel(phase)}</span><span aria-hidden="true" data-tt-buy-label>Kup TYPO Toolkit 2027 · {priceLabel(phase)}</span></span><span class="x-btn__icon" aria-hidden="true" set:html={arrow + arrow} /></a>
-            <a class="tt-link" href="#probka">Zobacz darmową próbkę ↓</a>
-          </div>
-          <p class="tt-trust">Ceny brutto · dostęp w e-mailu po płatności · PDF (ok. 66 MB) + plik Figma</p>
-        </div>
+        <h1 data-x-title><span class="tt-h1-name">Typo Toolkit 2027:</span> fonty bez <em>zgadywania</em></h1>
+        <p data-x-in>250 par fontów dla projektantów, każda na polskim tekście w gotowym układzie. Otwierasz rozdział pod projekt i wybierasz z 20 par. Do tego poradnik, plik Figma i skill do Claude.</p>
+        <div data-x-in><Offer phase={phase} buyHref={buyHref} /></div>
       </div>
 
       <div class="x-wrap x-stage" data-x-stage>
@@ -188,7 +184,6 @@ const priceLabel = (p: typeof phase) => (p.price ? `${p.price} zł` : 'Wkrótce'
           <div class="x-win__bar">
             <span class="x-dots"><i></i><i></i><i></i></span>
             <span class="x-win__title">Strona <b data-f-idx>{pairs[0].n}</b> / 285 · <span data-f-chap>{pairs[0].chapter}</span></span>
-            <span class="x-win__share"><em>Polskie znaki</em></span>
           </div>
           <div class="f-spec__body">
             <div class="f-spec__sample" data-f-sample>
@@ -215,37 +210,37 @@ const priceLabel = (p: typeof phase) => (p.price ? `${p.price} zł` : 'Wkrótce'
     <!-- ───── Problem ───── -->
     <section class="x-wrap x-sec">
       <header class="x-head">
-        <h2 data-split="lines">Przeglądasz, porównujesz, łączysz… i mija godzina.</h2>
+        <h2 data-split="lines">Przeglądasz, porównujesz, łączysz… i mija godzina.</h2>
       </header>
       <ol class="tt-pains">{pains.map((p, i) => <li class="x-card" data-fade><i>{i + 1}</i><p>{p}</p></li>)}</ol>
       <div class="tt-story" data-fade>
-        <p>Znam to z własnych projektów. Dlatego zacząłem „Pary fontów”. Zapytałem projektantów w ankiecie na Instagramie, z czym mają największy problem. Prawie połowa odpowiedziała: wszystko po trochu. Więc dokończyłem projekt i tak powstał TYPO Toolkit 2027.</p>
-        <p><b>TYPO Toolkit 2027 to dopracowane, kompletne narzędzie do pracy z typografią.</b> Dostajesz gotowe pary, poradnik i plik, z którego od razu pracujesz.</p>
+        <p>Znam to z własnych projektów. Dlatego zacząłem „Pary fontów”. Zapytałem projektantów w ankiecie na Instagramie, z czym mają największy problem. Prawie połowa odpowiedziała: wszystko po trochu. Więc dokończyłem projekt i tak powstał Typo Toolkit 2027.</p>
+        <p><b>Typo Toolkit 2027 to dopracowane, kompletne narzędzie do pracy z typografią.</b> Dostajesz gotowe pary, poradnik i plik, z którego od razu pracujesz.</p>
       </div>
     </section>
 
     <!-- ───── What is inside ───── -->
     <section class="x-wrap x-sec" id="srodek">
       <header class="x-head">
-        <h2 data-split="lines">Co jest w środku</h2>
-        <p data-fade>Cztery części, które razem skracają drogę od pustego pliku do dobranej typografii.</p>
+        <h2 data-split="lines">Co jest w środku</h2>
+        <p data-fade>Album PDF (285 stron) z 250 parami i poradnikiem, plik Figma z tymi samymi parami i skill do Claude, który zna cały album.</p>
       </header>
       <div class="x-bento f-bento">
         <article class="x-card x-feat" data-fade>
           <div class="x-feat__gfx" data-scene="tiles" aria-hidden="true">
             <div class="f-tiles">{tiles.map((f, i) => <span class:list={[i === 5 && 'is-ink', i === 6 && 'is-accent']} style={`font-family:'${f}'`} data-f-tile data-f-pair={i === 5 || i === 6 ? '' : undefined}>Aa</span>)}</div>
           </div>
-          <div class="x-feat__text"><h3>250 par w 12 rozdziałach</h3><p>Od codziennych, przez Biznes i SaaS, po Lifestyle i trendy na 2027. Każda para na osobnym slajdzie, w prawdziwym zastosowaniu, na polskim tekście: nazwy i grubości, krótkie „dlaczego działa”, licencja i link do pobrania.</p></div>
+          <div class="x-feat__text"><h3>250 par w 12 rozdziałach</h3><p>Od codziennych, przez Biznes i SaaS, po Lifestyle i trendy na 2027. Każda para na osobnym slajdzie, w prawdziwym zastosowaniu, na polskim tekście: nazwy i grubości, krótkie „dlaczego działa”, licencja i link do pobrania.</p></div>
         </article>
         <article class="x-card x-feat" data-fade>
           <div class="x-feat__gfx" data-scene="chapters" aria-hidden="true">
             <ol class="f-toc-mini">
-              {['Jak łączyć dwa kroje', 'Na co uważać', 'Hierarchia treści', 'Typografia do projektu', 'Licencje w praktyce'].map((c, i) => (
-                <li data-row class:list={[i === 2 && 'is-pick']}><i>{String(i + 1).padStart(2, '0')}</i><span>{c}</span><b></b></li>
+              {['Jak łączyć dwa kroje', 'Na co uważać', 'Hierarchia treści', 'Typografia do projektu', 'Licencje w praktyce'].map((c, i) => (
+                <li data-row class:list={[i === 2 && 'is-pick']}><i>{String(i + 1).padStart(2, '0')}</i><span>{c}</span><b></b></li>
               ))}
             </ol>
           </div>
-          <div class="x-feat__text"><h3>Poradnik</h3><p>Moje praktyki pracy z typografią: jak łączyć dwa kroje i na co uważać, jak budować hierarchię treści, jak dobrać typografię do projektu. Skrót, nie kurs od zera.</p></div>
+          <div class="x-feat__text"><h3>Poradnik</h3><p>Moje praktyki pracy z typografią: jak łączyć dwa kroje i na co uważać, jak budować hierarchię treści, jak dobrać typografię do projektu. Jest na końcu albumu, obok par, na których pokazuję przykłady.</p></div>
         </article>
         <article class="x-card x-feat" data-fade>
           <div class="x-feat__gfx" data-scene="album" aria-hidden="true">
@@ -259,33 +254,55 @@ const priceLabel = (p: typeof phase) => (p.price ? `${p.price} zł` : 'Wkrótce'
               ))}
             </div>
           </div>
-          <div class="x-feat__text"><h3>Plik Figma</h3><p>Pary gotowe do skopiowania do projektu. Pracujesz w nim ręcznie albo z agentem AI przez Figma MCP (limity odczytu zależą od planu Figma). Fonty z Google Fonts działają od razu, pozostałe instalujesz raz.</p></div>
+          <div class="x-feat__text"><h3>Plik Figma</h3><p>Wszystkie 250 par gotowych do skopiowania do projektu. Fonty z Google Fonts (82% użyć) działają w Figmie od razu, pozostałe 26 krojów instalujesz raz.</p></div>
         </article>
         <article class="x-card x-feat" data-fade>
           <div class="x-feat__gfx" data-scene="licence" aria-hidden="true">
             <ul class="f-checks tt-chat">
-              <li><span>„Strona kancelarii, spokojna, poważna”</span></li>
-              <li><span>Marcellus × Poppins</span><i data-check>✓</i></li>
-              <li><span>Dlaczego działa: klasyczny szeryf + czytelny grotesk</span></li>
-              <li><span>System: H1 48 / H2 32 / tekst 17</span><i data-check>✓</i></li>
+              <li><span>„Kawiarnia, ciepło i trochę retro, menu drukowane”</span></li>
+              <li><span>Zilla Slab × Inter · s. 173</span><i data-check>✓</i></li>
+              <li><span>Young Serif × Instrument Sans · s. 22</span><i data-check>✓</i></li>
+              <li><span>Rubik Mono One × Fraunces · s. 44</span><i data-check>✓</i></li>
             </ul>
           </div>
-          <div class="x-feat__text"><h3>Skill do Claude</h3><p>Opisujesz projekt, np. stronę kancelarii, a skill podpowiada parę i uzasadnia wybór. Potrafi też zbudować system typograficzny na wybranym foncie. W cenie zestawu do 7.12, od 8.12 możesz dodać go do zestawu za 29 zł przy zakupie. Nie sprzedaję go osobno. Wymaga Claude z włączonym wykonywaniem kodu.</p></div>
+          <div class="x-feat__text"><h3>Skill do Claude</h3><p>Opisujesz klienta jednym zdaniem i dostajesz trzy pary z albumu z numerami stron. Działa w aplikacji Claude, w przeglądarce i na komputerze. <a href="#skill">Co jeszcze potrafi ↓</a></p></div>
         </article>
       </div>
+    </section>
+
+    <!-- ───── Skill ───── -->
+    <section class="x-wrap x-sec tt-skill" id="skill">
+      <header class="x-head">
+        <h2 data-split="lines">Skill do Claude zna cały album</h2>
+        <p data-fade>Opisujesz klienta jednym zdaniem, a skill odpowiada parami z albumu, z numerem strony przy każdej.</p>
+      </header>
+      <div class="tt-skill__grid">
+        <div class="x-card tt-convo" data-fade aria-label="Przykład rozmowy ze skillem">
+          <p class="tt-convo__me">Kawiarnia na Kazimierzu, ciepło i trochę retro, menu drukowane i profil w social mediach. Dobierz fonty.</p>
+          <div class="tt-convo__ai">
+            <ol>
+              {convo.map((c) => <li><small>{c.tier}</small><b>{c.pair}</b><span>s. {c.page}</span><p>{c.why}</p></li>)}
+            </ol>
+          </div>
+          <p class="tt-convo__note">Fragment odpowiedzi skilla z testu 27.11. Numery to strony w albumie.</p>
+        </div>
+        <ul class="tt-skill__list" data-fade>
+          {skillCan.map((s) => <li><b>{s.t}</b><span>{s.d}</span></li>)}
+        </ul>
+      </div>
+      <p class="tt-skill__price" data-fade>W cenie zestawu do 7.12. Od 8.12 dodajesz go przy zakupie za 29 zł (razem 108 zł). Działa w aplikacji Claude, w przeglądarce i na komputerze.</p>
     </section>
 
     <!-- ───── What you get ───── -->
     <section class="x-wrap x-sec">
       <header class="x-head">
-        <h2 data-split="lines">Co z tego masz</h2>
+        <h2 data-split="lines">Co z tego masz</h2>
       </header>
       <div class="tt-benefits">
         {benefits.map((b) => <article class="x-card" data-fade><h3>{b.t}</h3><p>{b.d}</p></article>)}
       </div>
       <div class="tt-after" data-fade>
-        <p>Efekt: mniej szukania, więcej robienia.</p>
-        <a class="x-btn" href={buyHref} data-tt-buy><span class="x-btn__label"><span data-tt-buy-label>Kup TYPO Toolkit 2027 · {priceLabel(phase)}</span><span aria-hidden="true" data-tt-buy-label>Kup TYPO Toolkit 2027 · {priceLabel(phase)}</span></span><span class="x-btn__icon" aria-hidden="true" set:html={arrow + arrow} /></a>
+        <a class="x-btn" href={buyHref} data-tt-buy><span class="x-btn__label"><span>Kup teraz</span><span aria-hidden="true">Kup teraz</span></span><span class="x-btn__icon" aria-hidden="true" set:html={arrow + arrow} /></a>
       </div>
     </section>
 
@@ -293,10 +310,10 @@ const priceLabel = (p: typeof phase) => (p.price ? `${p.price} zł` : 'Wkrótce'
     <section class="x-wrap x-sec" id="pary">
       <header class="x-head">
         <h2 data-split="lines">Zobacz, jak wygląda środek.</h2>
-        <p data-fade>Prawdziwe slajdy z zestawu. Każda para ma swój slajd: przykład w konkretnym zastosowaniu, nazwy i grubości krojów, krótkie „dlaczego działa” i link do pobrania.</p>
+        <p data-fade>Prawdziwe slajdy z zestawu. Każda para ma swój slajd: przykład w konkretnym zastosowaniu, nazwy i grubości krojów, krótkie „dlaczego działa” i link do pobrania.</p>
       </header>
       <div class="tt-album" data-fade>
-        <ul class="tt-album__track" tabindex="0" aria-label="Slajdy z TYPO Toolkit 2027 (przewiń w bok)">
+        <ul class="tt-album__track" tabindex="0" aria-label="Slajdy z Typo Toolkit 2027 (przewiń w bok)">
           {slides.map((s, i) => (
             <li>
               <figure>
@@ -307,7 +324,7 @@ const priceLabel = (p: typeof phase) => (p.price ? `${p.price} zł` : 'Wkrótce'
           ))}
         </ul>
       </div>
-      <p class="tt-album__try" data-fade>Sprawdź sam: wybierz parę i przełącz sposób łączenia.</p>
+      <p class="tt-album__try" data-fade>Sprawdź sam: wybierz parę i przełącz sposób łączenia.</p>
       <div class="x-card f-demo" data-fade data-f-demo>
         <div class="f-demo__bar">
           <div class="f-chips" role="group" aria-label="Pary z zestawu">
@@ -316,17 +333,17 @@ const priceLabel = (p: typeof phase) => (p.price ? `${p.price} zł` : 'Wkrótce'
             ))}
           </div>
           <div class="f-seg" role="group" aria-label="Sposób łączenia">
-            <button type="button" aria-pressed="true" data-f-mode="mix">Mix w nagłówku</button>
+            <button type="button" aria-pressed="true" data-f-mode="mix">Mix w nagłówku</button>
             <button type="button" aria-pressed="false" data-f-mode="para">Nagłówek + akapit</button>
           </div>
         </div>
         <div class="f-slide" data-f-slide data-mode="mix">
-          <div class="f-slide__top"><span class="f-pill" data-f-chap>{pairs[0].chapter}</span><span>Strona <span data-f-idx>{pairs[0].n}</span> w PDF</span></div>
+          <div class="f-slide__top"><span class="f-pill" data-f-chap>{pairs[0].chapter}</span><span>Strona <span data-f-idx>{pairs[0].n}</span> w PDF</span></div>
           <div class="f-slide__body">
-            <p class="f-slide__mix"><span class="is-h">Projekty, które</span> <span class="is-b">zostają w głowie</span></p>
+            <p class="f-slide__mix"><span class="is-h">Projekty, które</span> <span class="is-b">zostają w głowie</span></p>
             <div class="f-slide__para">
               <p class="is-h">Dobra para robi połowę roboty.</p>
-              <p class="is-b">Nagłówek przyciąga uwagę, tekst prowadzi czytelnika dalej. Kiedy dwa kroje do siebie pasują, cała strona od razu wygląda na przemyślaną, a polskie znaki nie psują rytmu.</p>
+              <p class="is-b">Nagłówek przyciąga uwagę, tekst prowadzi czytelnika dalej. Kiedy dwa kroje do siebie pasują, cała strona od razu wygląda na przemyślaną, a polskie znaki nie psują rytmu.</p>
             </div>
           </div>
           <dl class="f-slide__meta">
@@ -340,9 +357,9 @@ const priceLabel = (p: typeof phase) => (p.price ? `${p.price} zł` : 'Wkrótce'
 
       <div class="tt-toc">
         <ol class="f-toc" data-fade>
-          <li class="tt-toc__head" aria-hidden="true"><i></i><span><b>Rozdział</b></span><em>Strona w PDF</em></li>
+          <li class="tt-toc__head" aria-hidden="true"><i></i><span><b>Rozdział</b></span><em>Strona w PDF</em></li>
           {chapters.map((c, i) => (
-            <li><i>{String(i + 1).padStart(2, '0')}</i><span><b>{c.name}</b><small>{c.count} par</small></span><em>{c.page}</em></li>
+            <li><i>{String(i + 1).padStart(2, '0')}</i><span><b>{c.name}</b><small>{c.count} par</small></span><em>{c.page}</em></li>
           ))}
         </ol>
       </div>
@@ -350,11 +367,11 @@ const priceLabel = (p: typeof phase) => (p.price ? `${p.price} zł` : 'Wkrótce'
       <div class="x-card tt-sample" id="probka" data-fade>
         <div>
           <h3>Darmowa próbka</h3>
-          <p>Kilka stron z zestawu w PDF-ie. Bez podawania e-maila.</p>
+          <p>5 par z zestawu w PDF-ie (9 stron, 1,9 MB). Pobierasz od razu, e-mail nie jest potrzebny.</p>
         </div>
         {SAMPLE
           ? <a class="x-btn x-btn--ghost" href={SAMPLE} download><span class="x-btn__label"><span>Pobierz darmową próbkę</span><span aria-hidden="true">Pobierz darmową próbkę</span></span></a>
-          : <span class="tt-soon">Próbka pojawi się w dniu premiery</span>}
+          : <span class="tt-soon">Próbka pojawi się w dniu premiery</span>}
       </div>
     </section>
 
@@ -367,11 +384,11 @@ const priceLabel = (p: typeof phase) => (p.price ? `${p.price} zł` : 'Wkrótce'
         <article class="x-card tt-who__main" data-fade>
           <h3>Dla Ciebie, jeśli:</h3>
           <ul>{audience.map((a) => <li><span>{a.who}</span><small>→ {a.where} ({a.n} par)</small></li>)}</ul>
-          <p class="tt-who__client">Klientowi pokażesz trzy propozycje i wybierzecie razem.</p>
+          <p class="tt-who__client">Klientowi pokażesz trzy propozycje i wybierzecie razem.</p>
         </article>
         <article class="x-card" data-fade>
           <h3>Czego tu nie ma</h3>
-          <p>To nie kurs typografii od zera. Nie dostajesz plików fontów (przy każdej parze jest link do pobrania u autora) ani nauki projektowania własnych krojów.</p>
+          <p>To nie kurs typografii od zera. Nie dostajesz plików fontów (przy każdej parze jest link do pobrania u autora) ani nauki projektowania własnych krojów.</p>
         </article>
         <article class="x-card" data-fade>
           <h3>Czego potrzebujesz</h3>
@@ -383,8 +400,8 @@ const priceLabel = (p: typeof phase) => (p.price ? `${p.price} zł` : 'Wkrótce'
     <!-- ───── Getting started ───── -->
     <section class="x-wrap x-sec">
       <header class="x-head">
-        <h2 data-split="lines">Start w trzech krokach</h2>
-        <p data-fade>Fonty z Google Fonts są wbudowane w Figmę. Pozostałe instalujesz raz.</p>
+        <h2 data-split="lines">Start w trzech krokach</h2>
+        <p data-fade>Fonty z Google Fonts są wbudowane w Figmę. Pozostałe instalujesz raz.</p>
       </header>
       <ol class="f-steps">
         {steps.map((s, i) => (
@@ -399,8 +416,8 @@ const priceLabel = (p: typeof phase) => (p.price ? `${p.price} zł` : 'Wkrótce'
         <img src="/img/about/daniel.jpg" alt="Daniel Troć" width="320" height="320" loading="lazy" decoding="async" />
         <div>
           <h2>Kto to zrobił</h2>
-          <p>Daniel Troć, projektant i założyciel studia Nuuvie z Lublina. Od ponad 15 lat projektuje produkty cyfrowe i marki.</p>
-          <p>Ten zestaw powstał z projektu „Pary fontów”, który leżał na dysku. Problem znałem z własnej pracy, a ankieta pokazała, że nie jestem w nim sam.</p>
+          <p>Daniel Troć, projektant i założyciel studia Nuuvie z Lublina. Od ponad 15 lat projektuje produkty cyfrowe i marki.</p>
+          <p>Ten zestaw powstał z projektu „Pary fontów”, który leżał na dysku. Problem znałem z własnej pracy, a ankieta pokazała, że nie jestem w nim sam.</p>
         </div>
       </div>
     </section>
@@ -408,10 +425,10 @@ const priceLabel = (p: typeof phase) => (p.price ? `${p.price} zł` : 'Wkrótce'
     <!-- ───── Prices ───── -->
     <section class="x-wrap x-sec" id="cena">
       <header class="x-head">
-        <h2 data-split="lines">Cena rośnie w trzech oknach.</h2>
+        <h2 data-split="lines">Cena rośnie w trzech oknach.</h2>
       </header>
       <div class="tt-prices" data-fade role="table" aria-label="Ceny i terminy">
-        <div class="tt-prices__row tt-prices__head" role="row"><span role="columnheader">Okno</span><span role="columnheader">Cena</span><span role="columnheader">Termin</span><span role="columnheader">W cenie</span></div>
+        <div class="tt-prices__row tt-prices__head" role="row"><span role="columnheader">Okno</span><span role="columnheader">Cena</span><span role="columnheader">Termin</span><span role="columnheader">W cenie</span></div>
         {priceRows.map((r) => (
           <div class:list={['tt-prices__row', r.id === phase.id && 'is-now']} role="row" data-tt-row={r.id}>
             <span role="cell"><b>{r.name}</b><em class="tt-now">Teraz</em></span>
@@ -421,10 +438,11 @@ const priceLabel = (p: typeof phase) => (p.price ? `${p.price} zł` : 'Wkrótce'
           </div>
         ))}
       </div>
+      <div class="tt-prices__buy" data-fade><a class="x-btn" href={buyHref} data-tt-buy><span class="x-btn__label"><span>Kup teraz</span><span aria-hidden="true">Kup teraz</span></span><span class="x-btn__icon" aria-hidden="true" set:html={arrow + arrow} /></a></div>
       <ul class="tt-price-notes" data-fade>
-        <li>Ceny brutto. Cena tylko rośnie, bez przekreśleń i promocji. Zmienia się punktualnie o północy w podanym terminie.</li>
-        <li>Skill do Claude nie jest sprzedawany osobno.</li>
-        <li>Jeśli plik nie otworzy się lub nie będzie działał, napisz na <a href={`mailto:${t.contact.email}`}>{t.contact.email}</a>. Pomogę go uruchomić albo rozpatrzę reklamację zgodnie z regulaminem.</li>
+        <li>Ceny brutto. Cena zmienia się punktualnie o północy w podanym terminie i tylko w górę.</li>
+        <li>Skill do Claude jest dostępny tylko razem z zestawem: w cenie do 7.12, od 8.12 za 29 zł przy zakupie (razem 108 zł).</li>
+        <li>Jeśli plik nie otworzy się lub nie będzie działał, napisz na <a href={`mailto:${t.contact.email}`}>{t.contact.email}</a>. Pomogę go uruchomić albo rozpatrzę reklamację zgodnie z regulaminem.</li>
       </ul>
     </section>
 
@@ -447,26 +465,15 @@ const priceLabel = (p: typeof phase) => (p.price ? `${p.price} zł` : 'Wkrótce'
     <section class="x-wrap x-sec" id="licencje">
       <header class="x-head">
         <h2 data-split="lines">Licencje</h2>
-        <p data-fade>Wszystkie fonty w zestawie są darmowe u autorów i pozwalają na użytek komercyjny. Licencja i link do pobrania są podane przy każdym foncie.</p>
+        <p data-fade>Wszystkie fonty w zestawie są darmowe u autorów i pozwalają na użytek komercyjny. Licencja i link do pobrania są podane przy każdym foncie.</p>
       </header>
     </section>
 
     <!-- ───── Final CTA ───── -->
     <section class="x-wrap x-final" id="kup" data-tt-final>
       <div class="x-final__in f-buy">
-        <h2 data-split="lines">Gotowy, żeby przestać zgadywać?</h2>
-        <div class="tt-offer tt-offer--dark" data-fade>
-          <div class="tt-price">
-            <b data-tt-price>{priceLabel(phase)}</b>
-            <span data-tt-note>{phase.note}</span>
-            <span class="tt-count" data-tt-count hidden></span>
-          </div>
-          <p class="tt-badge" data-tt-badge hidden={!phase.badge}>{phase.badge}</p>
-          <div class="x-actions">
-            <a class="x-btn" href={buyHref} data-tt-buy><span class="x-btn__label"><span data-tt-buy-label>Kup TYPO Toolkit 2027 · {priceLabel(phase)}</span><span aria-hidden="true" data-tt-buy-label>Kup TYPO Toolkit 2027 · {priceLabel(phase)}</span></span><span class="x-btn__icon" aria-hidden="true" set:html={arrow + arrow} /></a>
-          </div>
-          <p class="tt-trust">Ceny brutto · dostęp w e-mailu po płatności · PDF (ok. 66 MB) + plik Figma</p>
-        </div>
+        <h2 data-split="lines">250 par, poradnik, plik Figma i skill do Claude</h2>
+        <div data-fade><Offer phase={phase} buyHref={buyHref} dark /></div>
       </div>
     </section>
   </main>
@@ -485,11 +492,11 @@ const priceLabel = (p: typeof phase) => (p.price ? `${p.price} zł` : 'Wkrótce'
         <a class="x-brand" href="/" aria-label="Nuuvie Studio"><Mark id="mark-tt-foot" /><span>Nuuvie</span></a>
         <p>Studio projektowe Daniela Trocia.</p>
       </div>
-      <div><p>TYPO Toolkit 2027</p><ul>{nav.map((l) => <li><a href={l.href}>{l.label}</a></li>)}</ul></div>
+      <div><p>Typo Toolkit 2027</p><ul>{nav.map((l) => <li><a href={l.href}>{l.label}</a></li>)}</ul></div>
       <div><p>Social media</p><ul>{socials.map((s) => <li><a href={s.href} target="_blank" rel="noopener">{s.label}</a></li>)}</ul></div>
       <div><p>Informacje</p><ul>
         {t.footer.legal.map((l) => <li><a href={l.href}>{l.label}</a></li>)}
-        <li><a href="/legal/warunki-typo-toolkit-2027">Warunki korzystania z TYPO Toolkit 2027</a></li>
+        <li><a href="/legal/warunki-typo-toolkit-2027">Warunki korzystania z Typo Toolkit 2027</a></li>
         <li><a href={`mailto:${t.contact.email}`}>{t.contact.email}</a></li>
       </ul></div>
     </div>

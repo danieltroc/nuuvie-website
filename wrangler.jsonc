@@ -11,7 +11,7 @@
     "binding": "ASSETS",
     // Only the contact API and the TYPO Toolkit page (hidden on nuuvie.com before launch) reach the Worker;
     // every other request is a free static-file hit
-    "run_worker_first": ["/api/*", "/fonty", "/fonty/", "/sklep/typo-toolkit", "/sklep/typo-toolkit/"],
+    "run_worker_first": ["/api/*", "/fonty", "/fonty/", "/sklep/typo-toolkit", "/sklep/typo-toolkit/*"],
     // /blog serves dist/blog/index.html; /blog/ redirects to /blog (same addresses as Webflow)
     "html_handling": "drop-trailing-slash",
     // Unknown addresses get dist/404.html with status 404

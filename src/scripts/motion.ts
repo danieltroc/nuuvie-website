@@ -9,6 +9,7 @@
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { SplitText } from 'gsap/SplitText';
+import { keepNbsp } from './split-options';
 import Lenis from 'lenis';
 
 gsap.registerPlugin(ScrollTrigger, SplitText);
@@ -44,7 +45,7 @@ function initFades() {
 function initSplits() {
   // Statements: words light up one by one as the reader scrolls through them
   $$('[data-scrub-words]').forEach((el) => {
-    const split = SplitText.create(el, { type: 'words' });
+    const split = SplitText.create(el, { type: 'words', ...keepNbsp });
     gsap.fromTo(split.words, { opacity: 0.14 }, {
       opacity: 1, ease: 'none', stagger: 0.08,
       scrollTrigger: { trigger: el, start: 'top 82%', end: 'bottom 55%', scrub: 0.4 },
@@ -53,6 +54,7 @@ function initSplits() {
 
   $$('[data-split="lines"]').forEach((el) => {
     SplitText.create(el, {
+      ...keepNbsp,
       type: 'lines',
       mask: 'lines',
       linesClass: 'sl',

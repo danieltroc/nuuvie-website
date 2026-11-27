@@ -1,4 +1,4 @@
-/* TYPO Toolkit 2027 (/sklep/typo-toolkit). Builds on next.css; only page-specific pieces live here. */
+/* Typo Toolkit 2027 (/sklep/typo-toolkit). Builds on next.css; only page-specific pieces live here. */
 
 .f { --fh: 'Clash Display'; --fhw: 600; --fb: 'Satoshi'; }
 .f .x-hero h1 { max-width: 15ch; }
@@ -110,25 +110,58 @@
 .f-buy li::before { content: '✓'; margin-right: 0.6rem; color: #c4a8ff; }
 .f-buy .f-buy__price { margin-top: 2rem; font-size: clamp(1.5rem, 1rem + 1.6vw, 2.25rem); letter-spacing: -0.03em; color: #fff; }
 
-/* ═════════════ TYPO Toolkit 2027 ═════════════ */
-.tt .x-hero h1 { max-width: 12ch; }
+/* ═════════════ Typo Toolkit 2027 ═════════════ */
+.tt .x-hero h1 { max-width: 15ch; }
+/* The product name stays on one line, the claim follows on the next */
+.tt-h1-name { display: block; }
+@media (min-width: 400px) { .tt-h1-name { white-space: nowrap; } }
 .tt .x-hero h1 em { font-style: normal; color: var(--accent); }
-.tt-kicker { display: inline-block; margin-bottom: 1.25rem; padding: 0.35rem 0.8rem; border-radius: 999px; background: var(--paper-2); font-size: 0.8125rem; font-weight: 500; }
-/* Price box (hero and final CTA) */
-.tt-offer { display: grid; justify-items: center; gap: 1rem; margin-top: 2rem; }
-.tt-price { display: grid; justify-items: center; gap: 0.3rem; }
-.tt-price b { font-size: clamp(2.25rem, 1.6rem + 2vw, 3.25rem); font-weight: 600; letter-spacing: -0.04em; line-height: 1; font-variant-numeric: tabular-nums; }
-.tt .x-hero__text .tt-price span, .tt-price span { margin: 0; max-width: none; font-size: 0.9375rem; color: var(--muted); }
-.tt .x-hero__text .tt-count, .tt-count { font-variant-numeric: tabular-nums; font-size: 0.875rem; color: var(--ink); }
-.tt-count[hidden], .tt-badge[hidden] { display: none; }
-.tt .x-hero__text .tt-badge, .tt-badge { margin: 0; max-width: none; padding: 0.35rem 0.8rem; border-radius: 999px; background: #f3eeff; color: #5b23d6; font-size: 0.8125rem; font-weight: 500; }
-.tt-offer .x-actions { margin-top: 0.25rem; justify-content: center; align-items: center; gap: 1rem 1.5rem; flex-wrap: wrap; }
-.tt-link { font-size: 0.9375rem; text-decoration: underline; text-underline-offset: 0.2em; }
-.tt .x-hero__text .tt-trust, .tt-trust { margin: 0; max-width: none; font-size: 0.8125rem; color: var(--muted); }
-.tt-offer--dark .tt-price span, .tt-offer--dark .tt-trust { color: rgb(255 255 255 / 0.7); }
-.tt-offer--dark .tt-price b, .tt-offer--dark .tt-count { color: #fff; }
-.tt-offer--dark .tt-badge { background: rgb(255 255 255 / 0.12); color: #fff; }
-.x-btn[aria-disabled='true'] { pointer-events: none; opacity: 0.55; }
+/* Buy block (hero and final CTA): buttons first, then one card with the price */
+.tt-buy { display: grid; justify-items: center; gap: 1.25rem; margin-top: 2.25rem; }
+.tt-buy__actions { margin: 0; gap: 0.6rem; }
+.tt-deal {
+  display: grid; grid-template-columns: auto 1fr auto; align-items: stretch;
+  width: min(100%, 40rem); margin-top: 0.75rem; text-align: left;
+  border-radius: 1.25rem; background: #fff;
+  box-shadow: 0 0 0 1px var(--line), 0 18px 40px -24px rgb(10 10 10 / 0.25);
+}
+.tt-deal > div { padding: 1.25rem 1.5rem; }
+.tt-deal > div + div:not(.tt-deal__foot) { box-shadow: inset 1px 0 0 var(--line); }
+.tt-deal__price { display: flex; align-items: center; }
+.tt-deal__price b { font-size: clamp(2.25rem, 1.8rem + 1.6vw, 3rem); font-weight: 600; letter-spacing: -0.045em; line-height: 1; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.tt-deal__window { display: grid; align-content: center; gap: 0.2rem; }
+.tt-deal__window strong { font-size: 1rem; font-weight: 600; letter-spacing: -0.01em; }
+.tt-deal__window span, .tt-deal__count-label { font-size: 0.875rem; color: var(--muted); }
+.tt-deal__count { display: grid; align-content: center; gap: 0.35rem; }
+.tt-deal__count[hidden], .tt-deal [hidden] { display: none; }
+.tt-deal__clock { display: flex; gap: 0.75rem; }
+.tt-deal__clock > span { display: grid; justify-items: center; min-width: 2ch; }
+.tt-deal__clock b { font-size: 1.25rem; font-weight: 600; line-height: 1.1; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+.tt-deal__clock small { font-size: 0.6875rem; color: var(--muted); }
+.tt-deal__foot {
+  grid-column: 1 / -1; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0.25rem 1rem;
+  padding-block: 0.85rem !important; box-shadow: inset 0 1px 0 var(--line);
+  font-size: 0.875rem; color: var(--muted);
+}
+.tt-deal__badge { display: inline-flex; align-items: center; gap: 0.5rem; color: #5b23d6; font-weight: 500; }
+.tt-deal__badge::before { content: ''; width: 0.45rem; height: 0.45rem; border-radius: 50%; background: currentColor; }
+.tt .x-hero__text .tt-trust, .x-final .tt-buy .tt-trust, .tt-trust { margin: 0; max-width: none; font-size: 0.8125rem; color: var(--muted); }
+
+/* Phones: price and window side by side, the countdown underneath */
+@media (max-width: 639px) {
+  .tt-deal { grid-template-columns: auto 1fr; }
+  .tt-deal > div { padding: 1rem 1.15rem; }
+  .tt-deal__count { grid-column: 1 / -1; grid-template-columns: 1fr auto; align-items: center; box-shadow: inset 0 1px 0 var(--line) !important; }
+  .tt-deal__foot { flex-direction: column; }
+}
+
+/* Dark version in the final CTA */
+.tt-buy--dark .tt-deal { background: rgb(255 255 255 / 0.06); box-shadow: 0 0 0 1px rgb(255 255 255 / 0.14); }
+.tt-buy--dark .tt-deal > div + div:not(.tt-deal__foot) { box-shadow: inset 1px 0 0 rgb(255 255 255 / 0.14); }
+.tt-buy--dark .tt-deal__foot { box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.14); }
+.tt-buy--dark .tt-deal, .tt-buy--dark .tt-deal__badge { color: #fff; }
+.tt-buy--dark .tt-deal__window span, .tt-buy--dark .tt-deal__count-label, .tt-buy--dark .tt-deal__clock small, .tt-buy--dark .tt-deal__foot, .tt-buy--dark .tt-trust { color: rgb(255 255 255 / 0.65); }
+@media (max-width: 639px) { .tt-buy--dark .tt-deal__count { box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.14) !important; } }
 
 /* Numbers */
 .tt-stats { padding-top: clamp(2.5rem, 5vw, 4rem); }
@@ -241,3 +274,31 @@
 .tt-album img { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; border-radius: var(--radius); box-shadow: 0 0 0 1px var(--line); }
 .tt-album figcaption { margin-top: 0.75rem; font-size: 0.875rem; color: var(--muted); }
 .tt-album__try { margin: clamp(2rem, 4vw, 3rem) 0 1rem; font-size: 0.9375rem; color: var(--muted); }
+.x-final .tt-buy--dark .tt-trust { color: rgb(255 255 255 / 0.65); }
+
+/* ───── Skill: a real conversation and what it can do ───── */
+.tt-skill__grid { display: grid; gap: var(--gutter); align-items: start; }
+@media (min-width: 960px) { .tt-skill__grid { grid-template-columns: 1.1fr 1fr; } }
+.tt-convo { display: grid; gap: 1rem; padding: clamp(1.25rem, 3vw, 2rem); }
+.tt-convo__me { justify-self: end; max-width: 30rem; padding: 0.85rem 1.1rem; border-radius: 1.1rem 1.1rem 0.3rem 1.1rem; background: var(--ink); color: #fff; font-size: 0.9375rem; line-height: 1.45; }
+.tt-convo__ai ol { display: grid; gap: 0.6rem; }
+.tt-convo__ai li { display: grid; grid-template-columns: 1fr auto; gap: 0.15rem 1rem; padding: 0.9rem 1.1rem; border-radius: 0.9rem; background: #fff; box-shadow: 0 0 0 1px var(--line); }
+.tt-convo__ai small { grid-column: 1 / -1; font-size: 0.75rem; color: var(--accent); font-weight: 500; }
+.tt-convo__ai b { font-weight: 500; font-size: 1rem; letter-spacing: -0.01em; }
+.tt-convo__ai span { font-size: 0.875rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+.tt-convo__ai p { grid-column: 1 / -1; margin-top: 0.2rem; font-size: 0.875rem; line-height: 1.45; color: var(--muted); }
+.tt-convo__note { font-size: 0.8125rem; color: var(--muted); }
+.tt-skill__list { display: grid; gap: 0; }
+.tt-skill__list li { display: grid; gap: 0.25rem; padding: 1rem 0; box-shadow: inset 0 -1px 0 var(--line); }
+.tt-skill__list li:first-child { padding-top: 0; }
+.tt-skill__list b { font-weight: 500; font-size: 1.0625rem; letter-spacing: -0.015em; }
+.tt-skill__list span { font-size: 0.9375rem; line-height: 1.5; color: var(--muted); }
+.tt-skill__price { margin-top: clamp(1.5rem, 3vw, 2.25rem); max-width: 60ch; font-size: 0.9375rem; color: var(--muted); }
+
+/* Four benefits: two by two */
+@media (min-width: 1000px) { .tt-benefits { grid-template-columns: repeat(2, 1fr); } }
+
+/* No single word left alone on the last line */
+.tt p, .tt li, .tt h2, .tt h3 { text-wrap: pretty; }
+.tt .x-feat__text a { text-decoration: underline; text-underline-offset: 0.2em; }
+.tt-prices__buy { display: flex; justify-content: center; margin-top: clamp(1.5rem, 3vw, 2rem); }
