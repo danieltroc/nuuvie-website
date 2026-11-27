@@ -100,10 +100,13 @@ const stats = [
   { n: 12, suf: '', t: 'rozdziałów', d: 'pod typ projektu, po 20 par' },
   { n: 82, suf: '%', t: 'użyć z Google Fonts', d: 'działają w Figmie od razu' },
 ];
-const pains = [
-  'Przeglądasz fonty w nieskończoność.',
-  'Kończysz na bezpiecznym wyborze: kolejny projekt z Interem.',
-  'Znajdziesz font, a potem szukasz mu pary: kolejne godziny, kolejne próby.',
+// "I co? Znowu Inter?": a font picker that scrolls, picks a heading font, hunts for a pair
+// and ends on Inter. The order matters: the script picks the heading at index 7 and ends on Inter.
+const pickFonts = ['Gambetta', 'Telma', 'Zodiak', 'Boska', 'Fraunces', 'Clash Display', 'Cabinet Grotesk', 'Instrument Serif', 'Bricolage Grotesque', 'Marcellus', 'Sora', 'Switzer', 'General Sans', 'Satoshi', 'Petrona', 'Poppins', 'DM Sans', 'Inter'];
+const loopSteps = [
+  'Przewijasz listę fontów: następny, następny, następny.',
+  'Coś pasuje do nagłówka. Teraz szukasz mu pary i wszystko zaczyna się od nowa.',
+  'Mija godzina. Bierzesz to, co zawsze: Inter.',
 ];
 const benefits = [
   { t: 'Czas', d: 'Otwierasz rozdział pasujący do projektu i wybierasz z 20 par. Szukasz pary pod SaaS? Masz cały rozdział, od strony 135.' },
@@ -210,12 +213,34 @@ const arrow = '<svg viewBox="0 0 12 12" fill="none"><path d="M2 10 10 2M3.5 2H10
       <ul class="tt-nums">{stats.map((s) => <li data-fade><b><span data-tt-count-to={s.n}>{s.n}</span>{s.suf}</b><strong>{s.t}</strong><span>{s.d}</span></li>)}</ul>
     </section>
 
-    <!-- ───── Problem ───── -->
-    <section class="x-wrap x-sec">
+    <!-- ───── Problem: "I co? Znowu Inter?" ───── -->
+    <section class="x-wrap x-sec tt-loop" data-tt-loop>
       <header class="x-head">
-        <h2 data-split="lines">Przeglądasz, porównujesz, łączysz… i mija godzina.</h2>
+        <h2 data-split="lines">I co? Znowu Inter?</h2>
       </header>
-      <ol class="tt-pains">{pains.map((p, i) => <li class="x-card" data-fade><i>{i + 1}</i><p>{p}</p></li>)}</ol>
+      <div class="tt-loop__stage" data-fade>
+        <div class="x-win tt-pick" aria-hidden="true">
+          <div class="x-win__bar">
+            <span class="x-dots"><i></i><i></i><i></i></span>
+            <span class="x-win__title">Wybierz font</span>
+            <span class="tt-pick__clock" data-loop-clock>0:00</span>
+          </div>
+          <div class="tt-pick__body">
+            <div class="tt-pick__listwrap"><ul class="tt-pick__list" data-loop-list>{pickFonts.map((f) => <li style={`font-family:'${f}'`}>{f}</li>)}</ul></div>
+            <div class="tt-pick__preview" data-loop-preview>
+              <div class="tt-pick__slots">
+                <span>Nagłówek <b data-loop-slot="h">…</b></span>
+                <span>Tekst <b data-loop-slot="b">?</b></span>
+              </div>
+              <p class="tt-pick__h" data-loop-h>Nowa marka, nowy start</p>
+              <p class="tt-pick__b" data-loop-b>Akapit, który ktoś musi przeczytać do końca. Zażółć gęślą jaźń.</p>
+              <div class="tt-pick__keys"><kbd data-loop-key>↓</kbd><span data-loop-count>×0</span></div>
+              <em class="tt-pick__stamp" data-loop-stamp>Znowu Inter.</em>
+            </div>
+          </div>
+        </div>
+        <ol class="tt-loop__steps">{loopSteps.map((s, i) => <li data-loop-step={i}><i>{i + 1}</i><p>{s}</p></li>)}</ol>
+      </div>
       <div class="tt-story" data-fade>
         <p>Znam to z własnych projektów. Dlatego zacząłem „Pary fontów”. Zapytałem projektantów w ankiecie na Instagramie, z czym mają największy problem. Prawie połowa odpowiedziała: wszystko po trochu. Więc dokończyłem projekt i tak powstał Typo Toolkit 2027.</p>
         <p><b>Typo Toolkit 2027 to dopracowane, kompletne narzędzie do pracy z typografią.</b> Dostajesz gotowe pary, poradnik i plik, z którego od razu pracujesz.</p>

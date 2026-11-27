@@ -194,6 +194,87 @@ function initDeck() {
   new IntersectionObserver(([e]) => deck.classList.toggle('is-paused', !e.isIntersecting), { threshold: 0.3 }).observe(deck);
 }
 
+/* "I co? Znowu Inter?": the picker scrolls, picks a heading font, hunts for a pair and lands on
+   Inter while the clock runs to an hour. Loops while on screen; reduced motion shows the end. */
+function initLoop() {
+  const root = $('[data-tt-loop]');
+  if (!root) return;
+  const list = $('[data-loop-list]', root)!;
+  const rows = $$('li', list);
+  const h = $('[data-loop-h]', root)!;
+  const b = $('[data-loop-b]', root)!;
+  const slotH = $('[data-loop-slot="h"]', root)!;
+  const slotB = $('[data-loop-slot="b"]', root)!;
+  const key = $('[data-loop-key]', root)!;
+  const count = $('[data-loop-count]', root)!;
+  const clock = $('[data-loop-clock]', root)!;
+  const stamp = $('[data-loop-stamp]', root)!;
+  const steps = $$('[data-loop-step]', root);
+  const fonts = rows.map((r) => r.textContent ?? '');
+  const HEAD = 7;
+  const LAST = fonts.length - 1;
+  let presses = 0;
+
+  const fmt = (s: number) => (s >= 3600 ? '1:00:00' : `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, '0')}`);
+  // Keep the highlighted row in the middle of the visible part of the list (3 rows on phones, ~7 on desktop)
+  const scrollTo = (k: number) => {
+    const rowH = rows[0].offsetHeight;
+    const visible = Math.max(1, Math.floor((list.parentElement?.clientHeight ?? rowH) / rowH));
+    const top = Math.min(Math.max(0, k - Math.floor(visible / 2)), Math.max(0, rows.length - visible));
+    list.style.transform = `translateY(${-top * rowH}px)`;
+  };
+  const step = (n: number) => steps.forEach((el, k) => el.classList.toggle('is-on', k === n));
+  const at = (k: number, target: 'h' | 'b') => {
+    rows.forEach((r, j) => r.classList.toggle('is-on', j === k));
+    scrollTo(k);
+    (target === 'h' ? h : b).style.fontFamily = `'${fonts[k]}'`;
+    presses += 1;
+    count.textContent = `×${presses}`;
+    key.classList.remove('is-down');
+    void key.offsetWidth;
+    key.classList.add('is-down');
+  };
+  const reset = () => {
+    presses = 0;
+    count.textContent = '×0';
+    h.style.fontFamily = b.style.fontFamily = '';
+    slotH.textContent = '…';
+    slotB.textContent = '?';
+    stamp.classList.remove('is-on');
+    root.classList.remove('is-done');
+    rows.forEach((r) => r.classList.remove('is-on', 'is-picked'));
+    list.style.transform = '';
+    clock.textContent = '0:00';
+    step(0);
+  };
+  const end = () => {
+    rows.forEach((r, j) => r.classList.toggle('is-on', j === LAST));
+    scrollTo(LAST);
+    h.style.fontFamily = b.style.fontFamily = "'Inter'";
+    slotH.textContent = slotB.textContent = 'Inter';
+    stamp.classList.add('is-on');
+    root.classList.add('is-done');
+    clock.textContent = fmt(3600);
+    step(2);
+  };
+
+  if (reduced) { end(); steps.forEach((el) => el.classList.add('is-on')); return; }
+
+  const time = { s: 0 };
+  const tl = gsap.timeline({ paused: true, repeat: -1, repeatDelay: 3 });
+  tl.call(reset, [], 0);
+  tl.fromTo(time, { s: 0 }, { s: 3600, duration: 8.2, ease: 'power2.in', onUpdate: () => (clock.textContent = fmt(time.s)) }, 0.2);
+  // 1. Scroll the list
+  for (let k = 0; k <= HEAD; k++) tl.call(at, [k, 'h'], 0.4 + k * 0.34);
+  // 2. Pick a heading font, then hunt for a pair, faster
+  const t2 = 0.4 + HEAD * 0.34 + 0.6;
+  tl.call(() => { rows[HEAD].classList.add('is-picked'); slotH.textContent = fonts[HEAD]; step(1); }, [], t2);
+  for (let k = HEAD + 1; k < LAST; k++) tl.call(at, [k, 'b'], t2 + 0.5 + (k - HEAD - 1) * 0.24);
+  // 3. Give up: Inter
+  tl.call(end, [], 8.4);
+  ScrollTrigger.create({ trigger: root, start: 'top 75%', end: 'bottom top', onToggle: (self) => (self.isActive ? tl.play() : tl.pause()) });
+}
+
 /* Big numbers count up once, when they scroll into view */
 function initCounts() {
   const els = $$('[data-tt-count-to]');
@@ -232,3 +313,4 @@ initPrices();
 initBar();
 initCounts();
 initDeck();
+initLoop();

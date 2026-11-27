@@ -159,11 +159,43 @@
 .tt-nums span:not([data-tt-count-to]) { font-size: 0.875rem; line-height: 1.45; color: var(--muted); }
 
 /* Problem */
-.tt-pains { display: grid; gap: var(--gutter); }
-@media (min-width: 900px) { .tt-pains { grid-template-columns: repeat(3, 1fr); } }
-.tt-pains li { padding: clamp(1.25rem, 2.5vw, 2rem); }
-.tt-pains i { font-style: normal; font-size: 0.8125rem; color: var(--accent); }
-.tt-pains p { margin-top: 1rem; font-size: clamp(1.125rem, 1rem + 0.4vw, 1.375rem); line-height: 1.3; letter-spacing: -0.015em; }
+/* "I co? Znowu Inter?": font picker on the left, the three beats of the story on the right */
+.tt-loop__stage { display: grid; gap: clamp(1.5rem, 3vw, 3rem); align-items: center; }
+@media (min-width: 960px) { .tt-loop__stage { grid-template-columns: 1.35fr 1fr; } }
+.tt-pick { width: 100%; max-width: none; }
+.tt-pick .x-win__bar { position: relative; }
+.tt-pick__clock { margin-left: auto; padding: 0.15rem 0.5rem; border-radius: 0.4rem; background: var(--paper-2); font-size: 0.8125rem; font-variant-numeric: tabular-nums; transition: background-color 300ms, color 300ms; }
+.tt-loop.is-done .tt-pick__clock { background: #ffe1ea; color: #c2185b; }
+.tt-pick__body { display: grid; grid-template-columns: minmax(9rem, 0.8fr) 1.6fr; min-height: clamp(18rem, 32vw, 22rem); }
+.tt-pick__listwrap { position: relative; overflow: hidden; height: clamp(18rem, 32vw, 22rem); border-right: 1px solid var(--line); background: #fff; }
+.tt-pick__listwrap::after { content: ''; position: absolute; inset: auto 0 0; height: 4rem; background: linear-gradient(transparent, #fff); pointer-events: none; }
+.tt-pick__list { transition: transform 260ms var(--ease-out); }
+.tt-pick__list li { display: flex; align-items: center; height: 2.75rem; padding: 0 1rem; font-size: 1.0625rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; transition: background-color 150ms, color 150ms; }
+.tt-pick__list li.is-on { background: var(--ink); color: #fff; }
+.tt-pick__list li.is-picked { box-shadow: inset 3px 0 0 var(--accent); color: var(--accent); }
+.tt-pick__list li.is-picked.is-on { color: #fff; }
+.tt-pick__preview { position: relative; display: grid; align-content: center; gap: 0.75rem; padding: clamp(1.25rem, 3vw, 2.25rem); background: var(--paper-2); }
+.tt-pick__slots { display: flex; flex-wrap: wrap; gap: 0.4rem 1.25rem; font-size: 0.75rem; color: var(--muted); }
+.tt-pick__slots b { margin-left: 0.3rem; font-weight: 500; color: var(--ink); }
+.tt-pick__h { font-size: clamp(1.75rem, 1rem + 2.6vw, 3rem); line-height: 1.05; letter-spacing: -0.02em; }
+.tt-pick__b { max-width: 34ch; font-size: 0.9375rem; line-height: 1.5; color: var(--muted); }
+.tt-pick__keys { display: flex; align-items: center; gap: 0.6rem; margin-top: 0.5rem; font-size: 0.8125rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+.tt-pick__keys kbd { display: grid; place-items: center; width: 2rem; height: 2rem; border-radius: 0.45rem; background: #fff; box-shadow: 0 2px 0 rgb(10 10 10 / 0.18), 0 0 0 1px var(--line); font: inherit; font-size: 0.9375rem; color: var(--ink); }
+.tt-pick__keys kbd.is-down { animation: tt-key 180ms var(--ease-out); }
+@keyframes tt-key { 40% { transform: translateY(2px); box-shadow: 0 0 0 rgb(10 10 10 / 0.18), 0 0 0 1px var(--line); background: #f0ebff; } }
+.tt-pick__stamp { position: absolute; right: clamp(1rem, 3vw, 2rem); bottom: clamp(1rem, 3vw, 1.75rem); padding: 0.4rem 0.8rem; border: 2px solid #c2185b; border-radius: 0.5rem; color: #c2185b; font-style: normal; font-weight: 600; font-size: 1.0625rem; letter-spacing: -0.01em; transform: rotate(-6deg) scale(1.4); opacity: 0; transition: transform 380ms cubic-bezier(0.2, 1.4, 0.4, 1), opacity 200ms; }
+.tt-pick__stamp.is-on { transform: rotate(-6deg) scale(1); opacity: 1; }
+.tt-loop__steps { display: grid; gap: 0.5rem; }
+.tt-loop__steps li { display: grid; grid-template-columns: 2rem 1fr; gap: 0.75rem; align-items: baseline; padding: 1rem 0; box-shadow: inset 0 -1px 0 var(--line); opacity: 0.35; transition: opacity 400ms var(--ease-out); }
+.tt-loop__steps li.is-on { opacity: 1; }
+.tt-loop__steps i { font-style: normal; font-size: 0.8125rem; color: var(--accent); font-variant-numeric: tabular-nums; }
+.tt-loop__steps p { font-size: clamp(1.125rem, 1rem + 0.45vw, 1.4375rem); line-height: 1.3; letter-spacing: -0.015em; }
+@media (max-width: 599px) {
+  .tt-pick__body { grid-template-columns: 1fr; }
+  .tt-pick__listwrap { height: 8.25rem; border-right: 0; border-bottom: 1px solid var(--line); }
+  .tt-pick__listwrap::after { height: 1.25rem; }
+  .tt-pick__preview { min-height: 15rem; }
+}
 .tt-story { max-width: 46rem; margin: clamp(2rem, 4vw, 3rem) auto 0; display: grid; gap: 1rem; font-size: clamp(1.0625rem, 1rem + 0.3vw, 1.25rem); line-height: 1.55; color: var(--muted); }
 .tt-story b { font-weight: 500; color: var(--ink); }
 
