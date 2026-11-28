@@ -230,7 +230,7 @@ const arrow = '<svg viewBox="0 0 12 12" fill="none"><path d="M2 10 10 2M3.5 2H10
           </div>
           <div class="tt-deck__stage">
             {heroSlides.map((s, i) => (
-              <Image class:list={[i === 0 && 'is-on']} src={s.img} alt={s.alt} widths={[960, 1440, 1920]} sizes="(min-width: 1200px) 76rem, 94vw" loading={i < 2 ? 'eager' : 'lazy'} fetchpriority={i === 0 ? 'high' : 'auto'} data-tt-deck-slide data-cap={s.cap} />
+              <Image class:list={[i === 0 && 'is-on']} src={s.img} alt={s.alt} widths={[960, 1440, 1920, 2560, 3200]} sizes="(min-width: 1200px) 76rem, 94vw" quality={78} loading={i < 2 ? 'eager' : 'lazy'} fetchpriority={i === 0 ? 'high' : 'auto'} data-tt-deck-slide data-cap={s.cap} />
             ))}
           </div>
           <div class="tt-deck__dots" role="group" aria-label="Slajdy z albumu">
@@ -387,7 +387,7 @@ const arrow = '<svg viewBox="0 0 12 12" fill="none"><path d="M2 10 10 2M3.5 2H10
         </article>
         <article class="x-card" data-fade>
           <div class="tt-benB__gfx tt-benB__slide" aria-hidden="true">
-            <Image src={s162} alt="" widths={[480, 720]} sizes="(min-width: 900px) 30rem, 90vw" loading="lazy" />
+            <Image src={s162} alt="" widths={[480, 720, 960, 1280]} sizes="(min-width: 800px) 24rem, 90vw" quality={80} loading="lazy" />
           </div>
           <h3>{benefits[2].t}</h3><p>{benefits[2].d}</p>
         </article>
@@ -421,7 +421,7 @@ const arrow = '<svg viewBox="0 0 12 12" fill="none"><path d="M2 10 10 2M3.5 2H10
           <ul class="tt-gal__track" data-gal-track tabindex="0" aria-label="Slajdy z albumu, po jednym z każdej kategorii">
             {galSlides.map((g, i) => (
               <li data-gal-slide={i}>
-                <Image src={g.img} alt={`Slajd ze strony ${g.page}: para ${g.pair}, kategoria ${g.cat.name}`} widths={[720, 1080, 1600]} sizes="(min-width: 1200px) 76rem, 94vw" loading={i < 1 ? 'eager' : 'lazy'} />
+                <Image src={g.img} alt={`Slajd ze strony ${g.page}: para ${g.pair}, kategoria ${g.cat.name}`} widths={[720, 1080, 1600, 2400, 3200]} sizes="(min-width: 1200px) 56rem, (min-width: 1000px) 70vw, 94vw" quality={78} loading={i < 1 ? 'eager' : 'lazy'} />
               </li>
             ))}
           </ul>
@@ -461,7 +461,7 @@ const arrow = '<svg viewBox="0 0 12 12" fill="none"><path d="M2 10 10 2M3.5 2H10
             <div class="tt-whoC__cards">
               {a.cats.map((c) => (
                 <button type="button" class="tt-whoC__card" data-gal-go={c}>
-                  <Image src={galSlides[c].img} alt="" widths={[400, 640]} sizes="(min-width: 900px) 22rem, 80vw" loading="lazy" />
+                  <Image src={galSlides[c].img} alt="" widths={[480, 800, 1200, 1600, 2400, 3200]} sizes={a.cats.length === 1 ? '(min-width: 1200px) 76rem, 94vw' : a.cats.length === 2 ? '(min-width: 900px) 38rem, 94vw' : '(min-width: 900px) 25rem, 94vw'} quality={78} loading="lazy" />
                   <span><b>{galSlides[c].cat.name}</b><small>{galSlides[c].cat.count} par · od s. {galSlides[c].cat.page}</small></span>
                 </button>
               ))}
@@ -483,17 +483,22 @@ const arrow = '<svg viewBox="0 0 12 12" fill="none"><path d="M2 10 10 2M3.5 2H10
       </div>
     </section>
 
-    <!-- ───── Getting started ───── -->
-    <section class="x-wrap x-sec">
-      <header class="x-head">
+    <!-- ───── Getting started: most pairs work right away, three steps for the rest ───── -->
+    <section class="x-wrap x-sec tt-st">
+      <header class="x-head tt-st__head">
         <h2 data-split="lines">Start w trzech krokach</h2>
-        <p data-fade>Fonty z Google Fonts są wbudowane w Figmę. Pozostałe instalujesz raz.</p>
       </header>
-      <ol class="f-steps">
-        {steps.map((s, i) => (
-          <li class="x-card" data-fade><i>{i + 1}</i><h3>{s.t}</h3><p>{s.d}</p></li>
-        ))}
-      </ol>
+
+      <div class="tt-stC">
+        <div class="tt-stC__big" data-fade>
+          <p><b>190</b> z 250 par</p>
+          <h3>działa w Figmie od razu</h3>
+          <p class="tt-stC__sub">To pary w całości z Google Fonts. Dla pozostałych 60 instalujesz 26 krojów spoza Google Fonts, raz:</p>
+        </div>
+        <ol class="tt-stC__steps" data-fade>
+          {steps.map((st, i) => <li><i>{i + 1}</i><div><h3>{st.t}</h3><p>{st.d}</p></div></li>)}
+        </ol>
+      </div>
     </section>
 
     <!-- ───── Author: dark box, quote and bio on the left, a short looping video of Daniel on the right ───── -->
@@ -538,17 +543,14 @@ const arrow = '<svg viewBox="0 0 12 12" fill="none"><path d="M2 10 10 2M3.5 2H10
           ))}
         </ol>
         <div class="tt-prA__panel">
-          <div><p class="tt-prA__lead">Zestaw: 250 par, poradnik i plik Figma. <span data-tt-badge>{phase.badge}</span></p><div class="tt-prCount" data-tt-count hidden={!phase.until}><span>Do zmiany ceny</span><span class="tt-deal__clock" role="timer" aria-live="off">{[['d', 'dni'], ['h', 'godz.'], ['m', 'min'], ['s', 'sek.']].map(([k, l]) => <span><b data-tt-cd={k}>00</b><small>{l}</small></span>)}</span></div></div>
-          <a class="x-btn" href={buyHref} data-tt-buy><span class="x-btn__label"><span>Kup teraz za <span data-tt-buy-price>{phase.price} zł</span></span><span aria-hidden="true">Kup teraz za <span data-tt-buy-price>{phase.price} zł</span></span></span><span class="x-btn__icon" aria-hidden="true" set:html={arrow + arrow} /></a>
-        </div>
-      </div>
-
-
-      <ul class="tt-price-notes" data-fade>
+          <div class="tt-prA__buy"><p class="tt-prA__lead">Zestaw: 250 par, poradnik i plik Figma. <span data-tt-badge>{phase.badge}</span></p><div class="tt-prCount" data-tt-count hidden={!phase.until}><span>Do zmiany ceny</span><span class="tt-deal__clock" role="timer" aria-live="off">{[['d', 'dni'], ['h', 'godz.'], ['m', 'min'], ['s', 'sek.']].map(([k, l]) => <span><b data-tt-cd={k}>00</b><small>{l}</small></span>)}</span></div><a class="x-btn" href={buyHref} data-tt-buy><span class="x-btn__label"><span>Kup teraz za <span data-tt-buy-price>{phase.price} zł</span></span><span aria-hidden="true">Kup teraz za <span data-tt-buy-price>{phase.price} zł</span></span></span><span class="x-btn__icon" aria-hidden="true" set:html={arrow + arrow} /></a></div>
+          <ul class="tt-price-notes">
         <li>Ceny brutto. Cena zmienia się punktualnie o północy w podanym terminie i tylko w górę.</li>
         <li>Skill do Claude jest dostępny tylko razem z zestawem: w cenie do 7.12, od 8.12 za 29 zł przy zakupie (razem 108 zł).</li>
         <li>Jeśli plik nie otworzy się lub nie będzie działał, napisz na <a href={`mailto:${t.contact.email}`}>{t.contact.email}</a>. Pomogę go uruchomić albo rozpatrzę reklamację zgodnie z regulaminem.</li>
       </ul>
+        </div>
+      </div>
     </section>
 
     <!-- ───── FAQ ───── -->
