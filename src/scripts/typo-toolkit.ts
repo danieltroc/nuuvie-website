@@ -373,6 +373,25 @@ function initGallery() {
   }, { root: track, threshold: 0.6 });
   slides.forEach((sl) => io.observe(sl));
   mark(0);
+  // Links from other sections ("Dla kogo"): scroll to the explorer and open that category
+  document.addEventListener('click', (e) => {
+    const link = (e.target as HTMLElement).closest<HTMLElement>('[data-gal-go]');
+    if (!link) return;
+    root.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'start' });
+    window.setTimeout(() => go(Number(link.dataset.galGo)), reduced ? 0 : 450);
+  });
+}
+
+/* "Dla kogo", variant C: pick who you are, see your categories */
+function initWhoPick() {
+  const root = $('[data-tt-who-pick]');
+  if (!root) return;
+  const tabs = $$('[data-who-tab]', root);
+  const panels = $$('[data-who-panel]', root);
+  tabs.forEach((t, k) => t.addEventListener('click', () => {
+    tabs.forEach((x, j) => x.setAttribute('aria-selected', String(j === k)));
+    panels.forEach((p, j) => (p.hidden = j !== k));
+  }));
 }
 
 /* Big numbers count up once, when they scroll into view */
@@ -416,3 +435,4 @@ initDeck();
 initLoop();
 initChat();
 initGallery();
+initWhoPick();

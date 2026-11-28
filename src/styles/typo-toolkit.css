@@ -446,3 +446,38 @@
   .tt-gal__meta [data-gal-info] { display: none; }
 }
 @media (min-width: 1000px) and (hover: hover) { .tt-gal__tabs button:not([aria-selected='true']):hover { background: var(--paper-2); color: var(--ink); } }
+
+/* ───── Dla kogo: pick yourself, see your categories ───── */
+.tt-who__cat { padding: 0.4rem 0.75rem; border-radius: 999px; background: #fff; box-shadow: 0 0 0 1px var(--line); font-size: 0.8125rem; color: var(--ink); }
+/* C: segmented picker + category cards with slides */
+.tt-whoC { display: grid; gap: 1.25rem; }
+.tt-whoC__seg { display: flex; gap: 0.35rem; padding: 0.35rem; border-radius: 1.1rem; background: var(--paper-2); overflow-x: auto; scrollbar-width: none; }
+.tt-whoC__seg::-webkit-scrollbar { display: none; }
+.tt-whoC__seg button { flex: 1 0 auto; display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 0.75rem 1rem; border-radius: 0.8rem; font-size: 0.9375rem; color: var(--muted); white-space: nowrap; transition: background-color 200ms, color 200ms, box-shadow 200ms; }
+.tt-whoC__seg button span { display: grid; width: 1.15rem; height: 1.15rem; }
+.tt-whoC__seg button svg { width: 100%; height: 100%; }
+.tt-whoC__seg button[aria-selected='true'] { background: #fff; color: var(--ink); box-shadow: 0 1px 2px rgb(0 0 0 / 0.08), 0 0 0 1px var(--line); }
+.tt-whoC__panel { display: grid; gap: 0.9rem; }
+.tt-whoC__panel[hidden] { display: none; }
+.tt-whoC__lead { font-size: 1.0625rem; color: var(--muted); }
+.tt-whoC__lead b { color: var(--ink); font-weight: 500; }
+.tt-whoC__cards { display: grid; gap: var(--gutter); grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); }
+.tt-whoC__card { display: grid; gap: 0.75rem; padding: 0.5rem 0.5rem 1rem; border-radius: var(--radius); background: #fff; box-shadow: 0 0 0 1px var(--line); text-align: left; transition: box-shadow 200ms, transform 200ms var(--ease-out); }
+.tt-whoC__card img { width: 100%; height: auto; aspect-ratio: 16 / 9; border-radius: calc(var(--radius) - 0.4rem); }
+.tt-whoC__card span { display: grid; gap: 0.15rem; padding-inline: 0.5rem; }
+.tt-whoC__card b { font-weight: 500; font-size: 1.0625rem; }
+.tt-whoC__card b::after { content: ' →'; color: var(--accent); }
+.tt-whoC__card small { font-size: 0.8125rem; color: var(--muted); }
+@media (hover: hover) { .tt-whoC__card:hover { transform: translateY(-2px); box-shadow: 0 0 0 1px var(--line), 0 18px 32px -20px rgb(0 0 0 / 0.35); } }
+
+/* Shared facts row */
+.tt-who2__facts { display: grid; gap: var(--gutter); margin-top: clamp(2rem, 4vw, 3rem); padding-top: clamp(1.5rem, 3vw, 2rem); border-top: 1px solid var(--line); }
+@media (min-width: 900px) { .tt-who2__facts { grid-template-columns: 1fr 1fr; } }
+.tt-who2__facts h3 { font-size: 1.0625rem; font-weight: 500; margin-bottom: 0.75rem; }
+.tt-who2__facts p { color: var(--muted); line-height: 1.55; max-width: 48ch; }
+.tt-who2__needs { display: grid; gap: 0.5rem; color: var(--muted); }
+.tt-who2__needs li { display: grid; grid-template-columns: 1.25rem 1fr; }
+.tt-who2__needs li::before { content: '✓'; color: var(--accent); font-size: 0.875rem; }
+
+.tt-gal { scroll-margin-top: 6rem; }
+@media (max-width: 999px) { .tt-whoC__seg { display: grid; grid-template-columns: 1fr 1fr; } .tt-whoC__seg button { white-space: normal; justify-content: flex-start; text-align: left; } }
