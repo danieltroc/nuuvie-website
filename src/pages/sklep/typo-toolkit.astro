@@ -172,6 +172,11 @@ const priceRows = [
   { id: '69', name: 'Startowe', price: '69 zł', when: '2.12 – 7.12, 23:59', what: '250 par, poradnik, plik Figma, skill do Claude' },
   { id: '79', name: 'Regularne', price: '79 zł', when: 'od 8.12', what: '250 par, poradnik, plik Figma. Skill do Claude: +29 zł przy zakupie zestawu (razem 108 zł)' },
 ];
+const priceWin = [
+  { id: '59', name: 'Premierowe', price: 59, when: '30.11 – 1.12', until: 'do 1.12, 23:59' },
+  { id: '69', name: 'Startowe', price: 69, when: '2.12 – 7.12', until: 'do 7.12, 23:59' },
+  { id: '79', name: 'Regularne', price: 79, when: 'od 8.12', until: 'cena stała' },
+];
 const faq = [
   { q: 'Dlaczego nie wziąć darmowych par z internetu?', a: 'Możesz. Tutaj 250 par jest już wybranych i pokazanych na polskim tekście w gotowym układzie, z opisem „dlaczego działa” i linkiem do pobrania. Płacisz za godziny, które oszczędzasz na szukaniu i porównywaniu.' },
   { q: 'Dlaczego cena rośnie?', a: 'Najniższa cena jest dla osób, które kupią w tygodniu premiery. Cena rośnie w trzech oknach, tylko w górę, a terminy z tabeli są stałe.' },
@@ -491,35 +496,54 @@ const arrow = '<svg viewBox="0 0 12 12" fill="none"><path d="M2 10 10 2M3.5 2H10
       </ol>
     </section>
 
-    <!-- ───── Author ───── -->
+    <!-- ───── Author: dark box, quote and bio on the left, a short looping video of Daniel on the right ───── -->
     <section class="x-wrap x-sec">
-      <div class="x-card tt-author" data-fade>
-        <img src="/img/about/daniel.jpg" alt="Daniel Troć" width="320" height="320" loading="lazy" decoding="async" />
-        <div>
-          <h2>Kto to zrobił</h2>
-          <p>Daniel Troć, projektant i założyciel studia Nuuvie z Lublina. Od ponad 15 lat projektuje produkty cyfrowe i marki.</p>
-          <p>Ten zestaw powstał z projektu „Pary fontów”, który leżał na dysku. Problem znałem z własnej pracy, a ankieta pokazała, że nie jestem w nim sam.</p>
+      <div class="tt-auB" data-fade>
+        <div class="tt-auB__text">
+          <blockquote><p>Problem znałem z własnej pracy. Ankieta pokazała, że nie jestem w nim sam.</p></blockquote>
+          <p class="tt-auB__bio">Jestem projektantem i założycielem studia Nuuvie. Od ponad 15 lat projektuję produkty cyfrowe i marki. Ten zestaw powstał z projektu „Pary fontów”, który długo leżał na dysku, a teraz jest dopracowany do końca.</p>
+          <ul class="tt-author2__facts tt-auB__facts">
+            <li><b>15+</b><span>lat projektowania</span></li>
+            <li><b>2</b><span>obszary: produkty cyfrowe i marki</span></li>
+            <li><b>250</b><span>par w zestawie, w 12 kategoriach</span></li>
+          </ul>
+          <p class="tt-author2__links tt-auB__links">
+            <a href="/o-nuuvie">Więcej o mnie</a>
+            {socials.filter((x) => x.label !== 'TikTok').map((x) => <a href={x.href} target="_blank" rel="noopener">{x.label} ↗</a>)}
+          </p>
         </div>
+        <figure class="tt-auB__photo">
+          <video src="/video/daniel-hello.mp4" poster="/video/daniel-hello.jpg" width="405" height="720" muted loop playsinline preload="none" aria-label="Daniel Troć macha do kamery" data-tt-video></video>
+          <figcaption><b>Daniel Troć</b><span>Nuuvie Studio, Lublin</span></figcaption>
+        </figure>
       </div>
     </section>
 
-    <!-- ───── Prices ───── -->
-    <section class="x-wrap x-sec" id="cena">
+    <!-- ───── Prices: timeline of the three windows, the current one marked ───── -->
+    <section class="x-wrap x-sec tt-pr" id="cena">
       <header class="x-head">
         <h2 data-split="lines">Cena rośnie w trzech oknach.</h2>
       </header>
-      <div class="tt-prices" data-fade role="table" aria-label="Ceny i terminy">
-        <div class="tt-prices__row tt-prices__head" role="row"><span role="columnheader">Okno</span><span role="columnheader">Cena</span><span role="columnheader">Termin</span><span role="columnheader">W cenie</span></div>
-        {priceRows.map((r) => (
-          <div class:list={['tt-prices__row', r.id === phase.id && 'is-now']} role="row" data-tt-row={r.id}>
-            <span role="cell"><b>{r.name}</b><em class="tt-now">Teraz</em></span>
-            <span role="cell" class="tt-prices__price">{r.price}</span>
-            <span role="cell">{r.when}</span>
-            <span role="cell">{r.what}</span>
-          </div>
-        ))}
+
+      <div class="tt-prA" data-fade>
+        <ol class="tt-prA__line">
+          {priceWin.map((w) => (
+            <li class:list={[w.id === phase.id && 'is-now']} data-tt-row={w.id}>
+              <i class="tt-prA__dot"></i>
+              <p class="tt-prA__when">{w.when}</p>
+              <p class="tt-prA__price">{w.price} zł</p>
+              <p class="tt-prA__name">{w.name}<em>Teraz</em></p>
+              <p class="tt-prA__skill">{w.id === '79' ? 'Skill +29 zł (razem 108 zł)' : 'Skill do Claude w cenie'}</p>
+            </li>
+          ))}
+        </ol>
+        <div class="tt-prA__panel">
+          <div><p class="tt-prA__lead">Zestaw: 250 par, poradnik i plik Figma. <span data-tt-badge>{phase.badge}</span></p><div class="tt-prCount" data-tt-count hidden={!phase.until}><span>Do zmiany ceny</span><span class="tt-deal__clock" role="timer" aria-live="off">{[['d', 'dni'], ['h', 'godz.'], ['m', 'min'], ['s', 'sek.']].map(([k, l]) => <span><b data-tt-cd={k}>00</b><small>{l}</small></span>)}</span></div></div>
+          <a class="x-btn" href={buyHref} data-tt-buy><span class="x-btn__label"><span>Kup teraz za <span data-tt-buy-price>{phase.price} zł</span></span><span aria-hidden="true">Kup teraz za <span data-tt-buy-price>{phase.price} zł</span></span></span><span class="x-btn__icon" aria-hidden="true" set:html={arrow + arrow} /></a>
+        </div>
       </div>
-      <div class="tt-prices__buy" data-fade><a class="x-btn" href={buyHref} data-tt-buy><span class="x-btn__label"><span>Kup teraz</span><span aria-hidden="true">Kup teraz</span></span><span class="x-btn__icon" aria-hidden="true" set:html={arrow + arrow} /></a></div>
+
+
       <ul class="tt-price-notes" data-fade>
         <li>Ceny brutto. Cena zmienia się punktualnie o północy w podanym terminie i tylko w górę.</li>
         <li>Skill do Claude jest dostępny tylko razem z zestawem: w cenie do 7.12, od 8.12 za 29 zł przy zakupie (razem 108 zł).</li>

@@ -150,6 +150,7 @@ function initPrices() {
       root.dataset.phase = p.id;
       const fill = (sel: string, v: string | null) => $$(sel).forEach((el) => { el.textContent = v ?? ''; el.hidden = !v; });
       fill('[data-tt-price]', `${p.price} zł`);
+      fill('[data-tt-buy-price]', `${p.price} zł`);
       fill('[data-tt-label]', p.label);
       fill('[data-tt-until]', p.untilText);
       fill('[data-tt-next]', p.next);
@@ -394,6 +395,14 @@ function initWhoPick() {
   }));
 }
 
+/* Looping videos: play only while on screen; with reduced motion they stay on the poster */
+function initVideos() {
+  $$<HTMLVideoElement>('[data-tt-video]').forEach((v) => {
+    if (reduced) return;
+    new IntersectionObserver(([e]) => { if (e.isIntersecting) v.play().catch(() => {}); else v.pause(); }, { threshold: 0.25 }).observe(v);
+  });
+}
+
 /* Big numbers count up once, when they scroll into view */
 function initCounts() {
   const els = $$('[data-tt-count-to]');
@@ -435,4 +444,5 @@ initDeck();
 initLoop();
 initChat();
 initGallery();
+initVideos();
 initWhoPick();
