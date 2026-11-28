@@ -17,6 +17,12 @@ import s162 from '../../assets/typo-toolkit/s-162.png';
 import s137 from '../../assets/typo-toolkit/s-137.png';
 import s116 from '../../assets/typo-toolkit/s-116.png';
 import s225 from '../../assets/typo-toolkit/s-225.png';
+import s033 from '../../assets/typo-toolkit/s-033.png';
+import s065 from '../../assets/typo-toolkit/s-065.png';
+import s074 from '../../assets/typo-toolkit/s-074.png';
+import s094 from '../../assets/typo-toolkit/s-094.png';
+import s193 from '../../assets/typo-toolkit/s-193.png';
+import s260 from '../../assets/typo-toolkit/s-260.png';
 import { getDict, socials } from '../../i18n';
 import { CHECKOUT, SAMPLE, PHASES, phaseAt } from '../../lib/typo-toolkit';
 
@@ -67,6 +73,21 @@ const slides = [
 ];
 // Share image: the cover slide
 const og = await getImage({ src: sCover, width: 1200, format: 'jpg', quality: 82 });
+// Gallery: one real slide from each of the 12 categories, in album order
+const galSlides = [
+  { img: s011, pair: 'Clash Display × Satoshi', page: 11 }, // 256:6604
+  { img: s033, pair: 'Boska × Martian Mono', page: 33 }, // 257:8200
+  { img: s065, pair: 'Fraunces × Rethink Sans', page: 65 }, // 255:1715
+  { img: s074, pair: 'Space Grotesk × IBM Plex Sans', page: 74 }, // 255:2927
+  { img: s094, pair: 'Playfair Display × Lora', page: 94 }, // 255:3765
+  { img: s116, pair: 'EB Garamond × Roboto', page: 116 }, // 255:4535
+  { img: s137, pair: 'Sora × DM Sans', page: 137 }, // 246:4694
+  { img: s162, pair: 'Marcellus × Poppins', page: 162 }, // 246:5362
+  { img: s193, pair: 'JetBrains Mono × Spline Sans', page: 193 }, // 246:5826
+  { img: s225, pair: 'Zalando Sans Expanded × Momo Trust Sans', page: 225 }, // 255:5513
+  { img: s230, pair: 'Satoshi × Instrument Serif', page: 230 }, // 256:6646
+  { img: s260, pair: 'Manrope × Playfair Display', page: 260 }, // 257:9544
+].map((g, i) => ({ ...g, cat: chapters[i], n: String(i + 1).padStart(2, '0') }));
 // Hero: the cover first, then real pair slides from different chapters
 const heroSlides = [slides[0], slides[1], slides[3], slides[2], slides[4]];
 const pairs = raw.map((p) => {
@@ -97,8 +118,8 @@ const steps = [
 const stats = [
   { n: 250, suf: '', t: 'par fontów', d: 'każda na polskim tekście, w gotowym układzie' },
   { n: 209, suf: '', t: 'krojów pisma', d: 'od codziennych po Trendy 2027' },
-  { n: 12, suf: '', t: 'rozdziałów', d: 'pod typ projektu, po 20 par' },
-  { n: 82, suf: '%', t: 'użyć z Google Fonts', d: 'działają w Figmie od razu' },
+  { n: 12, suf: '', t: 'kategorii', d: 'pod typ projektu, po 20 par' },
+  { n: 285, suf: '', t: 'stron albumu', d: 'pary, poradnik i instrukcja skilla w jednym PDF-ie' },
 ];
 // "I co? Znowu Inter?": a font picker that scrolls, picks a heading font, hunts for a pair
 // and ends on Inter. The order matters: the script picks the heading at index 7 and ends on Inter.
@@ -109,24 +130,24 @@ const loopSteps = [
   'Mija godzina. Bierzesz to, co zawsze: Inter.',
 ];
 const benefits = [
-  { t: 'Czas', d: 'Otwierasz rozdział pasujący do projektu i wybierasz z 20 par. Szukasz pary pod SaaS? Masz cały rozdział, od strony 135.' },
+  { t: 'Czas', d: 'Otwierasz kategorię pasującą do projektu i wybierasz z 20 par. Szukasz pary pod SaaS? Masz całą kategorię, od strony 135.' },
   { t: 'Poza domyślnym wyborem', d: '209 krojów w 250 parach, od codziennych po Trendy 2027. Masz z czego wybierać, gdy chcesz wyjść poza kolejny projekt z Interem.' },
   { t: 'Pewność wyboru', d: 'Widzisz parę w prawdziwym układzie, zanim wstawisz ją do projektu: nagłówek z akapitem na polskim tekście, w konkretnym zastosowaniu, np. salon fryzjerski, kancelaria, fintech.' },
   { t: 'Argumenty dla klienta', d: 'Przy każdej parze masz krótkie uzasadnienie, dlaczego działa, np. „Clash ma charakter i ostre detale, a Satoshi jest neutralny i bardzo czytelny”. Od tego łatwiej zacząć rozmowę z klientem.' },
 ];
-// Skill: a real answer from the test on 27.11 (pages and notes match the catalogue)
-const convo = [
-  { tier: 'Bezpieczna', pair: 'Zilla Slab × Inter', page: 173, why: 'Zilla Slab ma cyfry nautyczne, więc kwoty w menu warto sprawdzić przed drukiem.' },
-  { tier: 'Z charakterem', pair: 'Young Serif × Instrument Sans', page: 22, why: 'Young Serif ma jedną grubość, więc hierarchię budujesz rozmiarem.' },
-  { tier: 'Odważna', pair: 'Rubik Mono One × Fraunces', page: 44, why: 'Rubik Mono One to same wersaliki: „zł” w nagłówku zmieni się w „ZŁ”.' },
-];
+// Skill demo: the prompt typed after picking /typo-toolkit (a longer, realistic brief)
+const chatPrompt = 'Kawiarnia na Kazimierzu w Krakowie, ciepło i trochę retro. Menu A4 z cenami, profil na Instagramie i szyld nad wejściem. Klient chce tylko darmowych fontów, a menu składa sam w Canvie. Dobierz trzy pary i napisz, na co uważać w cenniku.';
 const skillCan = [
-  { t: 'Trzy pary pod klienta', d: 'Bezpieczna, z charakterem i odważna, każda z uzasadnieniem i numerem strony w albumie.' },
-  { t: 'Ograniczenia klienta', d: 'Tylko Google Fonts, Canva, druk, cenniki z kwotami. Pisze też, z których par zrezygnował i dlaczego.' },
-  { t: 'Szczegóły krojów', d: 'Cyfry w cennikach, brak kursywy, same wersaliki.' },
-  { t: 'Zamiennik płatnego kroju', d: 'Np. dla Circulara znajduje darmowe kroje z albumu i uczciwie opisuje różnice.' },
+  { t: 'Zna cały album', d: 'Wszystkie 250 par. Przy każdej propozycji podaje numer strony.' },
+  { t: 'Trzy pary pod klienta', d: 'Opisujesz klienta jednym zdaniem i dostajesz parę bezpieczną, z charakterem i odważną, każdą z uzasadnieniem. Gdy w branży nie ma odważnej, mówi to wprost.' },
+  { t: 'Ograniczenia klienta', d: 'Tylko Google Fonts, darmowa Canva, drukarnia, tabele z kwotami. Pisze, z których par zrezygnował i dlaczego.' },
+  { t: 'Szczegóły każdego kroju', d: 'Cyfry w cennikach, brak kursywy, same wersaliki („zł” → „ZŁ”).' },
+  { t: 'Zamiennik płatnego kroju', d: 'Np. dla Circulara znajduje darmowe kroje i uczciwie opisuje różnice.' },
   { t: 'Szkielet typograficzny', d: 'Rozmiary na telefon i desktop, gotowy kod (Next.js, Tailwind) i tokeny do pobrania.' },
-  { t: 'Licencje i wdrożenie', d: 'Co wolno z każdym fontem i jak osadzić fonty na stronie bez wysyłania danych do Google.' },
+  { t: 'Licencje i wdrożenie', d: 'Co wolno z każdym fontem i jak wdrożyć fonty bez wysyłania danych do Google.' },
+  { t: 'Włącza się sam', d: 'Wywołujesz go „/typo-toolkit”, ale przy rozmowie o fontach włącza się sam.' },
+  { t: 'Podgląd dla klienta', d: 'Strona z trzema propozycjami, tekstami pod branżę klienta i menu z cenami. Otwierasz ją w przeglądarce i wysyłasz.' },
+  { t: 'Style w Figmie', d: 'Z łącznikiem Figma tworzy style tekstu od razu w Twoim pliku, osobno na desktop i telefon.' },
 ];
 const audience = [
   { who: 'projektujesz produkty cyfrowe', where: 'Biznes / SaaS i Techniczne / Developerskie', n: 40 },
@@ -186,7 +207,7 @@ const arrow = '<svg viewBox="0 0 12 12" fill="none"><path d="M2 10 10 2M3.5 2H10
     <section class="x-hero" data-tt-hero>
       <div class="x-wrap x-hero__text">
         <h1 data-x-title><span class="tt-h1-name">Typo Toolkit 2027:</span> fonty bez <em>zgadywania</em></h1>
-        <p data-x-in>250 par fontów dla projektantów, każda na polskim tekście w gotowym układzie. Otwierasz rozdział pod projekt i wybierasz z 20 par. Do tego poradnik, plik Figma i skill do Claude.</p>
+        <p data-x-in>250 par fontów dla projektantów, każda na polskim tekście w gotowym układzie. Otwierasz kategorię pod projekt i wybierasz z 20 par. Do tego poradnik, plik Figma i skill do Claude.</p>
         <div data-x-in><Offer phase={phase} buyHref={buyHref} /></div>
       </div>
 
@@ -216,7 +237,7 @@ const arrow = '<svg viewBox="0 0 12 12" fill="none"><path d="M2 10 10 2M3.5 2H10
     <!-- ───── Problem: "I co? Znowu Inter?" ───── -->
     <section class="x-wrap x-sec tt-loop" data-tt-loop>
       <header class="x-head">
-        <h2 data-split="lines">I co? Znowu Inter?</h2>
+        <h2 data-split="lines">I co? Znowu Inter?</h2>
       </header>
       <div class="tt-loop__stage" data-fade>
         <div class="x-win tt-pick" aria-hidden="true">
@@ -258,7 +279,7 @@ const arrow = '<svg viewBox="0 0 12 12" fill="none"><path d="M2 10 10 2M3.5 2H10
           <div class="x-feat__gfx" data-scene="tiles" aria-hidden="true">
             <div class="f-tiles">{tiles.map((f, i) => <span class:list={[i === 5 && 'is-ink', i === 6 && 'is-accent']} style={`font-family:'${f}'`} data-f-tile data-f-pair={i === 5 || i === 6 ? '' : undefined}>Aa</span>)}</div>
           </div>
-          <div class="x-feat__text"><h3>250 par w 12 rozdziałach</h3><p>Od codziennych, przez Biznes i SaaS, po Lifestyle i trendy na 2027. Każda para na osobnym slajdzie, w prawdziwym zastosowaniu, na polskim tekście: nazwy i grubości, krótkie „dlaczego działa”, licencja i link do pobrania.</p></div>
+          <div class="x-feat__text"><h3>250 par w 12 kategoriach</h3><p>Od codziennych, przez Biznes i SaaS, po Lifestyle i trendy na 2027. Każda para na osobnym slajdzie, w prawdziwym zastosowaniu, na polskim tekście: nazwy i grubości, krótkie „dlaczego działa”, licencja i link do pobrania.</p></div>
         </article>
         <article class="x-card x-feat" data-fade>
           <div class="x-feat__gfx" data-scene="chapters" aria-hidden="true">
@@ -299,36 +320,76 @@ const arrow = '<svg viewBox="0 0 12 12" fill="none"><path d="M2 10 10 2M3.5 2H10
     </section>
 
     <!-- ───── Skill ───── -->
-    <section class="x-wrap x-sec tt-skill" id="skill">
+    <section class="x-wrap x-sec tt-skill" id="skill" data-chat-prompt={chatPrompt}>
       <header class="x-head">
         <h2 data-split="lines">Skill do Claude zna cały album</h2>
         <p data-fade>Opisujesz klienta jednym zdaniem, a skill odpowiada parami z albumu, z numerem strony przy każdej.</p>
       </header>
       <div class="tt-skill__grid">
-        <div class="x-card tt-convo" data-fade aria-label="Przykład rozmowy ze skillem">
-          <p class="tt-convo__me">Kawiarnia na Kazimierzu, ciepło i trochę retro, menu drukowane i profil w social mediach. Dobierz fonty.</p>
-          <div class="tt-convo__ai">
-            <ol>
-              {convo.map((c) => <li><small>{c.tier}</small><b>{c.pair}</b><span>s. {c.page}</span><p>{c.why}</p></li>)}
-            </ol>
+        <div class="tt-chatwin" data-fade data-tt-chat role="img" aria-label="Przykład: w nowym czacie Claude wpisujesz /typo-toolkit i opisujesz klienta">
+          <div class="tt-chatwin__top" aria-hidden="true"><span class="x-dots"><i></i><i></i><i></i></span><span>Nowy czat</span></div>
+          <div class="tt-chatwin__body" aria-hidden="true">
+            <p class="tt-chatwin__hello"><span class="tt-chatwin__mark">✳</span>Od czego zaczynamy?</p>
+            <div class="tt-composer">
+              <div class="tt-composer__menu" data-chat-menu>
+                <p>Skille</p>
+                <div class="tt-composer__cmd is-on"><b>/typo-toolkit</b><span>Dobór par fontów z albumu Typo Toolkit 2027</span></div>
+              </div>
+              <div class="tt-composer__field"><span class="tt-composer__chip" data-chat-chip>/typo-toolkit</span><span data-chat-text></span><i class="tt-composer__caret"></i><span class="tt-composer__ph" data-chat-ph>Napisz wiadomość…</span></div>
+              <div class="tt-composer__bar"><span class="tt-composer__plus">+</span><span class="tt-composer__send" data-chat-send>↑</span></div>
+            </div>
           </div>
-          <p class="tt-convo__note">Fragment odpowiedzi skilla z testu 27.11. Numery to strony w albumie.</p>
+          <p class="tt-chatwin__note">Wpisujesz „/”, wybierasz typo-toolkit i opisujesz klienta. Przy rozmowie o fontach skill włącza się też sam.</p>
         </div>
-        <ul class="tt-skill__list" data-fade>
-          {skillCan.map((s) => <li><b>{s.t}</b><span>{s.d}</span></li>)}
-        </ul>
+        <div class="tt-acc" data-fade>
+          {skillCan.map((s, i) => (
+            <details name="tt-skill" open={i === 0}>
+              <summary><em>{String(i + 1).padStart(2, '0')}</em><b>{s.t}</b><i aria-hidden="true"></i></summary>
+              <p>{s.d}</p>
+            </details>
+          ))}
+        </div>
       </div>
       <p class="tt-skill__price" data-fade>W cenie zestawu do 7.12. Od 8.12 dodajesz go przy zakupie za 29 zł (razem 108 zł). Działa w aplikacji Claude, w przeglądarce i na komputerze.</p>
     </section>
 
-    <!-- ───── What you get ───── -->
-    <section class="x-wrap x-sec">
-      <header class="x-head">
+    <!-- ───── What you get: cards with a small picture of each benefit ───── -->
+    <section class="x-wrap x-sec tt-ben">
+      <header class="x-head tt-ben__head">
         <h2 data-split="lines">Co z tego masz</h2>
       </header>
-      <div class="tt-benefits">
-        {benefits.map((b) => <article class="x-card" data-fade><h3>{b.t}</h3><p>{b.d}</p></article>)}
+
+
+      <div class="tt-benB">
+        <article class="x-card" data-fade>
+          <div class="tt-benB__gfx tt-benB__cats" aria-hidden="true">
+            <span>Codzienne · 20 par</span><span class="is-on">Biznes / SaaS · 20 par <b>s. 135</b></span><span>Edytorskie · 20 par</span>
+          </div>
+          <h3>{benefits[0].t}</h3><p>{benefits[0].d}</p>
+        </article>
+        <article class="x-card" data-fade>
+          <div class="tt-benB__gfx tt-benB__fonts" aria-hidden="true">
+            <s>Inter</s>
+            <span style="font-family:'Fraunces'">Fraunces</span><span style="font-family:'Clash Display';font-weight:600">Clash Display</span><span style="font-family:'Instrument Serif'">Instrument Serif</span><span style="font-family:'Bricolage Grotesque';font-weight:600">Bricolage</span>
+          </div>
+          <h3>{benefits[1].t}</h3><p>{benefits[1].d}</p>
+        </article>
+        <article class="x-card" data-fade>
+          <div class="tt-benB__gfx tt-benB__slide" aria-hidden="true">
+            <Image src={s162} alt="" widths={[480, 720]} sizes="(min-width: 900px) 30rem, 90vw" loading="lazy" />
+          </div>
+          <h3>{benefits[2].t}</h3><p>{benefits[2].d}</p>
+        </article>
+        <article class="x-card" data-fade>
+          <div class="tt-benB__gfx tt-benB__quote" aria-hidden="true">
+            <p><span style="font-family:'Clash Display';font-weight:600">Clash</span> ma charakter i ostre detale, a <span style="font-family:'Satoshi'">Satoshi</span> jest neutralny i bardzo czytelny.</p>
+            <small>s. 11 · dlaczego działa</small>
+          </div>
+          <h3>{benefits[3].t}</h3><p>{benefits[3].d}</p>
+        </article>
       </div>
+
+
       <div class="tt-after" data-fade>
         <a class="x-btn" href={buyHref} data-tt-buy><span class="x-btn__label"><span>Kup teraz</span><span aria-hidden="true">Kup teraz</span></span><span class="x-btn__icon" aria-hidden="true" set:html={arrow + arrow} /></a>
       </div>
@@ -338,58 +399,27 @@ const arrow = '<svg viewBox="0 0 12 12" fill="none"><path d="M2 10 10 2M3.5 2H10
     <section class="x-wrap x-sec" id="pary">
       <header class="x-head">
         <h2 data-split="lines">Zobacz, jak wygląda środek.</h2>
-        <p data-fade>Prawdziwe slajdy z zestawu. Każda para ma swój slajd: przykład w konkretnym zastosowaniu, nazwy i grubości krojów, krótkie „dlaczego działa” i link do pobrania.</p>
+        <p data-fade>Wybierz kategorię i zobacz prawdziwy slajd z albumu. Każda para ma swój: przykład w konkretnym zastosowaniu, kroje z grubościami, „dlaczego działa” i link do pobrania.</p>
       </header>
-      <div class="tt-album" data-fade>
-        <ul class="tt-album__track" tabindex="0" aria-label="Slajdy z Typo Toolkit 2027 (przewiń w bok)">
-          {slides.map((s, i) => (
-            <li>
-              <figure>
-                <Image src={s.img} alt={s.alt} widths={[640, 960, 1440]} sizes="(min-width: 900px) 62vw, 86vw" loading={i < 2 ? 'eager' : 'lazy'} />
-                <figcaption>{s.cap}</figcaption>
-              </figure>
-            </li>
-          ))}
-        </ul>
-      </div>
-      <p class="tt-album__try" data-fade>Sprawdź sam: wybierz parę i przełącz sposób łączenia.</p>
-      <div class="x-card f-demo" data-fade data-f-demo>
-        <div class="f-demo__bar">
-          <div class="f-chips" role="group" aria-label="Pary z zestawu">
-            {pairs.map((p, i) => (
-              <button type="button" aria-pressed={i === 0 ? 'true' : 'false'} data-f-chip={i}>{p.h} × {p.b}</button>
+      <div class="tt-gal" data-fade data-tt-gal data-gal={JSON.stringify(galSlides.map((g) => ({ cat: g.cat.name, info: `${g.cat.count} par · od strony ${g.cat.page}`, pair: g.pair, page: g.page, n: g.n })))}>
+        <div class="tt-gal__tabs" role="tablist" aria-label="Kategorie w albumie">
+          <p class="tt-gal__tabs-head" aria-hidden="true"><span>Kategoria</span><span>Pary · strona</span></p>
+          {galSlides.map((g, i) => <button type="button" role="tab" aria-selected={i === 0 ? 'true' : 'false'} data-gal-tab={i}><i>{g.n}</i><span>{g.cat.name}</span><small>{g.cat.count} par · s. {g.cat.page}</small></button>)}
+        </div>
+        <div class="tt-gal__view">
+          <ul class="tt-gal__track" data-gal-track tabindex="0" aria-label="Slajdy z albumu, po jednym z każdej kategorii">
+            {galSlides.map((g, i) => (
+              <li data-gal-slide={i}>
+                <Image src={g.img} alt={`Slajd ze strony ${g.page}: para ${g.pair}, kategoria ${g.cat.name}`} widths={[720, 1080, 1600]} sizes="(min-width: 1200px) 76rem, 94vw" loading={i < 1 ? 'eager' : 'lazy'} />
+              </li>
             ))}
-          </div>
-          <div class="f-seg" role="group" aria-label="Sposób łączenia">
-            <button type="button" aria-pressed="true" data-f-mode="mix">Mix w nagłówku</button>
-            <button type="button" aria-pressed="false" data-f-mode="para">Nagłówek + akapit</button>
-          </div>
+          </ul>
         </div>
-        <div class="f-slide" data-f-slide data-mode="mix">
-          <div class="f-slide__top"><span class="f-pill" data-f-chap>{pairs[0].chapter}</span><span>Strona <span data-f-idx>{pairs[0].n}</span> w PDF</span></div>
-          <div class="f-slide__body">
-            <p class="f-slide__mix"><span class="is-h">Projekty, które</span> <span class="is-b">zostają w głowie</span></p>
-            <div class="f-slide__para">
-              <p class="is-h">Dobra para robi połowę roboty.</p>
-              <p class="is-b">Nagłówek przyciąga uwagę, tekst prowadzi czytelnika dalej. Kiedy dwa kroje do siebie pasują, cała strona od razu wygląda na przemyślaną, a polskie znaki nie psują rytmu.</p>
-            </div>
-          </div>
-          <dl class="f-slide__meta">
-            <div><dt>Nagłówek</dt><dd data-f-hname>{pairs[0].h} {pairs[0].hw}</dd></div>
-            <div><dt>Tekst</dt><dd data-f-bname>{pairs[0].b}</dd></div>
-            <div><dt>Źródło</dt><dd data-f-src>{pairs[0].src}</dd></div>
-            <div><dt>Licencja</dt><dd data-f-lic>{pairs[0].lic}</dd></div>
-          </dl>
+        <div class="tt-gal__meta" aria-live="polite">
+          <p><b data-gal-cat>{galSlides[0].cat.name}</b><span data-gal-info>{galSlides[0].cat.count} par · od strony {galSlides[0].cat.page}</span></p>
+          <p class="tt-gal__pair"><span data-gal-pair>{galSlides[0].pair}</span><span data-gal-page>s. {galSlides[0].page}</span></p>
+          <div class="tt-gal__ctrl"><button type="button" class="tt-gal__nav is-prev" data-gal-prev aria-label="Poprzednia kategoria"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button><p class="tt-gal__count"><b data-gal-n>01</b> / 12</p><button type="button" class="tt-gal__nav is-next" data-gal-next aria-label="Następna kategoria"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg></button></div>
         </div>
-      </div>
-
-      <div class="tt-toc">
-        <ol class="f-toc" data-fade>
-          <li class="tt-toc__head" aria-hidden="true"><i></i><span><b>Rozdział</b></span><em>Strona w PDF</em></li>
-          {chapters.map((c, i) => (
-            <li><i>{String(i + 1).padStart(2, '0')}</i><span><b>{c.name}</b><small>{c.count} par</small></span><em>{c.page}</em></li>
-          ))}
-        </ol>
       </div>
 
       <div class="x-card tt-sample" id="probka" data-fade>

@@ -275,6 +275,106 @@ function initLoop() {
   ScrollTrigger.create({ trigger: root, start: 'top 75%', end: 'bottom top', onToggle: (self) => (self.isActive ? tl.play() : tl.pause()) });
 }
 
+/* Skill demo: type "/ty", the skill menu opens, pick /typo-toolkit, type the brief, send.
+   Loops while on screen; reduced motion shows the finished message. */
+function initChat() {
+  const win = $('[data-tt-chat]');
+  const prompt = $('#skill')?.dataset.chatPrompt ?? '';
+  if (!win || !prompt) return;
+  const text = $('[data-chat-text]', win)!;
+  const cls = (name: string, on: boolean) => win.classList.toggle(name, on);
+  const finished = () => { cls('has-chip', true); cls('is-typing', true); cls('can-send', true); text.textContent = ` ${prompt}`; };
+  if (reduced) return finished();
+
+  let run = 0;
+  const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+  const typeIn = async (str: string, id: number, speed: number) => {
+    for (const ch of str) {
+      if (id !== run) return false;
+      text.textContent += ch;
+      await sleep(ch === ' ' ? speed * 0.6 : speed + Math.random() * speed * 0.8);
+    }
+    return id === run;
+  };
+  const reset = () => {
+    ['has-chip', 'is-typing', 'can-send', 'has-menu', 'is-sent'].forEach((c) => cls(c, false));
+    text.textContent = '';
+  };
+  const play = async () => {
+    const id = ++run;
+    while (id === run) {
+      reset();
+      await sleep(700);
+      cls('is-typing', true);
+      if (!(await typeIn('/', id, 90))) return;
+      cls('has-menu', true);
+      if (!(await typeIn('ty', id, 120))) return;
+      await sleep(650);
+      if (id !== run) return;
+      cls('has-menu', false);
+      text.textContent = ' ';
+      cls('has-chip', true);
+      await sleep(350);
+      if (!(await typeIn(prompt, id, 22))) return;
+      cls('can-send', true);
+      await sleep(900);
+      if (id !== run) return;
+      cls('is-sent', true);
+      await sleep(180);
+      cls('is-sent', false);
+      await sleep(3200);
+    }
+  };
+  new IntersectionObserver(([e]) => { if (e.isIntersecting) play(); else { run++; finished(); } }, { threshold: 0.35 }).observe(win);
+}
+
+/* Gallery: category tabs, a swipeable track (scroll-snap) and arrows, all kept in step */
+function initGallery() {
+  const root = $('[data-tt-gal]');
+  if (!root) return;
+  const data: { cat: string; info: string; pair: string; page: number; n: string }[] = JSON.parse(root.dataset.gal ?? '[]');
+  const track = $('[data-gal-track]', root)!;
+  const slides = $$('[data-gal-slide]', root);
+  const tabs = $$('[data-gal-tab]', root);
+  const tabBar = tabs[0]?.parentElement;
+  const prev = $('[data-gal-prev]', root)!;
+  const next = $('[data-gal-next]', root)!;
+  const set = (sel: string, v: string) => { const el = $(sel, root); if (el) el.textContent = v; };
+  let cur = 0;
+
+  const mark = (i: number) => {
+    if (i === cur && root.dataset.ready) return;
+    cur = i;
+    root.dataset.ready = '1';
+    tabs.forEach((t, k) => t.setAttribute('aria-selected', String(k === i)));
+    const tab = tabs[i];
+    if (tab && tabBar) tabBar.scrollTo({ left: tab.offsetLeft - (tabBar.clientWidth - tab.offsetWidth) / 2, behavior: reduced ? 'auto' : 'smooth' });
+    const d = data[i];
+    if (d) { set('[data-gal-cat]', d.cat); set('[data-gal-info]', d.info); set('[data-gal-pair]', d.pair); set('[data-gal-page]', `s.\u00a0${d.page}`); set('[data-gal-n]', d.n); }
+    prev.toggleAttribute('disabled', i === 0);
+    next.toggleAttribute('disabled', i === slides.length - 1);
+  };
+  const go = (i: number) => {
+    const k = Math.max(0, Math.min(slides.length - 1, i));
+    track.scrollTo({ left: slides[k].offsetLeft - track.offsetLeft, behavior: reduced ? 'auto' : 'smooth' });
+    mark(k);
+  };
+
+  tabs.forEach((t, k) => t.addEventListener('click', () => go(k)));
+  prev.addEventListener('click', () => go(cur - 1));
+  next.addEventListener('click', () => go(cur + 1));
+  track.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight') { e.preventDefault(); go(cur + 1); }
+    if (e.key === 'ArrowLeft') { e.preventDefault(); go(cur - 1); }
+  });
+  // Swiping or trackpad scrolling: the slide that is mostly in view becomes the current one
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((e) => { if (e.isIntersecting) mark(Number((e.target as HTMLElement).dataset.galSlide)); });
+  }, { root: track, threshold: 0.6 });
+  slides.forEach((sl) => io.observe(sl));
+  mark(0);
+}
+
 /* Big numbers count up once, when they scroll into view */
 function initCounts() {
   const els = $$('[data-tt-count-to]');
@@ -314,3 +414,5 @@ initBar();
 initCounts();
 initDeck();
 initLoop();
+initChat();
+initGallery();
